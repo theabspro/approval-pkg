@@ -1,0 +1,31 @@
+{
+    "name": "abs/approval-pkg",
+    "description": "For Approvals",
+    "type": "library",
+    "require":
+    {},
+    "require-dev":
+    {},
+    "authors": [
+    {
+        "name": "Abdul",
+        "email": "abdulpro@gmail.com"
+    }],
+    "minimum-stability": "dev",
+    "extra":
+    {
+        "laravel":
+        {
+            "providers": [
+                "Abs\\ApprovalPkg\\ApprovalPkgServiceProvider"
+            ]
+        }
+    },
+    "autoload":
+    {
+        "psr-4":
+        {
+            "Abs\\ApprovalPkg\\": "src/"
+        }
+    }
+}
