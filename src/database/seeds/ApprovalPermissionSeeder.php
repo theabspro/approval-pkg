@@ -13,28 +13,28 @@ class ApprovalPermissionSeeder extends Seeder {
 	public function run() {
 		$permissions = [
 			//MASTER > CUSTOMERS
-			4400 => [
+			4800 => [
 				'display_order' => 10,
-				'parent_id' => 2,
-				'name' => 'customers',
-				'display_name' => 'Customers',
+				'parent_id' => null,
+				'name' => 'approval-levels',
+				'display_name' => 'Approval Levels',
 			],
-			4401 => [
+			4801 => [
 				'display_order' => 1,
-				'parent_id' => 4400,
-				'name' => 'add-customer',
+				'parent_id' => 4800,
+				'name' => 'add-approval-level',
 				'display_name' => 'Add',
 			],
-			4402 => [
+			4802 => [
 				'display_order' => 2,
-				'parent_id' => 4400,
-				'name' => 'edit-customer',
+				'parent_id' => 4800,
+				'name' => 'edit-approval-level',
 				'display_name' => 'Edit',
 			],
-			4403 => [
+			4803 => [
 				'display_order' => 3,
-				'parent_id' => 4400,
-				'name' => 'delete-customer',
+				'parent_id' => 4800,
+				'name' => 'delete-approval-level',
 				'display_name' => 'Delete',
 			],
 
