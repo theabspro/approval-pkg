@@ -18,6 +18,7 @@ class ApprovalLevelsC extends Migration {
 			$table->unsignedTinyInteger('approval_order');
 			$table->unsignedInteger('current_status_id');
 			$table->unsignedInteger('next_status_id');
+			$table->unsignedInteger('reject_status_id');
 			$table->unsignedInteger('created_by_id')->nullable();
 			$table->unsignedInteger('updated_by_id')->nullable();
 			$table->unsignedInteger('deleted_by_id')->nullable();
@@ -28,6 +29,7 @@ class ApprovalLevelsC extends Migration {
 
 			$table->foreign('current_status_id')->references('id')->on('approval_type_statuses')->onDelete('CASCADE')->onUpdate('cascade');
 			$table->foreign('next_status_id')->references('id')->on('approval_type_statuses')->onDelete('CASCADE')->onUpdate('cascade');
+			$table->foreign('reject_status_id')->references('id')->on('approval_type_statuses')->onDelete('CASCADE')->onUpdate('cascade');
 			$table->foreign('created_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
 			$table->foreign('updated_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');
 			$table->foreign('deleted_by_id')->references('id')->on('users')->onDelete('SET NULL')->onUpdate('cascade');

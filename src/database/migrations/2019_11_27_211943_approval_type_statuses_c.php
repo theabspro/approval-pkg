@@ -16,7 +16,7 @@ class ApprovalTypeStatusesC extends Migration {
 			$table->unsignedInteger('approval_type_id');
 			$table->string('status', 191);
 
-			$table->foreign('approval_type_id')->references('id')->on('approval_type_statuses')->onDelete('CASCADE')->onUpdate('cascade');
+			$table->foreign('approval_type_id')->references('id')->on('approval_types')->onDelete('CASCADE')->onUpdate('cascade');
 
 			$table->unique(["approval_type_id", "status"]);
 		});
