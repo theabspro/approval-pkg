@@ -5,11 +5,10 @@ namespace Abs\ApprovalPkg;
 use App\Company;
 use App\Config;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ApprovalStatus extends Model {
-	use SoftDeletes;
-	protected $table = 'approval_statuses';
+class ApprovalTypeStatus extends Model {
+	protected $table = 'approval_type_statuses';
+	public $timestamps = false;
 	protected $fillable = [
 		'code',
 		'name',
