@@ -12,7 +12,7 @@ class ApprovalLevelsU extends Migration {
 	 */
 	public function up() {
 		Schema::table('approval_levels', function (Blueprint $table) {
-			$table->unsignedInteger('reject_status_id')->after('next_status_id');
+			$table->unsignedInteger('reject_status_id')->nullable()->after('next_status_id');
 			$table->foreign('reject_status_id')->references('id')->on('approval_type_statuses')->onDelete('CASCADE')->onUpdate('cascade');
 		});
 	}
