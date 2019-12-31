@@ -1,6 +1,9 @@
 <?php
 namespace Abs\ApprovalPkg\Database\Seeds;
 
+use Abs\ApprovalPkg\ApprovalLevel;
+use Abs\ApprovalPkg\ApprovalType;
+use Abs\ApprovalPkg\ApprovalTypeStatus;
 use App\Permission;
 use Illuminate\Database\Seeder;
 
@@ -11,41 +14,95 @@ class ApprovalPermissionSeeder extends Seeder {
 	 * @return void
 	 */
 	public function run() {
-		$permissions = [
-			//MASTER > CUSTOMERS
-			4800 => [
-				'display_order' => 10,
-				'parent_id' => null,
-				'name' => 'approval-levels',
-				'display_name' => 'Approval Levels',
-			],
-			4801 => [
-				'display_order' => 1,
-				'parent_id' => 4800,
-				'name' => 'add-approval-level',
-				'display_name' => 'Add',
-			],
-			4802 => [
-				'display_order' => 2,
-				'parent_id' => 4800,
-				'name' => 'edit-approval-level',
-				'display_name' => 'Edit',
-			],
-			4803 => [
-				'display_order' => 3,
-				'parent_id' => 4800,
-				'name' => 'delete-approval-level',
-				'display_name' => 'Delete',
-			],
 
+		$approval_types = [
+			1 => [
+				'name' => 'CN DN Approvals',
+				'code' => 'cn-dn-approvals',
+				'filter_field' => 'status_id',
+			],
 		];
 
-		foreach ($permissions as $permission_id => $permsion) {
-			$permission = Permission::firstOrNew([
-				'id' => $permission_id,
+		$approval_type_statuses = [
+			1 => [
+				'approval_type_id' => 1,
+				'status' => 'New',
+			],
+			2 => [
+				'approval_type_id' => 1,
+				'status' => 'Approval 1 Pending',
+			],
+			3 => [
+				'approval_type_id' => 1,
+				'status' => 'Approval 2 Pending',
+			],
+			4 => [
+				'approval_type_id' => 1,
+				'status' => 'Approved',
+			],
+			5 => [
+				'approval_type_id' => 1,
+				'status' => 'Approval 1 Rejected',
+			],
+			6 => [
+				'approval_type_id' => 1,
+				'status' => 'Approval 2 Rejected',
+			],
+		];
+
+		$approval_levels = [
+			1 => [
+				'approval_type_id' => 1,
+				'name' => 'CN/DN Approval 1',
+				'approval_order' => 1,
+				'current_status_id' => 2,
+				'next_status_id' => 4,
+				'reject_status_id' => 5,
+			],
+		];
+		foreach ($approval_types as $id => $data) {
+			$record = ApprovalType::firstOrNew([
+				'id' => $id,
 			]);
-			$permission->fill($permsion);
-			$permission->save();
+			$record->fill($data);
+			$record->save();
+
+			$permissions = [
+				[
+					'display_order' => 99,
+					'parent' => null,
+					'name' => $data['code'],
+					'display_name' => $data['name'],
+				],
+			];
+			Permission::createFromArrays($permissions);
+
+		}
+		foreach ($approval_type_statuses as $id => $data) {
+			$record = ApprovalTypeStatus::firstOrNew([
+				'id' => $id,
+			]);
+			$record->fill($data);
+			$record->save();
+		}
+		foreach ($approval_levels as $id => $data) {
+			$record = ApprovalLevel::firstOrNew([
+				'id' => $id,
+			]);
+			$record->fill($data);
+			$record->save();
+
+			$approval_type = ApprovalType::find($data['approval_type_id']);
+			$permissions = [
+				[
+					'display_order' => 99,
+					'parent' => $approval_type->code,
+					'name' => $data['name'],
+					'display_name' => $data['name'],
+				],
+			];
+			Permission::createFromArrays($permissions);
+
 		}
 	}
 }

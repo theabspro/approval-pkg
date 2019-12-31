@@ -20,6 +20,10 @@ class ApprovalLevel extends Model {
 		'company_id',
 	];
 
+	public function approvalType() {
+		return $this->belongsTo('Abs\ApprovalPkg\ApprovalType');
+	}
+
 	public static function createFromObject($record_data) {
 
 		$errors = [];
