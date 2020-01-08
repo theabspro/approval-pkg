@@ -100,6 +100,24 @@ class ApprovalPermissionSeeder extends Seeder {
 					'name' => $data['name'],
 					'display_name' => $data['name'],
 				],
+				[
+					'display_order' => 1,
+					'parent' => $data['name'],
+					'name' => $data['name'] . ' View All',
+					'display_name' => $data['name'] . ' View All',
+				],
+				[
+					'display_order' => 2,
+					'parent' => $data['name'],
+					'name' => $data['name'] . ' Outlet Based',
+					'display_name' => $data['name'] . ' Outlet Based',
+				],
+				[
+					'display_order' => 3,
+					'parent' => $data['name'],
+					'name' => $data['name'] . ' Sub Employee Based',
+					'display_name' => $data['name'] . ' Sub Employee Based',
+				],
 			];
 			Permission::createFromArrays($permissions);
 
