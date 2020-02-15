@@ -20,7 +20,12 @@
 	    when('/approval-pkg/approval-type/edit/:id', {
 	        template: '<approval-type-form></approval-type-form>',
 	        title: 'Edit Approval Type',
+	    }).
+	    when('/approval-pkg/approval-type/view/:id', {
+	        template: '<approval-type-view></approval-type-view>',
+	        title: 'View Approval Type',
 	    });
+
 	}]);
 
     var approval_type_list_template_url = "{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-type/list.html')}}";

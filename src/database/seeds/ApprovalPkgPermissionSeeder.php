@@ -39,6 +39,32 @@ class ApprovalPkgPermissionSeeder extends Seeder {
 				'display_name' => 'Delete',
 			],
 
+			//APPROVAL LEVELS
+			// [
+			// 	'display_order' => 99,
+			// 	'parent' => null,
+			// 	'name' => 'approval-levels',
+			// 	'display_name' => 'Approval Levels',
+			// ],
+			// [
+			// 	'display_order' => 1,
+			// 	'parent' => 'approval-levels',
+			// 	'name' => 'add-approval-level',
+			// 	'display_name' => 'Add',
+			// ],
+			// [
+			// 	'display_order' => 2,
+			// 	'parent' => 'approval-levels',
+			// 	'name' => 'edit-approval-level',
+			// 	'display_name' => 'Edit',
+			// ],
+			// [
+			// 	'display_order' => 3,
+			// 	'parent' => 'approval-levels',
+			// 	'name' => 'delete-approval-level',
+			// 	'display_name' => 'Delete',
+			// ],
+
 		];
 		Permission::createFromArrays($permissions);
 
