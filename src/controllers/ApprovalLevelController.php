@@ -1,7 +1,7 @@
 <?php
 
 namespace Abs\ApprovalPkg;
-use Abs\CustomerPkg\Customer;
+use Abs\ApprovalPkg\ApprovalType;
 use App\Address;
 use App\Country;
 use App\Http\Controllers\Controller;
@@ -18,7 +18,7 @@ class ApprovalLevelController extends Controller {
 	}
 
 	public function getCustomerList(Request $request) {
-		$customer_list = Customer::withTrashed()
+		$approval_types = ApprovalType::withTrashed()
 			->select(
 				'customers.id',
 				'customers.code',
@@ -27,7 +27,7 @@ class ApprovalLevelController extends Controller {
 				'customers.email',
 				DB::raw('IF(customers.deleted_at IS NULL,"Active","Inactive") as status')
 			)
-			->where('customers.company_id', Auth::user()->company_id)
+		/*->where('customers.company_id', Auth::user()->company_id)
 			->where(function ($query) use ($request) {
 				if (!empty($request->customer_code)) {
 					$query->where('customers.code', 'LIKE', '%' . $request->customer_code . '%');
@@ -47,23 +47,23 @@ class ApprovalLevelController extends Controller {
 				if (!empty($request->email)) {
 					$query->where('customers.email', 'LIKE', '%' . $request->email . '%');
 				}
-			})
+			})*/
 			->orderby('customers.id', 'desc');
 
-		return Datatables::of($customer_list)
-			->addColumn('code', function ($customer_list) {
-				$status = $customer_list->status == 'Active' ? 'green' : 'red';
-				return '<span class="status-indicator ' . $status . '"></span>' . $customer_list->code;
+		return Datatables::of($approval_types)
+			->addColumn('code', function ($approval_types) {
+				$status = $approval_types->status == 'Active' ? 'green' : 'red';
+				return '<span class="status-indicator ' . $status . '"></span>' . $approval_types->code;
 			})
-			->addColumn('action', function ($customer_list) {
+			->addColumn('action', function ($approval_types) {
 				$edit_img = asset('public/theme/img/table/cndn/edit.svg');
 				$delete_img = asset('public/theme/img/table/cndn/delete.svg');
 				return '
-					<a href="#!/customer-pkg/customer/edit/' . $customer_list->id . '">
+					<a href="#!/customer-pkg/customer/edit/' . $approval_types->id . '">
 						<img src="' . $edit_img . '" alt="View" class="img-responsive">
 					</a>
 					<a href="javascript:;" data-toggle="modal" data-target="#delete_customer"
-					onclick="angular.element(this).scope().deleteCustomer(' . $customer_list->id . ')" dusk = "delete-btn" title="Delete">
+					onclick="angular.element(this).scope().deleteCustomer(' . $approval_types->id . ')" dusk = "delete-btn" title="Delete">
 					<img src="' . $delete_img . '" alt="delete" class="img-responsive">
 					</a>
 					';
@@ -73,11 +73,11 @@ class ApprovalLevelController extends Controller {
 
 	public function getCustomerFormData($id = NULL) {
 		if (!$id) {
-			$customer = new Customer;
+			$customer = new ApprovalType;
 			$address = new Address;
 			$action = 'Add';
 		} else {
-			$customer = Customer::withTrashed()->find($id);
+			$customer = ApprovalType::withTrashed()->find($id);
 			$address = Address::where('address_of_id', 24)->where('entity_id', $id)->first();
 			$action = 'Edit';
 		}
@@ -125,13 +125,13 @@ class ApprovalLevelController extends Controller {
 
 			DB::beginTransaction();
 			if (!$request->id) {
-				$customer = new Customer;
+				$customer = new ApprovalType;
 				$customer->created_by_id = Auth::user()->id;
 				$customer->created_at = Carbon::now();
 				$customer->updated_at = NULL;
 				$address = new Address;
 			} else {
-				$customer = Customer::withTrashed()->find($request->id);
+				$customer = ApprovalType::withTrashed()->find($request->id);
 				$customer->updated_by_id = Auth::user()->id;
 				$customer->updated_at = Carbon::now();
 				$address = Address::where('address_of_id', 24)->where('entity_id', $request->id)->first();
@@ -167,7 +167,7 @@ class ApprovalLevelController extends Controller {
 		}
 	}
 	public function deleteCustomer($id) {
-		$delete_status = Customer::withTrashed()->where('id', $id)->forceDelete();
+		$delete_status = ApprovalType::withTrashed()->where('id', $id)->forceDelete();
 		if ($delete_status) {
 			$address_delete = Address::where('address_of_id', 24)->where('entity_id', $id)->forceDelete();
 			return response()->json(['success' => true]);

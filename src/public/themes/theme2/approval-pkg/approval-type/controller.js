@@ -40,10 +40,10 @@ app.component('approvalTypeList', {
                 type: "GET",
                 dataType: "json",
                 data: function(d) {
-                    d.approval_type_code = $('#approval_type_code').val();
+                    /*d.approval_type_code = $('#approval_type_code').val();
                     d.approval_type_name = $('#approval_type_name').val();
                     d.mobile_no = $('#mobile_no').val();
-                    d.email = $('#email').val();
+                    d.email = $('#email').val();*/
                 },
             },
 
@@ -52,7 +52,6 @@ app.component('approvalTypeList', {
                 { data: 'code', name: 'approval_types.code' },
                 { data: 'name', name: 'approval_types.name' },
                 { data: 'mobile_no', name: 'approval_types.mobile_no' },
-                { data: 'email', name: 'approval_types.email' },
             ],
             "infoCallback": function(settings, start, end, max, total, pre) {
                 $('#table_info').html(total)
@@ -99,7 +98,7 @@ app.component('approvalTypeList', {
         }
 
         //FOR FILTER
-        $('#approval_type_code').on('keyup', function() {
+        /*$('#approval_type_code').on('keyup', function() {
             dataTables.fnFilter();
         });
         $('#approval_type_name').on('keyup', function() {
@@ -117,7 +116,7 @@ app.component('approvalTypeList', {
             $("#mobile_no").val('');
             $("#email").val('');
             dataTables.fnFilter();
-        }
+        }*/
 
         $rootScope.loading = false;
     }
