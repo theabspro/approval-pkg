@@ -12,20 +12,23 @@ use Illuminate\Http\Request;
 use Validator;
 use Yajra\Datatables\Datatables;
 
-class ApprovalLevelController extends Controller {
+class ApprovalTypeController extends Controller {
 
 	public function __construct() {
 	}
 
-	public function getCustomerList(Request $request) {
+	public function getApprovalTypeList(Request $request) {
 		$approval_types = ApprovalType::withTrashed()
+			->leftJoin('approval_type_statuses', 'approval_type_statuses.approval_type_id', 'approval_types.id')
+			->leftJoin('approval_levels', 'approval_levels.approval_type_id', 'approval_types.id')
 			->select(
-				'customers.id',
-				'customers.code',
-				'customers.name',
-				'customers.mobile_no',
-				'customers.email',
-				DB::raw('IF(customers.deleted_at IS NULL,"Active","Inactive") as status')
+				'approval_types.id',
+				'approval_types.name as approval_type_name',
+				'approval_types.code as approval_type_code',
+				'approval_types.filter_field',
+				DB::raw('count(approval_levels.id) as no_of_levels'),
+				DB::raw('count(approval_type_statuses.id) as no_of_status'),
+				DB::raw('IF(approval_types.deleted_at IS NULL,"Active","Inactive") as status')
 			)
 		/*->where('customers.company_id', Auth::user()->company_id)
 			->where(function ($query) use ($request) {
@@ -48,22 +51,23 @@ class ApprovalLevelController extends Controller {
 					$query->where('customers.email', 'LIKE', '%' . $request->email . '%');
 				}
 			})*/
-			->orderby('customers.id', 'desc');
-
+			->groupBy('approval_types.id')
+			->orderby('approval_types.id', 'desc');
+		//dd($approval_types);
 		return Datatables::of($approval_types)
-			->addColumn('code', function ($approval_types) {
+			->addColumn('name', function ($approval_types) {
 				$status = $approval_types->status == 'Active' ? 'green' : 'red';
-				return '<span class="status-indicator ' . $status . '"></span>' . $approval_types->code;
+				return '<span class="status-indicator ' . $status . '"></span>' . $approval_types->approval_type_name;
 			})
 			->addColumn('action', function ($approval_types) {
 				$edit_img = asset('public/theme/img/table/cndn/edit.svg');
 				$delete_img = asset('public/theme/img/table/cndn/delete.svg');
 				return '
-					<a href="#!/customer-pkg/customer/edit/' . $approval_types->id . '">
+					<a href="#!/approval-pkg/approval-type/edit/' . $approval_types->id . '">
 						<img src="' . $edit_img . '" alt="View" class="img-responsive">
 					</a>
-					<a href="javascript:;" data-toggle="modal" data-target="#delete_customer"
-					onclick="angular.element(this).scope().deleteCustomer(' . $approval_types->id . ')" dusk = "delete-btn" title="Delete">
+					<a href="javascript:;" data-toggle="modal" data-target="#delete-approval-type"
+					onclick="angular.element(this).scope().deleteApprovalType(' . $approval_types->id . ')" dusk = "delete-btn" title="Delete">
 					<img src="' . $delete_img . '" alt="delete" class="img-responsive">
 					</a>
 					';
@@ -71,25 +75,26 @@ class ApprovalLevelController extends Controller {
 			->make(true);
 	}
 
-	public function getCustomerFormData($id = NULL) {
+	public function getApprovalTypeFormData(Request $r) {
+		$id = $r->id
 		if (!$id) {
-			$customer = new ApprovalType;
+			$approval_type = new ApprovalType;
 			$address = new Address;
 			$action = 'Add';
 		} else {
-			$customer = ApprovalType::withTrashed()->find($id);
+			$approval_type = ApprovalType::withTrashed()->find($id);
 			$address = Address::where('address_of_id', 24)->where('entity_id', $id)->first();
 			$action = 'Edit';
 		}
 		$this->data['country_list'] = $country_list = Collect(Country::select('id', 'name')->get())->prepend(['id' => '', 'name' => 'Select Country']);
-		$this->data['customer'] = $customer;
+		$this->data['approval_type'] = $approval_type;
 		$this->data['address'] = $address;
 		$this->data['action'] = $action;
 
 		return response()->json($this->data);
 	}
 
-	public function saveCustomer(Request $request) {
+	public function saveApprovalType(Request $request) {
 		// dd($request->all());
 		try {
 			$error_messages = [
@@ -166,7 +171,7 @@ class ApprovalLevelController extends Controller {
 			return response()->json(['success' => false, 'errors' => ['Exception Error' => $e->getMessage()]]);
 		}
 	}
-	public function deleteCustomer($id) {
+	public function deleteApprovalType($id) {
 		$delete_status = ApprovalType::withTrashed()->where('id', $id)->forceDelete();
 		if ($delete_status) {
 			$address_delete = Address::where('address_of_id', 24)->where('entity_id', $id)->forceDelete();

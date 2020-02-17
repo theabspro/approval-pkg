@@ -48,10 +48,10 @@ app.component('approvalTypeList', {
             },
 
             columns: [
-                { data: 'action', class: 'action', name: 'action', searchable: false },
-                { data: 'code', name: 'approval_types.code' },
-                { data: 'name', name: 'approval_types.name' },
-                { data: 'mobile_no', name: 'approval_types.mobile_no' },
+                { data: 'action', class: 'action', searchable: false },
+                { data: 'name', name: 'approval_types.name', searchable: true },
+                { data: 'no_of_levels', searchable: false },
+                { data: 'no_of_status', searchable: false },
             ],
             "infoCallback": function(settings, start, end, max, total, pre) {
                 $('#table_info').html(total)
@@ -129,9 +129,13 @@ app.component('approvalTypeForm', {
         var self = this;
         self.hasPermission = HelperService.hasPermission;
         self.angular_routes = angular_routes;
-        $http.get(
-            get_form_data_url
-        ).then(function(response) {
+        $http({
+            laravel_routes['getApprovalTypeFormData'],
+            method: "GET",
+            params: {
+                'id': typeof($routeParams.id) == 'undefined' ? null : $routeParams.id,
+            }
+        }).then(function(response) {
             // console.log(response);
             self.approval_type = response.data.approval_type;
             self.address = response.data.address;

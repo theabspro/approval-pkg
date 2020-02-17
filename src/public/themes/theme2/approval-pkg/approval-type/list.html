@@ -22,7 +22,7 @@
                 <div class="page-header-content search-block">
                     <div class="search_filter">
                         <label>
-                            <input type="search" id="search_customer" class="form-control" placeholder="Search" />
+                            <input type="search" id="search_approval_type" class="form-control" placeholder="Search" />
                             <button class="btn-clear" ng-click="clear_search()">Clear</button>
                         </label>
                     </div><!-- Search Filter -->
@@ -55,7 +55,7 @@
     </div><!-- Page Main Content -->
 </div><!-- Content Wrap -->
 <!-- Filter Modal -->
-<div class="modal fade filter" id="customer-filter-modal" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade filter" id="approval-type-filter-modal" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -99,7 +99,7 @@
     </div><!-- Modal Dialog -->
 </div><!-- Modal -->
 <!-- Modal -->
-<div class="modal fade alert-modal failure" id="delete_customer" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade alert-modal failure" id="delete-approval-type" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -108,7 +108,7 @@
             <div class="modal-body">
                 <h5>Delete</h5>
                 <p>You can’t retrive the data again, Are you sure you want to delete? </p>
-                <input type="hidden" name="customer_id" id="customer_id" value="">
+                <input type="hidden" name="approval_type_id" id="approval_type_id" value="">
                 <button class="btn btn-grey" data-dismiss="modal" aria-label="Close">Cancel</button>
                 <button class="btn btn-rose" ng-click="deleteConfirm()" type="button" data-dismiss="modal" aria-label="Close">Yes</button>
             </div>
