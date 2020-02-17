@@ -130,7 +130,7 @@ app.component('approvalTypeForm', {
         self.hasPermission = HelperService.hasPermission;
         self.angular_routes = angular_routes;
         $http({
-            laravel_routes['getApprovalTypeFormData'],
+            url: laravel_routes['getApprovalTypeFormData'],
             method: "GET",
             params: {
                 'id': typeof($routeParams.id) == 'undefined' ? null : $routeParams.id,
