@@ -2,11 +2,9 @@
 
 namespace Abs\ApprovalPkg;
 use Abs\ApprovalPkg\ApprovalType;
-use App\Address;
-use App\Country;
+use Abs\ApprovalPkg\ApprovalTypeStatus;
 use App\Http\Controllers\Controller;
 use Auth;
-use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Validator;
@@ -60,9 +58,13 @@ class ApprovalTypeController extends Controller {
 				return '<span class="status-indicator ' . $status . '"></span>' . $approval_types->approval_type_name;
 			})
 			->addColumn('action', function ($approval_types) {
+				$view_img = asset('public/theme/img/table/cndn/view.svg');
 				$edit_img = asset('public/theme/img/table/cndn/edit.svg');
 				$delete_img = asset('public/theme/img/table/cndn/delete.svg');
 				return '
+					<a href="#!/approval-pkg/approval-type/view/' . $approval_types->id . '">
+	                        <img class="img-responsive" src="' . $view_img . '" alt="View" />
+	                    	</a>
 					<a href="#!/approval-pkg/approval-type/edit/' . $approval_types->id . '">
 						<img src="' . $edit_img . '" alt="View" class="img-responsive">
 					</a>
@@ -76,19 +78,19 @@ class ApprovalTypeController extends Controller {
 	}
 
 	public function getApprovalTypeFormData(Request $r) {
-		$id = $r->id
+		$id = $r->id;
 		if (!$id) {
 			$approval_type = new ApprovalType;
 			$approval_type->approval_type_statuses = [];
 			$action = 'Add';
 		} else {
-			$approval_type = ApprovalType::withTrashed()->find($id);
-			// $address = Address::where('address_of_id', 24)->where('entity_id', $id)->first();
+			$approval_type = ApprovalType::withTrashed()->where('id', $id)->with([
+				'approvalTypeStatuses',
+			])
+				->first();
 			$action = 'Edit';
 		}
-		$this->data['country_list'] = $country_list = Collect(Country::select('id', 'name')->get())->prepend(['id' => '', 'name' => 'Select Country']);
 		$this->data['approval_type'] = $approval_type;
-		// $this->data['address'] = $address;
 		$this->data['action'] = $action;
 
 		return response()->json($this->data);
@@ -96,86 +98,149 @@ class ApprovalTypeController extends Controller {
 
 	public function saveApprovalType(Request $request) {
 		// dd($request->all());
+		DB::beginTransaction();
 		try {
+
 			$error_messages = [
-				'code.required' => 'Customer Code is Required',
-				'code.max' => 'Maximum 255 Characters',
-				'code.min' => 'Minimum 3 Characters',
-				'name.required' => 'Customer Name is Required',
-				'name.max' => 'Maximum 255 Characters',
-				'name.min' => 'Minimum 3 Characters',
-				'mobile_no.required' => 'Mobile Number is Required',
-				'mobile_no.max' => 'Maximum 25 Numbers',
-				'email.required' => 'Email is Required',
-				'address_line1.required' => 'Address Line 1 is Required',
-				'address_line1.max' => 'Maximum 255 Characters',
-				'address_line1.min' => 'Minimum 3 Characters',
-				'address_line2.max' => 'Maximum 255 Characters',
-				'pincode.required' => 'Pincode is Required',
-				'pincode.max' => 'Maximum 6 Characters',
-				'pincode.min' => 'Minimum 6 Characters',
+				'name.required' => 'Approval Type name is required',
+				'name.unique' => 'Approval Type name is already taken',
+				'code.required' => 'Approval Type code is required',
+				'code.unique' => 'Approval Type code is already taken',
+				'filter_field.required' => 'Filter Field is required',
 			];
+
 			$validator = Validator::make($request->all(), [
-				'code' => 'required|max:255|min:3',
-				'name' => 'required|max:255|min:3',
-				'mobile_no' => 'required|max:25',
-				'email' => 'required',
-				'address_line1' => 'required|max:255|min:3',
-				'address_line2' => 'max:255',
-				'pincode' => 'required|max:6|min:6',
+				'name' => [
+					'unique:approval_types,name,' . $request->id . ',id,company_id,' . Auth::user()->company_id,
+					'required',
+				],
+				'code' => [
+					'unique:approval_types,code,' . $request->id . ',id,company_id,' . Auth::user()->company_id,
+					'required',
+				],
+				'filter_field' => 'required',
 			], $error_messages);
+
 			if ($validator->fails()) {
 				return response()->json(['success' => false, 'errors' => $validator->errors()->all()]);
 			}
 
-			DB::beginTransaction();
-			if (!$request->id) {
-				$customer = new ApprovalType;
-				$customer->created_by_id = Auth::user()->id;
-				$customer->created_at = Carbon::now();
-				$customer->updated_at = NULL;
-				$address = new Address;
-			} else {
-				$customer = ApprovalType::withTrashed()->find($request->id);
-				$customer->updated_by_id = Auth::user()->id;
-				$customer->updated_at = Carbon::now();
-				$address = Address::where('address_of_id', 24)->where('entity_id', $request->id)->first();
-			}
-			$customer->fill($request->all());
-			$customer->company_id = Auth::user()->company_id;
-			if ($request->status == 'Inactive') {
-				$customer->deleted_at = Carbon::now();
-				$customer->deleted_by_id = Auth::user()->id;
-			} else {
-				$customer->deleted_by_id = NULL;
-				$customer->deleted_at = NULL;
-			}
-			$customer->save();
+			//VALIDATE UNIQUE FOR APPROVAL-TYPE-STATUSES
+			if (isset($request->approval_type_statuses) && !empty($request->approval_type_statuses)) {
+				$error_messages_1 = [
+					'status.required' => 'Approval Type Status is required',
+					'status.unique' => 'Approval Type Status is already taken',
+				];
 
-			$address->fill($request->all());
-			$address->company_id = Auth::user()->company_id;
-			$address->address_of_id = 24;
-			$address->entity_id = $customer->id;
-			$address->address_type_id = 40;
-			$address->name = 'Primary Address';
-			$address->save();
+				foreach ($request->approval_type_statuses as $approval_type_status_key => $approval_type_status) {
+					$validator_1 = Validator::make($approval_type_status, [
+						'status' => [
+							'unique:approval_type_statuses,status,' . $approval_type_status['id'] . ',id,approval_type_id,' . $approval_type_status['approval_type_id'],
+							'required',
+						],
+					], $error_messages_1);
+
+					if ($validator_1->fails()) {
+						return response()->json(['success' => false, 'errors' => $validator_1->errors()->all()]);
+					}
+
+					//FIND DUPLICATE APPROVAL-TYPE-STATUSES
+					foreach ($request->approval_type_statuses as $search_key => $search_array) {
+						if ($search_array['status'] == $approval_type_status['status']) {
+							if ($search_key != $approval_type_status_key) {
+								return response()->json(['success' => false, 'errors' => ['Approval Type Status is already taken']]);
+							}
+						}
+					}
+				}
+			}
+
+			if (empty($request->id)) {
+				$approval_type = new ApprovalType;
+				$msg = "Saved";
+				$approval_type->created_by_id = Auth()->user()->id;
+				$approval_type->created_at = date('Y-m-d H:i:s');
+				$approval_type->updated_at = NULL;
+			} else {
+				$approval_type = ApprovalType::withTrashed()->where('id', $request->id)->first();
+				$msg = "Updated";
+				$approval_type->updated_by_id = Auth()->user()->id;
+				$approval_type->updated_at = date('Y-m-d H:i:s');
+			}
+
+			$approval_type->fill($request->all());
+			$approval_type->company_id = Auth::user()->company_id;
+			if ($request->status == 'Active') {
+				$approval_type->deleted_at = NULL;
+				$approval_type->deleted_by_id = NULL;
+			} else {
+				$approval_type->deleted_at = date('Y-m-d H:i:s');
+				$approval_type->deleted_by_id = Auth::user()->id;
+			}
+			$approval_type->save();
+
+			//DELETE APPROVAL-TYPE-STATUSES
+			if (!empty($request->approval_type_status_removal_ids)) {
+				$approval_type_status_removal_ids = json_decode($request->approval_type_status_removal_ids, true);
+				ApprovalTypeStatus::withTrashed()->whereIn('id', $approval_type_status_removal_ids)->forcedelete();
+			}
+
+			if (isset($request->approval_type_statuses) && !empty($request->approval_type_statuses)) {
+				foreach ($request->approval_type_statuses as $key => $approval_type_status) {
+					$approval_status = ApprovalTypeStatus::withTrashed()->firstOrNew(['id' => $approval_type_status['id']]);
+					$approval_status->fill($approval_type_status);
+					$approval_status->approval_type_id = $approval_type->id;
+					if ($approval_type_status['switch_value'] == 'Active') {
+						$approval_status->deleted_at = NULL;
+						$approval_status->deleted_by_id = NULL;
+					} else {
+						$approval_status->deleted_at = date('Y-m-d H:i:s');
+						$approval_status->deleted_by_id = Auth::user()->id;
+					}
+					if (empty($approval_type_status['id'])) {
+						$approval_status->created_by_id = Auth::user()->id;
+						$approval_status->created_at = date('Y-m-d H:i:s');
+						$approval_status->updated_at = NULL;
+					} else {
+						$approval_status->updated_by_id = Auth::user()->id;
+						$approval_status->updated_at = date('Y-m-d H:i:s');
+					}
+					$approval_status->save();
+				}
+			}
 
 			DB::commit();
-			if (!($request->id)) {
-				return response()->json(['success' => true, 'message' => ['Customer Details Added Successfully']]);
-			} else {
-				return response()->json(['success' => true, 'message' => ['Customer Details Updated Successfully']]);
-			}
-		} catch (Exceprion $e) {
+			return response()->json(['success' => true, 'comes_from' => $msg]);
+		} catch (Exception $e) {
 			DB::rollBack();
 			return response()->json(['success' => false, 'errors' => ['Exception Error' => $e->getMessage()]]);
 		}
 	}
-	public function deleteApprovalType($id) {
-		$delete_status = ApprovalType::withTrashed()->where('id', $id)->forceDelete();
-		if ($delete_status) {
-			$address_delete = Address::where('address_of_id', 24)->where('entity_id', $id)->forceDelete();
-			return response()->json(['success' => true]);
+
+	public function deleteApprovalType(Request $request) {
+		DB::beginTransaction();
+		try {
+			ApprovalType::withTrashed()->where('id', $request->id)->forceDelete();
+
+			DB::commit();
+			return response()->json(['success' => true, 'message' => 'Approval Type Deleted Successfully']);
+		} catch (Exception $e) {
+			DB::rollBack();
+			return response()->json(['success' => false, 'errors' => ['Exception Error' => $e->getMessage()]]);
 		}
+	}
+
+	public function viewApprovalType(Request $r) {
+		$id = $r->id;
+		if ($id) {
+			$this->data['approval_type'] = ApprovalType::withTrashed()->where('id', $id)->with([
+				'approvalTypeStatuses',
+			])
+				->first();
+			$this->data['action'] = 'View';
+		} else {
+			return response()->json(['success' => false, 'error' => 'Approval Type ID not found']);
+		}
+		return response()->json($this->data);
 	}
 }

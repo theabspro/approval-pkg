@@ -80,19 +80,32 @@ app.component('approvalTypeList', {
         $scope.deleteConfirm = function() {
             $id = $('#approval_type_id').val();
             $http.get(
-                approval_type_delete_data_url + '/' + $id,
+                laravel_routes['deleteApprovalType'], {
+                    params: {
+                        id: $id,
+                    }
+                }
             ).then(function(response) {
                 if (response.data.success) {
                     $noty = new Noty({
                         type: 'success',
                         layout: 'topRight',
-                        text: 'Approval Type Deleted Successfully',
+                        text: response.data.message,
                     }).show();
                     setTimeout(function() {
                         $noty.close();
                     }, 3000);
                     $('#approval_types_list').DataTable().ajax.reload();
                     $scope.$apply();
+                } else {
+                    $noty = new Noty({
+                        type: 'error',
+                        layout: 'topRight',
+                        text: response.data.errors,
+                    }).show();
+                    setTimeout(function() {
+                        $noty.close();
+                    }, 3000);
                 }
             });
         }
@@ -148,8 +161,6 @@ app.component('approvalTypeForm', {
                 }
             } else {
                 self.switch_value = 'Active';
-                self.state_list = [{ 'id': '', 'name': 'Select State' }];
-                self.city_list = [{ 'id': '', 'name': 'Select City' }];
             }
         });
 
@@ -225,37 +236,35 @@ app.component('approvalTypeForm', {
                         contentType: false,
                     })
                     .done(function(res) {
-                        if (res.success == true) {
+                        if (!res.success) {
+                            $('#submit').prop('disabled', 'disabled');
+                            var errors = '';
+                            for (var i in res.errors) {
+                                errors += '<li>' + res.errors[i] + '</li>';
+                            }
                             $noty = new Noty({
-                                type: 'success',
+                                type: 'error',
                                 layout: 'topRight',
-                                text: res.message,
+                                text: errors
                             }).show();
                             setTimeout(function() {
                                 $noty.close();
                             }, 3000);
-                            $location.path('/approval-pkg/approval-type/list');
-                            $scope.$apply();
+                            $('#submit').button('reset');
+
                         } else {
-                            if (!res.success == true) {
-                                $('#submit').button('reset');
-                                var errors = '';
-                                for (var i in res.errors) {
-                                    errors += '<li>' + res.errors[i] + '</li>';
-                                }
-                                $noty = new Noty({
-                                    type: 'error',
-                                    layout: 'topRight',
-                                    text: errors
-                                }).show();
-                                setTimeout(function() {
-                                    $noty.close();
-                                }, 3000);
-                            } else {
-                                $('#submit').button('reset');
-                                $location.path('/approval-pkg/approval-type/list');
-                                $scope.$apply();
-                            }
+                            $noty = new Noty({
+                                type: 'success',
+                                layout: 'topRight',
+                                text: 'Approval Type ' + res.comes_from + ' Successfully',
+                            }).show();
+                            setTimeout(function() {
+                                $noty.close();
+                            }, 3000);
+                            $('#submit').button('reset');
+
+                            $location.path('/approval-pkg/approval-type/list')
+                            $scope.$apply()
                         }
                     })
                     .fail(function(xhr) {
@@ -271,5 +280,152 @@ app.component('approvalTypeForm', {
                     });
             }
         });
+    }
+});
+
+//------------------------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------------------------
+app.component('approvalTypeView', {
+    templateUrl: approval_type_view_template_url,
+    controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope) {
+        var self = this;
+        self.hasPermission = HelperService.hasPermission;
+        self.angular_routes = angular_routes;
+        $http({
+            url: laravel_routes['viewApprovalType'],
+            method: "GET",
+            params: {
+                'id': $routeParams.id,
+            }
+        }).then(function(response) {
+            console.log(response.data);
+            self.approval_type = response.data.approval_type;
+            self.action = response.data.action;
+            $rootScope.loading = false;
+            if (self.action == 'View') {
+                if (self.approval_type.deleted_at) {
+                    self.switch_value = 'Inactive';
+                } else {
+                    self.switch_value = 'Active';
+                }
+            }
+        });
+
+        /* Tab Funtion */
+        $('.btn-nxt').on("click", function() {
+            $('.cndn-tabs li.active').next().children('a').trigger("click");
+            tabPaneFooter();
+        });
+        $('.btn-prev').on("click", function() {
+            $('.cndn-tabs li.active').prev().children('a').trigger("click");
+            tabPaneFooter();
+        });
+        /*$('.btn-pills').on("click", function() {
+            tabPaneFooter();
+        });
+        $scope.btnNxt = function() {}
+        $scope.prev = function() {}*/
+
+        /*self.addNewApprovalTypeStatus = function() {
+            self.approval_type.approval_type_statuses.push({
+                id: '',
+                status:'',
+                switch_value: 'Active',
+            });
+        }
+        self.approval_type_status_removal_ids = [];
+        self.removeApprovalTypeStatus = function(index, approval_type_status_id) {
+            if(approval_type_status_id) {
+                self.approval_type_status_removal_ids.push(approval_type_status_id);
+                $('#approval_type_status_removal_ids').val(JSON.stringify(self.approval_type_status_removal_ids));
+            }
+            self.approval_type.approval_type_statuses.splice(index, 1);
+        }*/
+
+        /*var form_id = '#form';
+        var v = jQuery(form_id).validate({
+            ignore: '',
+            rules: {
+                'name': {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 191,
+                },
+                'code': {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 191,
+                },
+                'filter_field': {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 255,
+                },
+            },
+            invalidHandler: function(event, validator) {
+                $noty = new Noty({
+                    type: 'error',
+                    layout: 'topRight',
+                    text: 'You have errors,Please check all tabs'
+                }).show();
+                setTimeout(function() {
+                    $noty.close();
+                }, 3000)
+            },
+            submitHandler: function(form) {
+                let formData = new FormData($(form_id)[0]);
+                $('#submit').button('loading');
+                $.ajax({
+                        url: laravel_routes['saveApprovalType'],
+                        method: "POST",
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                    })
+                    .done(function(res) {
+                        if (!res.success) {
+                            $('#submit').prop('disabled', 'disabled');
+                            var errors = '';
+                            for (var i in res.errors) {
+                                errors += '<li>' + res.errors[i] + '</li>';
+                            }
+                            $noty = new Noty({
+                                type: 'error',
+                                layout: 'topRight',
+                                text: errors
+                            }).show();
+                            setTimeout(function() {
+                                $noty.close();
+                            }, 3000);
+                            $('#submit').button('reset');
+
+                        } else {
+                            $noty = new Noty({
+                                type: 'success',
+                                layout: 'topRight',
+                                text: 'Approval Type ' + res.comes_from + ' Successfully',
+                            }).show();
+                            setTimeout(function() {
+                                $noty.close();
+                            }, 3000);
+                            $('#submit').button('reset');
+
+                            $location.path('/approval-pkg/approval-type/list')
+                            $scope.$apply()
+                        }
+                    })
+                    .fail(function(xhr) {
+                        $('#submit').button('reset');
+                        $noty = new Noty({
+                            type: 'error',
+                            layout: 'topRight',
+                            text: 'Something went wrong at server',
+                        }).show();
+                        setTimeout(function() {
+                            $noty.close();
+                        }, 3000);
+                    });
+            }
+        });*/
     }
 });

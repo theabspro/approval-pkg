@@ -18,11 +18,11 @@ class ApprovalType extends Model {
 	];
 
 	public function approvalLevels() {
-		return $this->hasMany('Abs\ApprovalPkg\ApprovalLevel');
+		return $this->hasMany('Abs\ApprovalPkg\ApprovalLevel', 'approval_type_id', 'id')->withTrashed()->orderby('id');
 	}
 
-	public function approvalStatus() {
-		return $this->hasMany('Abs\ApprovalPkg\ApprovalTypeStatus');
+	public function approvalTypeStatuses() {
+		return $this->hasMany('Abs\ApprovalPkg\ApprovalTypeStatus', 'approval_type_id', 'id')->withTrashed()->orderby('id');
 	}
 
 	public static function createFromObject($record_data) {
