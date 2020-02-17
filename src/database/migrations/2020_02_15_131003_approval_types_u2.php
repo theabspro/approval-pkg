@@ -12,7 +12,7 @@ class ApprovalTypesU2 extends Migration {
 	 */
 	public function up() {
 		Schema::table('approval_types', function (Blueprint $table) {
-			$table->unsignedInteger('company_id')->after('id');
+			$table->unsignedInteger('company_id')->default(1)->after('id');
 			$table->foreign('company_id')->references('id')->on('companies')->onDelete('cascade')->onUpdate('cascade');
 			$table->unique(["company_id", "name"]);
 			$table->unique(["company_id", "code"]);
