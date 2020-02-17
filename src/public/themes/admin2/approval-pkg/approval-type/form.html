@@ -40,19 +40,19 @@
                                         <div class="col-md-3">
                                             <div class="input-text form-group">
                                                 <label>Approval Type Name <sup class="mandatory">*</sup></label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.approval_type.name" name="name" placeholder="Enter Approval Type Name" />
+                                                <input type="text" class="form-control required" ng-model="$ctrl.approval_type.name" name="name" placeholder="Enter Approval Type Name" minlength="3" maxlength="191" autocomplete="off" />
                                             </div><!-- Feild -->
                                         </div><!-- Column -->
                                         <div class="col-md-3">
                                             <div class="input-text form-group">
                                                 <label>Approval Type Code <sup class="mandatory">*</sup></label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.approval_type.code" name="code" placeholder="Enter Approval Type Code" />
+                                                <input type="text" class="form-control required" ng-model="$ctrl.approval_type.code" name="code" placeholder="Enter Approval Type Code" minlength="3" maxlength="191" autocomplete="off" />
                                             </div><!-- Feild -->
                                         </div><!-- Column -->
                                         <div class="col-md-3">
                                             <div class="input-text form-group">
                                                 <label>Filter Field <sup class="mandatory">*</sup></label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.approval_type.filter_field " name="filter_field" placeholder="Enter Filter Field" />
+                                                <input type="text" class="form-control required" ng-model="$ctrl.approval_type.filter_field " name="filter_field" placeholder="Enter Filter Field" minlength="3" maxlength="255" autocomplete="off" />
                                             </div><!-- Feild -->
                                         </div><!-- Column -->
                                         <div class="col-md-3">
@@ -76,68 +76,51 @@
                                     </div><!-- Row -->
                                 </div><!-- Tab Pane Wrap -->
                             </div><!-- Tabe Pane -->
-                            <div class="tab-pane fade" id="address-details" data-animation="fadeInUp" data-animation-delay="300">
+                            <div class="tab-pane fade" id="approval-status" data-animation="fadeInUp" data-animation-delay="300">
                                 <div class="tab-pane-wrap">
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Address Line 1 <sup class="mandatory">*</sup></label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.address.address_line1" name="address_line1" placeholder="Enter Address Line 1" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Address Line 2</label>
-                                                <input type="text" class="form-control" ng-model="$ctrl.address.address_line2" name="address_line2" placeholder="Enter Address Line 2" />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Country <sup class="mandatory">*</sup></label>
-                                                <md-select ng-model="$ctrl.address.country_id" ng-change="onSelectedCountry($ctrl.address.country_id);$ctrl.address.state_id='';$ctrl.address.city_id=''" placeholder="Select Country" data-md-container-class="selectdemoSelectHeader">
-                                                    <md-select-header class="demo-select-header ng-hide">
-                                                        <input ng-model="searchApproval TypeGroup" type="search" placeholder="Search Approval Type Group" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
-                                                    </md-select-header>
-                                                    <md-optgroup label="Approval Type Group List">
-                                                        <md-option ng-value="country.id" ng-repeat="country in $ctrl.country_list | filter:searchTravel">{{country.name}}</md-option>
-                                                    </md-optgroup>
-                                                </md-select>
-                                                <input type="hidden" name="country_id" value='{{$ctrl.address.country_id}}' class="required">
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>State <sup class="mandatory">*</sup></label>
-                                                <md-select ng-model="$ctrl.address.state_id" ng-change="onSelectedState($ctrl.address.state_id);$ctrl.address.city_id=''" placeholder="Select State" data-md-container-class="selectdemoSelectHeader">
-                                                    <md-select-header class="demo-select-header ng-hide">
-                                                        <input ng-model="searchApproval TypeGroup" type="search" placeholder="Search Approval Type Group" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
-                                                    </md-select-header>
-                                                    <md-optgroup label="">
-                                                        <md-option ng-value="state.id" ng-repeat="state in $ctrl.state_list | filter:searchTravel">{{state.name}}</md-option>
-                                                    </md-optgroup>
-                                                </md-select>
-                                                <input type="hidden" name="state_id" value='{{$ctrl.address.state_id}}' class="required">
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>City <sup class="mandatory">*</sup></label>
-                                                <md-select ng-model="$ctrl.address.city_id" placeholder="Select City" data-md-container-class="selectdemoSelectHeader">
-                                                    <md-select-header class="demo-select-header ng-hide">
-                                                        <input ng-model="searchApproval TypeGroup" type="search" placeholder="Search Approval Type Group" class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
-                                                    </md-select-header>
-                                                    <md-optgroup label="">
-                                                        <md-option ng-value="city.id" ng-repeat="city in $ctrl.city_list | filter:searchTravel">{{city.name}}</md-option>
-                                                    </md-optgroup>
-                                                </md-select>
-                                                <input type="hidden" name="city_id" value='{{$ctrl.address.city_id}}' class="required">
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Pincode<sup class="mandatory">*</sup></label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.address.pincode" name="pincode" placeholder="Enter Pincode" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" />
-                                            </div><!-- Feild -->
+                                        <div class="col-md-12">
+                                            <h6 class="tab-pane-title">Approval Type : <span class="color-primary-light">{{$ctrl.approval_type.name}}</span></h6>
+                                            <div class="table-responsive">
+                                                <table class="table table-form">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="width-230">Status Name</th>
+                                                            <th class="width-230">Active Status</th>
+                                                            <th class="width-60"></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="approval_type_status_list" ng-repeat="(index, approval_type_status) in $ctrl.approval_type.approval_type_statuses">
+                                                        <input type="hidden" name="approval_type_statuses[{{index}}][id]" value="{{approval_type_status.id}}">
+                                                        <input type="hidden" name="approval_type_statuses[{{index}}][approval_type_id]" value="{{$ctrl.approval_type.id}}">
+                                                        <tr>
+                                                            <td>
+                                                                <input type="text" class="form-control type-sm" name="approval_type_statuses[{{index}}][status]" ng-model="approval_type_status.status" placeholder="Enter Status" autocomplete="off" minlength="3" maxlength="191" required="required"/>
+                                                            </td>
+                                                            <td>
+                                                               <div class="tab-switch">
+                                                                    <md-switch ng-model="approval_type_status.switch_value" aria-label="Switch 1" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn">
+                                                                        {{ approval_type_status.switch_value }}
+                                                                    </md-switch>
+                                                                    <input type="hidden" name="approval_type_statuses[{{index}}][status]" value="{{approval_type_status.switch_value}}">
+                                                                </div> 
+                                                            </td>
+                                                            <td>
+                                                                <button class="btn-delete" ng-click="$ctrl.removeApprovalTypeStatus(index, approval_type_status.id)" type="button">
+                                                                    <img class="img-responsive" src="./public/theme/img/table/cndn/delete.svg" alt="Delete" />
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td colspan="3">
+                                                                <button type="button" class="btn btn-primary-light btn-square" ng-click="$ctrl.addNewApprovalTypeStatus()">+ Add </button>
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div><!-- Table Responsive -->
                                         </div><!-- Column -->
                                         <div class="tab-pane-footer">
                                             <div class="row">
@@ -147,6 +130,7 @@
                                                 </div>
                                             </div>
                                         </div><!-- Tab Footer -->
+                                        <input type="hidden" name="approval_type_status_removal_ids" id="approval_type_status_removal_ids" value="">
                                     </div><!-- Row -->
                                 </div><!-- Tab Pane Wrap -->
                             </div><!-- Tabe Pane -->

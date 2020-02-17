@@ -5,19 +5,21 @@ namespace Abs\ApprovalPkg;
 use App\Company;
 use App\Config;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class ApprovalTypeStatus extends Model {
+	use SoftDeletes;
 	protected $table = 'approval_type_statuses';
-	public $timestamps = false;
+	public $timestamps = true;
 	protected $fillable = [
-		'code',
-		'name',
-		'cust_group',
-		'dimension',
-		'mobile_no',
-		'email',
-		'company_id',
+		'approval_type_id',
+		'status',
 	];
+	protected $appends = ['switch_value'];
+
+	public function getSwitchValueAttribute() {
+		return !empty($this->attributes['deleted_at']) ? 'Inactive' : 'Active';
+	}
 
 	public static function createFromObject($record_data) {
 

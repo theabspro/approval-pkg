@@ -91,8 +91,8 @@ app.component('approvalTypeList', {
                     setTimeout(function() {
                         $noty.close();
                     }, 3000);
-                    $('#approval_types_list').DataTable().ajax.reload(function(json) {});
-                    $location.path('/approval-type-pkg/approval-type/list');
+                    $('#approval_types_list').DataTable().ajax.reload();
+                    $scope.$apply();
                 }
             });
         }
@@ -136,15 +136,11 @@ app.component('approvalTypeForm', {
                 'id': typeof($routeParams.id) == 'undefined' ? null : $routeParams.id,
             }
         }).then(function(response) {
-            // console.log(response);
+            console.log(response.data);
             self.approval_type = response.data.approval_type;
-            self.address = response.data.address;
-            self.country_list = response.data.country_list;
             self.action = response.data.action;
             $rootScope.loading = false;
             if (self.action == 'Edit') {
-                $scope.onSelectedCountry(self.address.country_id);
-                $scope.onSelectedState(self.address.state_id);
                 if (self.approval_type.deleted_at) {
                     self.switch_value = 'Inactive';
                 } else {
@@ -166,106 +162,46 @@ app.component('approvalTypeForm', {
             $('.cndn-tabs li.active').prev().children('a').trigger("click");
             tabPaneFooter();
         });
-        $('.btn-pills').on("click", function() {
+        /*$('.btn-pills').on("click", function() {
             tabPaneFooter();
         });
         $scope.btnNxt = function() {}
-        $scope.prev = function() {}
+        $scope.prev = function() {}*/
 
-        //SELECT STATE BASED COUNTRY
-        $scope.onSelectedCountry = function(id) {
-            approval_type_get_state_by_country = vendor_get_state_by_country;
-            $http.post(
-                approval_type_get_state_by_country, { 'country_id': id }
-            ).then(function(response) {
-                // console.log(response);
-                self.state_list = response.data.state_list;
+        self.addNewApprovalTypeStatus = function() {
+            self.approval_type.approval_type_statuses.push({
+                id: '',
+                status:'',
+                switch_value: 'Active',
             });
         }
-
-        //SELECT CITY BASED STATE
-        $scope.onSelectedState = function(id) {
-            approval_type_get_city_by_state = vendor_get_city_by_state
-            $http.post(
-                approval_type_get_city_by_state, { 'state_id': id }
-            ).then(function(response) {
-                // console.log(response);
-                self.city_list = response.data.city_list;
-            });
+        self.approval_type_status_removal_ids = [];
+        self.removeApprovalTypeStatus = function(index, approval_type_status_id) {
+            if(approval_type_status_id) {
+                self.approval_type_status_removal_ids.push(approval_type_status_id);
+                $('#approval_type_status_removal_ids').val(JSON.stringify(self.approval_type_status_removal_ids));
+            }
+            self.approval_type.approval_type_statuses.splice(index, 1);
         }
 
         var form_id = '#form';
         var v = jQuery(form_id).validate({
             ignore: '',
             rules: {
-                'code': {
-                    required: true,
-                    minlength: 3,
-                    maxlength: 255,
-                },
                 'name': {
                     required: true,
                     minlength: 3,
-                    maxlength: 255,
+                    maxlength: 191,
                 },
-                'cust_group': {
-                    maxlength: 100,
-                },
-                'dimension': {
-                    maxlength: 50,
-                },
-                'mobile_no': {
-                    required: true,
-                    minlength: 10,
-                    maxlength: 25,
-                },
-                'email': {
-                    required: true,
-                    email: true,
-                    minlength: 6,
-                    maxlength: 255,
-                },
-                'address_line1': {
-                    minlength: 3,
-                    maxlength: 255,
-                },
-                'address_line2': {
-                    minlength: 3,
-                    maxlength: 255,
-                },
-                'pincode': {
-                    required: true,
-                    minlength: 6,
-                    maxlength: 6,
-                },
-            },
-            messages: {
                 'code': {
-                    maxlength: 'Maximum of 255 charaters',
+                    required: true,
+                    minlength: 3,
+                    maxlength: 191,
                 },
-                'name': {
-                    maxlength: 'Maximum of 255 charaters',
-                },
-                'cust_group': {
-                    maxlength: 'Maximum of 100 charaters',
-                },
-                'dimension': {
-                    maxlength: 'Maximum of 50 charaters',
-                },
-                'mobile_no': {
-                    maxlength: 'Maximum of 25 charaters',
-                },
-                'email': {
-                    maxlength: 'Maximum of 100 charaters',
-                },
-                'address_line1': {
-                    maxlength: 'Maximum of 255 charaters',
-                },
-                'address_line2': {
-                    maxlength: 'Maximum of 255 charaters',
-                },
-                'pincode': {
-                    maxlength: 'Maximum of 6 charaters',
+                'filter_field': {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 255,
                 },
             },
             invalidHandler: function(event, validator) {
@@ -298,7 +234,7 @@ app.component('approvalTypeForm', {
                             setTimeout(function() {
                                 $noty.close();
                             }, 3000);
-                            $location.path('/approval-type-pkg/approval-type/list');
+                            $location.path('/approval-pkg/approval-type/list');
                             $scope.$apply();
                         } else {
                             if (!res.success == true) {
@@ -317,7 +253,7 @@ app.component('approvalTypeForm', {
                                 }, 3000);
                             } else {
                                 $('#submit').button('reset');
-                                $location.path('/approval-type-pkg/approval-type/list');
+                                $location.path('/approval-pkg/approval-type/list');
                                 $scope.$apply();
                             }
                         }

@@ -79,16 +79,16 @@ class ApprovalTypeController extends Controller {
 		$id = $r->id
 		if (!$id) {
 			$approval_type = new ApprovalType;
-			$address = new Address;
+			$approval_type->approval_type_statuses = [];
 			$action = 'Add';
 		} else {
 			$approval_type = ApprovalType::withTrashed()->find($id);
-			$address = Address::where('address_of_id', 24)->where('entity_id', $id)->first();
+			// $address = Address::where('address_of_id', 24)->where('entity_id', $id)->first();
 			$action = 'Edit';
 		}
 		$this->data['country_list'] = $country_list = Collect(Country::select('id', 'name')->get())->prepend(['id' => '', 'name' => 'Select Country']);
 		$this->data['approval_type'] = $approval_type;
-		$this->data['address'] = $address;
+		// $this->data['address'] = $address;
 		$this->data['action'] = $action;
 
 		return response()->json($this->data);
