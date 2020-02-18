@@ -24,8 +24,8 @@ class ApprovalTypeController extends Controller {
 				'approval_types.name as approval_type_name',
 				'approval_types.code as approval_type_code',
 				'approval_types.filter_field',
-				DB::raw('count(approval_levels.id) as no_of_levels'),
-				DB::raw('count(approval_type_statuses.id) as no_of_status'),
+				DB::raw('count(distinct approval_levels.id) as no_of_levels'),
+				DB::raw('count(distinct approval_type_statuses.id) as no_of_status'),
 				DB::raw('IF(approval_types.deleted_at IS NULL,"Active","Inactive") as status')
 			)
 		/*->where('customers.company_id', Auth::user()->company_id)
@@ -235,12 +235,124 @@ class ApprovalTypeController extends Controller {
 		if ($id) {
 			$this->data['approval_type'] = ApprovalType::withTrashed()->where('id', $id)->with([
 				'approvalTypeStatuses',
+				'approvalLevels',
 			])
 				->first();
 			$this->data['action'] = 'View';
+			$this->data['extras'] = [
+				'approval_type_status_list' => collect(ApprovalTypeStatus::where('approval_type_id', $id)->select('status', 'id')->get())->prepend(['status' => 'Select Approval Type Status']),
+			];
 		} else {
 			return response()->json(['success' => false, 'error' => 'Approval Type ID not found']);
 		}
 		return response()->json($this->data);
+	}
+
+	public function saveApprovalLevel(Request $request) {
+		//dd($request->all());
+		try {
+			if (isset($request->approval_levels) && !empty($request->approval_levels)) {
+				$error_messages = [
+					'name.required' => 'Approval Level name is required',
+					'name.unique' => 'Approval Level name is already taken',
+					'approval_order.required' => 'Approval Order is required',
+					'approval_order.unique' => 'Approval Order is already taken',
+				];
+
+				foreach ($request->approval_levels as $approval_level_key => $approval_level) {
+					$validator = Validator::make($approval_level, [
+						'name' => [
+							'unique:approval_levels,name,' . $approval_level['id'] . ',id,approval_type_id,' . $approval_level['approval_type_id'],
+							'required:true',
+						],
+						'approval_order' => [
+							'unique:approval_levels,approval_order,' . $approval_level['id'] . ',id,approval_type_id,' . $approval_level['approval_type_id'],
+							'required:true',
+						],
+						'current_status_id' => 'required',
+						'next_status_id' => 'required',
+						'reject_status_id' => 'required',
+						'has_email_noty' => 'required',
+						'has_sms_noty' => 'required',
+					], $error_messages);
+
+					if ($validator->fails()) {
+						return response()->json(['success' => false, 'errors' => $validator->errors()->all()]);
+					}
+
+					//FIND DUPLICATE APPROVAL-LEVELS
+					foreach ($request->approval_levels as $search_key => $search_array) {
+						if ($search_array['name'] == $approval_level['name']) {
+							if ($search_key != $approval_level_key) {
+								return response()->json(['success' => false, 'errors' => ['Approval Level name is already taken']]);
+							}
+						}
+						if ($search_array['approval_order'] == $approval_level['approval_order']) {
+							if ($search_key != $approval_level_key) {
+								return response()->json(['success' => false, 'errors' => ['Approval Order is already taken']]);
+							}
+						}
+					}
+				}
+
+				//DELETE APPROVAL-LEVELS
+				DB::beginTransaction();
+				if (!empty($request->approval_level_removal_ids)) {
+					$approval_level_removal_ids = json_decode($request->approval_level_removal_ids, true);
+					$approval_level_delete = ApprovalLevel::withTrashed()->whereIn('id', $approval_level_removal_ids)->forcedelete();
+				}
+
+				foreach ($request->approval_levels as $key => $approval_level) {
+					$approval_level_save = ApprovalLevel::withTrashed()->firstOrNew(['id' => $approval_level['id']]);
+					$approval_level_save->fill($approval_level);
+					// has email noty?
+					if ($approval_level['has_email_noty'] == 'Yes') {
+						$approval_level_save->has_email_noty = 1;
+					} else {
+						$approval_level_save->has_email_noty = 0;
+					}
+					// has sms noty?
+					if ($approval_level['has_sms_noty'] == 'Yes') {
+						$approval_level_save->has_sms_noty = 1;
+					} else {
+						$approval_level_save->has_sms_noty = 0;
+					}
+					// active status
+					if ($approval_level['switch_value'] == 'Active') {
+						$approval_level_save->deleted_at = NULL;
+						$approval_level_save->deleted_by_id = NULL;
+					} else {
+						$approval_level_save->deleted_at = date('Y-m-d H:i:s');
+						$approval_level_save->deleted_by_id = Auth::user()->id;
+					}
+					if (empty($approval_level['id'])) {
+						$msg = "Saved";
+						$approval_level_save->created_by_id = Auth()->user()->id;
+						$approval_level_save->created_at = date('Y-m-d H:i:s');
+						$approval_level_save->updated_by_id = NULL;
+						$approval_level_save->updated_at = NULL;
+					} else {
+						$msg = "Updated";
+						$approval_level_save->updated_by_id = Auth()->user()->id;
+						$approval_level_save->updated_at = date('Y-m-d H:i:s');
+					}
+					$approval_level_save->save();
+				}
+				DB::commit();
+				return response()->json(['success' => true, 'comes_from' => $msg]);
+			} else {
+				if (!empty($request->approval_level_removal_ids)) {
+					$approval_level_removal_ids = json_decode($request->approval_level_removal_ids, true);
+					$approval_level_delete = ApprovalLevel::withTrashed()->whereIn('id', $approval_level_removal_ids)->forcedelete();
+					$msg = "Updated";
+					return response()->json(['success' => true, 'comes_from' => $msg]);
+				}
+				return response()->json(['success' => true, 'comes_from' => '']);
+			}
+
+		} catch (Exception $e) {
+			DB::rollBack();
+			return response()->json(['success' => false, 'errors' => ['Exception Error' => $e->getMessage()]]);
+		}
 	}
 }

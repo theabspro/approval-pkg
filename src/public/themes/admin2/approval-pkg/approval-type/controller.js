@@ -298,8 +298,9 @@ app.component('approvalTypeView', {
                 'id': $routeParams.id,
             }
         }).then(function(response) {
-            console.log(response.data);
+            //console.log(response.data);
             self.approval_type = response.data.approval_type;
+            self.extras = response.data.extras;
             self.action = response.data.action;
             $rootScope.loading = false;
             if (self.action == 'View') {
@@ -308,6 +309,19 @@ app.component('approvalTypeView', {
                 } else {
                     self.switch_value = 'Active';
                 }
+                angular.forEach(response.data.approval_type.approval_levels, function(value, key) {
+                    //console.log(key, value);
+                    if (value.has_email_noty == 1) {
+                        value.has_email_noty = 'Yes';
+                    } else {
+                        value.has_email_noty = 'No';
+                    }
+                    if (value.has_sms_noty == 1) {
+                        value.has_sms_noty = 'Yes';
+                    } else {
+                        value.has_sms_noty = 'No';
+                    }
+                });
             }
         });
 
@@ -326,23 +340,29 @@ app.component('approvalTypeView', {
         $scope.btnNxt = function() {}
         $scope.prev = function() {}*/
 
-        /*self.addNewApprovalTypeStatus = function() {
-            self.approval_type.approval_type_statuses.push({
+        self.addNewApprovalLevel = function() {
+            self.approval_type.approval_levels.push({
                 id: '',
-                status:'',
+                name:'',
+                approval_order:'',
+                current_status_id:'',
+                next_status_id:'',
+                reject_status_id:'',
+                has_email_noty:'No',
+                has_sms_noty:'No',
                 switch_value: 'Active',
             });
         }
-        self.approval_type_status_removal_ids = [];
-        self.removeApprovalTypeStatus = function(index, approval_type_status_id) {
-            if(approval_type_status_id) {
-                self.approval_type_status_removal_ids.push(approval_type_status_id);
-                $('#approval_type_status_removal_ids').val(JSON.stringify(self.approval_type_status_removal_ids));
+        self.approval_level_removal_ids = [];
+        self.removeApprovalLevel = function(index, approval_level_id) {
+            if(approval_level_id) {
+                self.approval_level_removal_ids.push(approval_level_id);
+                $('#approval_level_removal_ids').val(JSON.stringify(self.approval_level_removal_ids));
             }
-            self.approval_type.approval_type_statuses.splice(index, 1);
-        }*/
+            self.approval_type.approval_levels.splice(index, 1);
+        }
 
-        /*var form_id = '#form';
+        var form_id = '#form';
         var v = jQuery(form_id).validate({
             ignore: '',
             rules: {
@@ -351,15 +371,20 @@ app.component('approvalTypeView', {
                     minlength: 3,
                     maxlength: 191,
                 },
-                'code': {
+                'approval_order': {
                     required: true,
-                    minlength: 3,
-                    maxlength: 191,
+                    number: true,
+                    minlength: 1,
+                    maxlength: 3,
                 },
-                'filter_field': {
+                'current_status_id': {
                     required: true,
-                    minlength: 3,
-                    maxlength: 255,
+                },
+                'next_status_id': {
+                    required: true,
+                },
+                'reject_status_id': {
+                    required: true,
                 },
             },
             invalidHandler: function(event, validator) {
@@ -376,7 +401,7 @@ app.component('approvalTypeView', {
                 let formData = new FormData($(form_id)[0]);
                 $('#submit').button('loading');
                 $.ajax({
-                        url: laravel_routes['saveApprovalType'],
+                        url: laravel_routes['saveApprovalLevel'],
                         method: "POST",
                         data: formData,
                         processData: false,
@@ -400,11 +425,13 @@ app.component('approvalTypeView', {
                             $('#submit').button('reset');
 
                         } else {
-                            $noty = new Noty({
-                                type: 'success',
-                                layout: 'topRight',
-                                text: 'Approval Type ' + res.comes_from + ' Successfully',
-                            }).show();
+                            if(res.comes_from != '') {
+                                $noty = new Noty({
+                                    type: 'success',
+                                    layout: 'topRight',
+                                    text: 'Approval Level ' + res.comes_from + ' Successfully',
+                                }).show();
+                            }
                             setTimeout(function() {
                                 $noty.close();
                             }, 3000);
@@ -426,6 +453,6 @@ app.component('approvalTypeView', {
                         }, 3000);
                     });
             }
-        });*/
+        });
     }
 });

@@ -11,14 +11,20 @@ class ApprovalLevel extends Model {
 	use SoftDeletes;
 	protected $table = 'approval_levels';
 	protected $fillable = [
-		'code',
+		'approval_type_id',
 		'name',
-		'cust_group',
-		'dimension',
-		'mobile_no',
-		'email',
-		'company_id',
+		'approval_order',
+		'current_status_id',
+		'next_status_id',
+		'has_email_noty',
+		'has_sms_noty',
+		'reject_status_id',
 	];
+	protected $appends = ['switch_value'];
+
+	public function getSwitchValueAttribute() {
+		return !empty($this->attributes['deleted_at']) ? 'Inactive' : 'Active';
+	}
 
 	public function approvalType() {
 		return $this->belongsTo('Abs\ApprovalPkg\ApprovalType');

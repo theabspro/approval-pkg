@@ -6,4 +6,5 @@ Route::group(['namespace' => 'Abs\ApprovalPkg', 'middleware' => ['web', 'auth'],
 	Route::post('/approval-type/save', 'ApprovalTypeController@saveApprovalType')->name('saveApprovalType');
 	Route::get('/approval-type/delete', 'ApprovalTypeController@deleteApprovalType')->name('deleteApprovalType');
 	Route::get('approval-type/view', 'ApprovalTypeController@viewApprovalType')->name('viewApprovalType');
+	Route::post('/approval-level/save', 'ApprovalTypeController@saveApprovalLevel')->name('saveApprovalLevel');
 });

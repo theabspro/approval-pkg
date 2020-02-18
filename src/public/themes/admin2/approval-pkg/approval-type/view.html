@@ -88,7 +88,6 @@
                                                         <tr>
                                                             <th class="width-230">Status Name</th>
                                                             <th class="width-230">Active Status</th>
-                                                            <!-- <th class="width-60"></th> -->
                                                         </tr>
                                                     </thead>
                                                     <tbody class="approval_type_status_list" ng-repeat="(index, approval_type_status) in $ctrl.approval_type.approval_type_statuses">
@@ -106,17 +105,127 @@
                                                                     <input type="hidden" name="approval_type_statuses[{{index}}][switch_value]" value="{{approval_type_status.switch_value}}">
                                                                 </div> 
                                                             </td>
-                                                            <!-- <td>
-                                                                <button class="btn-delete" ng-click="$ctrl.removeApprovalTypeStatus(index, approval_type_status.id)" type="button">
-                                                                    <img class="img-responsive" src="./public/theme/img/table/cndn/delete.svg" alt="Delete" />
-                                                                </button>
-                                                            </td> -->
                                                         </tr>
                                                     </tbody>
                                                     <tfoot>
                                                         <tr>
-                                                            <td colspan="2">
-                                                                <!-- <button type="button" class="btn btn-primary-light btn-square" ng-click="$ctrl.addNewApprovalTypeStatus()">+ Add </button> -->
+                                                            <td colspan="2"></td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div><!-- Table Responsive -->
+                                        </div><!-- Column -->
+                                        <div class="tab-pane-footer">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <a class="btn btn-secondary btn-prev">Previous</a>
+                                                    <a class="btn btn-primary btn-nxt">Next</a>
+                                                </div>
+                                            </div>
+                                        </div><!-- Tab Footer -->
+                                    </div><!-- Row -->
+                                </div><!-- Tab Pane Wrap -->
+                            </div><!-- Tabe Pane -->
+                            <div class="tab-pane fade" id="approval-levels" data-animation="fadeInUp" data-animation-delay="300">
+                                <div class="tab-pane-wrap">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h6 class="tab-pane-title">Approval Type : <span class="color-primary-light">{{$ctrl.approval_type.name}}</span></h6>
+                                            <div class="table-responsive">
+                                                <table class="table table-form">
+                                                    <thead>
+                                                        <tr>
+                                                            <th class="width-60"></th>
+                                                            <th class="width-230">Name</th>
+                                                            <th class="width-230">Approval Order</th>
+                                                            <th class="width-230">Current Status</th>
+                                                            <th class="width-230">Approval Status</th>
+                                                            <th class="width-230">Reject Status</th>
+                                                            <th class="width-230">Has Email Noty?</th>
+                                                            <!-- <th class="width-230">Email Noty</th> -->
+                                                            <th class="width-230">Has SMS Noty?</th>
+                                                            <!-- <th class="width-230">SMS Noty</th> -->
+                                                            <th class="width-230">Active Status</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="approval_level_list" ng-repeat="(index, approval_level) in $ctrl.approval_type.approval_levels">
+                                                        <input type="hidden" name="approval_levels[{{index}}][id]" value="{{approval_level.id}}">
+                                                        <input type="hidden" name="approval_levels[{{index}}][approval_type_id]" value="{{$ctrl.approval_type.id}}">
+                                                        <tr>
+                                                            <td>
+                                                                <button class="btn-delete" ng-click="$ctrl.removeApprovalLevel(index, approval_level.id)" type="button">
+                                                                    <img class="img-responsive" src="./public/theme/img/table/cndn/delete.svg" alt="Delete" />
+                                                                </button>
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control type-sm" name="approval_levels[{{index}}][name]" ng-model="approval_level.name" placeholder="Enter Name" autocomplete="off" minlength="3" maxlength="191" required="required" />
+                                                            </td>
+                                                            <td>
+                                                                <input type="text" class="form-control type-sm" name="approval_levels[{{index}}][approval_order]" ng-model="approval_level.approval_order" placeholder="Enter Approval Order" autocomplete="off" minlength="1" maxlength="3" required="required" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" />
+                                                            </td>
+                                                            <td>
+                                                                <md-select class="type-sm" ng-model="approval_level.current_status_id" placeholder="Select Current Status" md-on-close="clearSearchCurrentStatus()" data-md-container-class="selectdemoSelectHeader">
+                                                                    <md-select-header class="demo-select-header">
+                                                                        <input ng-model="searchCurrentStatus" type="search" placeholder="Search for a Current Status.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                                    </md-select-header>
+                                                                    <md-optgroup>
+                                                                        <md-option ng-value="i.id" ng-repeat="i in $ctrl.extras.approval_type_status_list | filter:searchCurrentStatus">{{i.status}}</md-option>
+                                                                    </md-optgroup>
+                                                                </md-select>
+                                                                <input type="hidden" name="approval_levels[{{index}}][current_status_id]" value="{{approval_level.current_status_id}}" class="required"> 
+                                                            </td>
+                                                            <td>
+                                                                <md-select class="type-sm" ng-model="approval_level.next_status_id" placeholder="Select Approval Status" md-on-close="clearSearchApprovalStatus()" data-md-container-class="selectdemoSelectHeader">
+                                                                    <md-select-header class="demo-select-header">
+                                                                        <input ng-model="searchApprovalStatus" type="search" placeholder="Search for a Approval Status.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                                    </md-select-header>
+                                                                    <md-optgroup>
+                                                                        <md-option ng-value="i.id" ng-repeat="i in $ctrl.extras.approval_type_status_list | filter:searchApprovalStatus">{{i.status}}</md-option>
+                                                                    </md-optgroup>
+                                                                </md-select>
+                                                                <input type="hidden" name="approval_levels[{{index}}][next_status_id]" value="{{approval_level.next_status_id}}" class="required"> 
+                                                            </td>
+                                                            <td>
+                                                                <md-select class="type-sm" ng-model="approval_level.    reject_status_id" placeholder="Select Reject Status" md-on-close="clearSearchRejectStatus()" data-md-container-class="selectdemoSelectHeader">
+                                                                    <md-select-header class="demo-select-header">
+                                                                        <input ng-model="searchRejectStatus" type="search" placeholder="Search for a Reject Status.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                                    </md-select-header>
+                                                                    <md-optgroup>
+                                                                        <md-option ng-value="i.id" ng-repeat="i in $ctrl.extras.approval_type_status_list | filter:searchRejectStatus">{{i.status}}</md-option>
+                                                                    </md-optgroup>
+                                                                </md-select>
+                                                                <input type="hidden" name="approval_levels[{{index}}][reject_status_id]" value="{{approval_level.reject_status_id}}" class="required"> 
+                                                            </td>
+                                                            <td>
+                                                               <div class="tab-switch">
+                                                                    <md-switch ng-model="approval_level.has_email_noty" aria-label="Switch 1" ng-true-value="'No'" ng-false-value="'Yes'" class="md-warn type-2">
+                                                                        {{ approval_level.has_email_noty }}
+                                                                    </md-switch>
+                                                                    <input type="hidden" name="approval_levels[{{index}}][has_email_noty]" value="{{approval_level.has_email_noty}}">
+                                                                </div> 
+                                                            </td>
+                                                            <td>
+                                                               <div class="tab-switch">
+                                                                    <md-switch ng-model="approval_level.has_sms_noty" aria-label="Switch 1" ng-true-value="'No'" ng-false-value="'Yes'" class="md-warn type-2">
+                                                                        {{ approval_level.has_sms_noty }}
+                                                                    </md-switch>
+                                                                    <input type="hidden" name="approval_levels[{{index}}][has_sms_noty]" value="{{approval_level.has_sms_noty}}">
+                                                                </div> 
+                                                            </td>
+                                                            <td>
+                                                               <div class="tab-switch">
+                                                                    <md-switch ng-model="approval_level.switch_value" aria-label="Switch 1" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn">
+                                                                        {{ approval_level.switch_value }}
+                                                                    </md-switch>
+                                                                    <input type="hidden" name="approval_levels[{{index}}][switch_value]" value="{{approval_level.switch_value}}">
+                                                                </div> 
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td colspan="9">
+                                                                <button type="button" class="btn btn-primary-light btn-square" ng-click="$ctrl.addNewApprovalLevel()">+ Add </button>
                                                             </td>
                                                         </tr>
                                                     </tfoot>
@@ -127,11 +236,12 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <a class="btn btn-secondary btn-prev">Previous</a>
-                                                    <!-- <a class="btn btn-primary btn-nxt">Next</a> -->
-                                                    <!-- <button type="submit" id="submit" class="btn btn-primary">Submit</button> -->
+                                                    <a class="btn btn-primary btn-nxt">Next</a>
+                                                    <button type="submit" id="submit" class="btn btn-primary">Submit</button>
                                                 </div>
                                             </div>
                                         </div><!-- Tab Footer -->
+                                        <input type="hidden" name="approval_level_removal_ids" id="approval_level_removal_ids" value="">
                                     </div><!-- Row -->
                                 </div><!-- Tab Pane Wrap -->
                             </div><!-- Tabe Pane -->
