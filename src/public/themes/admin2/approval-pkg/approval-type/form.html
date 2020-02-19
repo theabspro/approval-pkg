@@ -5,11 +5,11 @@
         <div class="page-header-inner">
             <div class="page-header-content-left">
                 <div class="page-header-content button-block">
-                    <a href="#!/approval-pkg/approval-type/list" type="button" class="btn-back btn-img"><img class="img-responsive" src="./public/theme/img/content/previous.svg" alt="Back" /></a>
+                    <a href="#!/approval-pkg/approval-type/list" type="button" class="btn-back btn-img" ng-shortcut="'meta+shift+left'" ng-shortcut-click><img class="img-responsive" src="./public/theme/img/content/previous.svg" alt="Back" /></a>
                 </div><!-- Page Header Content -->
                 <div class="page-header-content title-block">
                     <h1 class="title"><b>{{$ctrl.action}} Approval Type</b></h1>
-                    <p class="subtitle"><a href="#!/approval-pkg/approval-type/list">Approval Types</a> / {{$ctrl.action}}</p>
+                    <p class="subtitle"><a href="#!/approval-pkg/approval-type/list" ng-shortcut="'meta+shift+left'" ng-shortcut-click>Approval Types</a> / {{$ctrl.action}}</p>
                 </div><!-- Page Header Content -->
             </div><!-- Page Header Content Left -->
         </div><!-- Page Header Inner -->
@@ -25,8 +25,8 @@
                             <!-- Filters -->
                             <div class="isotope-filters animated" data-animation="fadeInLeft" data-animation-delay="300">
                                 <ul class="nav nav-pills cndn-tabs">
-                                    <li class="active"><a class="filter active" data-target="#general-information" data-toggle="tab" aria-expanded="true">General Information</a></li>
-                                    <li><a data-target="#approval-status" data-toggle="tab" aria-expanded="true" class="filter">Approval Status</a></li>
+                                    <li class="active"><a class="filter active" data-target="#general-information" data-toggle="tab" aria-expanded="true" ng-shortcut="'meta+shift+up'" ng-shortcut-click>General Information</a></li>
+                                    <li><a data-target="#approval-status" data-toggle="tab" aria-expanded="true" class="filter" ng-shortcut="'meta+shift+down'" ng-shortcut-click>Approval Status</a></li>
                                 </ul>
                             </div><!-- Filters -->
                         </div><!-- Tab Header -->
@@ -126,7 +126,7 @@
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <a class="btn btn-secondary btn-prev">Previous</a>
-                                                    <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+                                                    <button type="submit" id="submit" class="btn btn-primary" ng-shortcut="'meta+shift+s'" ng-shortcut-click>Submit</button>
                                                 </div>
                                             </div>
                                         </div><!-- Tab Footer -->
