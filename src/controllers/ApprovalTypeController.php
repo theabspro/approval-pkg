@@ -28,27 +28,19 @@ class ApprovalTypeController extends Controller {
 				DB::raw('count(distinct approval_type_statuses.id) as no_of_status'),
 				DB::raw('IF(approval_types.deleted_at IS NULL,"Active","Inactive") as status')
 			)
-		/*->where('customers.company_id', Auth::user()->company_id)
+			->where('approval_types.company_id', Auth::user()->company_id)
 			->where(function ($query) use ($request) {
-				if (!empty($request->customer_code)) {
-					$query->where('customers.code', 'LIKE', '%' . $request->customer_code . '%');
+				if (!empty($request->approval_type_name)) {
+					$query->where('approval_types.name', 'LIKE', '%' . $request->approval_type_name . '%');
 				}
 			})
 			->where(function ($query) use ($request) {
-				if (!empty($request->customer_name)) {
-					$query->where('customers.name', 'LIKE', '%' . $request->customer_name . '%');
+				if ($request->status == '1') {
+					$query->whereNull('approval_types.deleted_at');
+				} else if ($request->status == '0') {
+					$query->whereNotNull('approval_types.deleted_at');
 				}
 			})
-			->where(function ($query) use ($request) {
-				if (!empty($request->mobile_no)) {
-					$query->where('customers.mobile_no', 'LIKE', '%' . $request->mobile_no . '%');
-				}
-			})
-			->where(function ($query) use ($request) {
-				if (!empty($request->email)) {
-					$query->where('customers.email', 'LIKE', '%' . $request->email . '%');
-				}
-			})*/
 			->groupBy('approval_types.id')
 			->orderby('approval_types.id', 'desc');
 		//dd($approval_types);

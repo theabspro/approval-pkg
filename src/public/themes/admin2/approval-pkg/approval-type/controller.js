@@ -1,6 +1,6 @@
 app.component('approvalTypeList', {
     templateUrl: approval_type_list_template_url,
-    controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location) {
+    controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location, $mdSelect) {
         $scope.loading = true;
         var self = this;
         self.hasPermission = HelperService.hasPermission;
@@ -40,10 +40,8 @@ app.component('approvalTypeList', {
                 type: "GET",
                 dataType: "json",
                 data: function(d) {
-                    /*d.approval_type_code = $('#approval_type_code').val();
                     d.approval_type_name = $('#approval_type_name').val();
-                    d.mobile_no = $('#mobile_no').val();
-                    d.email = $('#email').val();*/
+                    d.status = $('#status').val();
                 },
             },
 
@@ -111,25 +109,31 @@ app.component('approvalTypeList', {
         }
 
         //FOR FILTER
-        /*$('#approval_type_code').on('keyup', function() {
-            dataTables.fnFilter();
+        self.status = [
+            { id: '', name: 'Select Status' },
+            { id: '1', name: 'Active' },
+            { id: '0', name: 'Inactive' },
+        ];
+
+        /* Modal Md Select Hide */
+        $('.modal').bind('click', function(event) {
+            if ($('.md-select-menu-container').hasClass('md-active')) {
+                $mdSelect.hide();
+            }
         });
+
         $('#approval_type_name').on('keyup', function() {
             dataTables.fnFilter();
         });
-        $('#mobile_no').on('keyup', function() {
+        $scope.onSelectedStatus = function(val) {
+            $("#status").val(val);
             dataTables.fnFilter();
-        });
-        $('#email').on('keyup', function() {
-            dataTables.fnFilter();
-        });
+        }
         $scope.reset_filter = function() {
             $("#approval_type_name").val('');
-            $("#approval_type_code").val('');
-            $("#mobile_no").val('');
-            $("#email").val('');
+            $("#status").val('');
             dataTables.fnFilter();
-        }*/
+        }
 
         $rootScope.loading = false;
     }
