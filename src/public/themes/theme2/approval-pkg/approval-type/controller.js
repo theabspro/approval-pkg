@@ -47,7 +47,8 @@ app.component('approvalTypeList', {
 
             columns: [
                 { data: 'action', class: 'action', searchable: false },
-                { data: 'name', name: 'approval_types.name', searchable: true },
+                { data: 'approval_type_name', name: 'approval_types.name', searchable: true },
+                { data: 'approval_type_code', name: 'approval_types.code', searchable: true },
                 { data: 'no_of_levels', searchable: false },
                 { data: 'no_of_status', searchable: false },
             ],
@@ -65,6 +66,9 @@ app.component('approvalTypeList', {
             $('#search_approval_type').val('');
             $('#approval_types_list').DataTable().search('').draw();
         }
+        $('.refresh_table').on("click", function() {
+            $('#approval_types_list').DataTable().ajax.reload();
+        });
 
         var dataTables = $('#approval_types_list').dataTable();
         $("#search_approval_type").keyup(function() {
@@ -186,13 +190,13 @@ app.component('approvalTypeForm', {
         self.addNewApprovalTypeStatus = function() {
             self.approval_type.approval_type_statuses.push({
                 id: '',
-                status:'',
+                status: '',
                 switch_value: 'Active',
             });
         }
         self.approval_type_status_removal_ids = [];
         self.removeApprovalTypeStatus = function(index, approval_type_status_id) {
-            if(approval_type_status_id) {
+            if (approval_type_status_id) {
                 self.approval_type_status_removal_ids.push(approval_type_status_id);
                 $('#approval_type_status_removal_ids').val(JSON.stringify(self.approval_type_status_removal_ids));
             }
@@ -347,19 +351,19 @@ app.component('approvalTypeView', {
         self.addNewApprovalLevel = function() {
             self.approval_type.approval_levels.push({
                 id: '',
-                name:'',
-                approval_order:'',
-                current_status_id:'',
-                next_status_id:'',
-                reject_status_id:'',
-                has_email_noty:'No',
-                has_sms_noty:'No',
+                name: '',
+                approval_order: '',
+                current_status_id: '',
+                next_status_id: '',
+                reject_status_id: '',
+                has_email_noty: 'No',
+                has_sms_noty: 'No',
                 switch_value: 'Active',
             });
         }
         self.approval_level_removal_ids = [];
         self.removeApprovalLevel = function(index, approval_level_id) {
-            if(approval_level_id) {
+            if (approval_level_id) {
                 self.approval_level_removal_ids.push(approval_level_id);
                 $('#approval_level_removal_ids').val(JSON.stringify(self.approval_level_removal_ids));
             }
@@ -429,7 +433,7 @@ app.component('approvalTypeView', {
                             $('#submit').button('reset');
 
                         } else {
-                            if(res.comes_from != '') {
+                            if (res.comes_from != '') {
                                 $noty = new Noty({
                                     type: 'success',
                                     layout: 'topRight',

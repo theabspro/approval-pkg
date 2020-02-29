@@ -3,7 +3,7 @@
         <div class="page-header-inner">
             <div class="page-header-content-left">
                 <div class="page-header-content title-block">
-                    <h1 class="title type-2">Approval Types</h1>
+                    <h1 class="title type-2">Approval Types (<span id="table_info"></span>)</h1>
                 </div><!-- Page Header Content -->
                 <div class="page-header-content button-block">
                     <button class="btn btn-bordered" data-toggle="modal" data-target="#approval-type-filter-modal" ng-shortcut="'meta+shift+f'" ng-shortcut-click>
@@ -18,6 +18,13 @@
                         <li class="green">Active</li>
                         <li class="red">In Active</li>
                     </ul>
+                </div><!-- Page Header Content -->
+                <div class="page-header-content reset-block">
+                    <div class="reset-wrap">
+                        <button class="btn-reset reset-tooltip refresh_table">
+                            <img class="img-responsive" src="./public/theme/img/content/reset.svg" alt="Reset" />
+                        </button>
+                    </div>
                 </div><!-- Page Header Content -->
                 <div class="page-header-content search-block">
                     <div class="search_filter">
@@ -44,6 +51,7 @@
                             <tr>
                                 <th class="action">Action</th>
                                 <th>Approval Type</th>
+                                <th>Type Short Name</th>
                                 <th>No. of Levels</th>
                                 <th>No. of Status</th>
                             </tr>
