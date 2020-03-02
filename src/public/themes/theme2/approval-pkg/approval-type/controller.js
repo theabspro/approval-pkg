@@ -47,7 +47,7 @@ app.component('approvalTypeList', {
 
             columns: [
                 { data: 'action', class: 'action', searchable: false },
-                { data: 'approval_type_name', name: 'approval_types.name', searchable: true },
+                { data: 'name', name: 'approval_types.name', searchable: true },
                 { data: 'approval_type_code', name: 'approval_types.code', searchable: true },
                 { data: 'no_of_levels', searchable: false },
                 { data: 'no_of_status', searchable: false },
