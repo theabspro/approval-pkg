@@ -38,34 +38,26 @@
                             <div class="tab-pane fade in active" id="general-information" data-animation="fadeInUp" data-animation-delay="300">
                                 <div class="tab-pane-wrap">
                                     <div class="row">
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Approval Type Name <sup class="mandatory">*</sup></label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.approval_type.name" name="name" placeholder="Enter Approval Type Name" minlength="3" maxlength="191" autocomplete="off" readonly />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Approval Type Code <sup class="mandatory">*</sup></label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.approval_type.code" name="code" placeholder="Enter Approval Type Code" minlength="3" maxlength="191" autocomplete="off" readonly />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Filter Field <sup class="mandatory">*</sup></label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.approval_type.filter_field " name="filter_field" placeholder="Enter Filter Field" minlength="3" maxlength="255" autocomplete="off" readonly />
-                                            </div><!-- Feild -->
-                                        </div><!-- Column -->
-                                        <div class="col-md-3">
-                                            <div class="input-text form-group">
-                                                <label>Active Status <sup class="mandatory">*</sup></label>
-                                                <div class="tab-switch">
-                                                    <md-switch ng-model="$ctrl.switch_value" aria-label="Switch 1" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn" ng-disabled="true">
-                                                        {{ $ctrl.switch_value }}
-                                                    </md-switch>
-                                                    <input type="hidden" name="status" value="{{$ctrl.switch_value}}">
-                                                </div>
-                                            </div><!-- Form Group -->
+                                        <div class="col-md-12">
+                                            <ul class="grid-row">
+                                                <li class="grid-col-3">
+                                                    <span class="grid-col-label">Approval Type Name</span>
+                                                    <span class="grid-col-value">{{$ctrl.approval_type.name}}</span>
+                                                </li>
+                                                <li class="grid-col-3">
+                                                    <span class="grid-col-label">Approval Type Code</span>
+                                                    <span class="grid-col-value">{{$ctrl.approval_type.code}}</span>
+                                                </li>
+                                                <li class="grid-col-3">
+                                                    <span class="grid-col-label">Filter Field</span>
+                                                    <span class="grid-col-value">{{$ctrl.approval_type.filter_field}}</span>
+                                                </li>
+                                                <li class="grid-col-3">
+                                                    <span class="grid-col-label">Active Status</span>
+                                                    <span ng-if="$ctrl.approval_type.deleted_at != NULL" class="grid-col-value color-red">In Active</span>
+                                                    <span ng-if="$ctrl.approval_type.deleted_at == NULL" class="grid-col-value color-green">Active</span>
+                                                </li>
+                                            </ul>
                                         </div><!-- Column -->
                                         <div class="tab-pane-footer">
                                             <div class="row">
@@ -80,38 +72,24 @@
                             <div class="tab-pane fade" id="approval-status" data-animation="fadeInUp" data-animation-delay="300">
                                 <div class="tab-pane-wrap">
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-lg-6 col-md-8">
                                             <h6 class="tab-pane-title">Approval Type : <span class="color-primary-light">{{$ctrl.approval_type.name}}</span></h6>
                                             <div class="table-responsive">
                                                 <table class="table table-form">
                                                     <thead>
                                                         <tr>
-                                                            <th class="width-230">Status Name</th>
+                                                            <th class="width-280">Status Name</th>
                                                             <th class="width-230">Active Status</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody class="approval_type_status_list" ng-repeat="(index, approval_type_status) in $ctrl.approval_type.approval_type_statuses">
-                                                        <input type="hidden" name="approval_type_statuses[{{index}}][id]" value="{{approval_type_status.id}}">
-                                                        <input type="hidden" name="approval_type_statuses[{{index}}][approval_type_id]" value="{{$ctrl.approval_type.id}}">
-                                                        <tr>
-                                                            <td>
-                                                                <input type="text" class="form-control type-sm" name="approval_type_statuses[{{index}}][status]" ng-model="approval_type_status.status" placeholder="Enter Status" autocomplete="off" minlength="3" maxlength="191" required="required" readonly />
-                                                            </td>
-                                                            <td>
-                                                               <div class="tab-switch">
-                                                                    <md-switch ng-model="approval_type_status.switch_value" aria-label="Switch 1" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn" ng-disabled="true">
-                                                                        {{ approval_type_status.switch_value }}
-                                                                    </md-switch>
-                                                                    <input type="hidden" name="approval_type_statuses[{{index}}][switch_value]" value="{{approval_type_status.switch_value}}">
-                                                                </div> 
-                                                            </td>
+                                                    <tbody class="approval_type_status_list">
+                                                        <tr ng-repeat="(index, approval_type_status) in $ctrl.approval_type.approval_type_statuses">
+                                                            <input type="hidden" name="approval_type_statuses[{{index}}][id]" value="{{approval_type_status.id}}">
+                                                            <input type="hidden" name="approval_type_statuses[{{index}}][approval_type_id]" value="{{$ctrl.approval_type.id}}">
+                                                            <td>{{approval_type_status.status}}</td>
+                                                            <td class="{{approval_type_status.deleted_at != NULL ? 'text-red' : 'text-green' }}">{{approval_type_status.switch_value}}</td>
                                                         </tr>
                                                     </tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <td colspan="2"></td>
-                                                        </tr>
-                                                    </tfoot>
                                                 </table>
                                             </div><!-- Table Responsive -->
                                         </div><!-- Column -->
@@ -137,15 +115,15 @@
                                                         <tr>
                                                             <th class="width-60"></th>
                                                             <th class="width-230">Name</th>
-                                                            <th class="width-230">Approval Order</th>
-                                                            <th class="width-230">Current Status</th>
-                                                            <th class="width-230">Approval Status</th>
-                                                            <th class="width-230">Reject Status</th>
-                                                            <th class="width-230">Has Email Noty?</th>
+                                                            <th class="width-115">Approval Order</th>
+                                                            <th class="width-115">Current Status</th>
+                                                            <th class="width-115">Approval Status</th>
+                                                            <th class="width-115">Reject Status</th>
+                                                            <th class="width-95">Has Email Noty?</th>
                                                             <!-- <th class="width-230">Email Noty</th> -->
-                                                            <th class="width-230">Has SMS Noty?</th>
+                                                            <th class="width-95">Has SMS Noty?</th>
                                                             <!-- <th class="width-230">SMS Noty</th> -->
-                                                            <th class="width-230">Active Status</th>
+                                                            <th class="width-95">Active Status</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody class="approval_level_list" ng-repeat="(index, approval_level) in $ctrl.approval_type.approval_levels">
@@ -172,7 +150,7 @@
                                                                         <md-option ng-value="i.id" ng-repeat="i in $ctrl.extras.approval_type_status_list | filter:searchCurrentStatus">{{i.status}}</md-option>
                                                                     </md-optgroup>
                                                                 </md-select>
-                                                                <input type="hidden" name="approval_levels[{{index}}][current_status_id]" value="{{approval_level.current_status_id}}" class="required"> 
+                                                                <input type="hidden" name="approval_levels[{{index}}][current_status_id]" value="{{approval_level.current_status_id}}" class="required">
                                                             </td>
                                                             <td>
                                                                 <md-select class="type-sm" ng-model="approval_level.next_status_id" placeholder="Select Approval Status" md-on-close="clearSearchApprovalStatus()" data-md-container-class="selectdemoSelectHeader">
@@ -183,7 +161,7 @@
                                                                         <md-option ng-value="i.id" ng-repeat="i in $ctrl.extras.approval_type_status_list | filter:searchApprovalStatus">{{i.status}}</md-option>
                                                                     </md-optgroup>
                                                                 </md-select>
-                                                                <input type="hidden" name="approval_levels[{{index}}][next_status_id]" value="{{approval_level.next_status_id}}" class="required"> 
+                                                                <input type="hidden" name="approval_levels[{{index}}][next_status_id]" value="{{approval_level.next_status_id}}" class="required">
                                                             </td>
                                                             <td>
                                                                 <md-select class="type-sm" ng-model="approval_level.    reject_status_id" placeholder="Select Reject Status" md-on-close="clearSearchRejectStatus()" data-md-container-class="selectdemoSelectHeader">
@@ -194,31 +172,31 @@
                                                                         <md-option ng-value="i.id" ng-repeat="i in $ctrl.extras.approval_type_status_list | filter:searchRejectStatus">{{i.status}}</md-option>
                                                                     </md-optgroup>
                                                                 </md-select>
-                                                                <input type="hidden" name="approval_levels[{{index}}][reject_status_id]" value="{{approval_level.reject_status_id}}" class="required"> 
+                                                                <input type="hidden" name="approval_levels[{{index}}][reject_status_id]" value="{{approval_level.reject_status_id}}" class="required">
                                                             </td>
                                                             <td>
-                                                               <div class="tab-switch">
-                                                                    <md-switch ng-model="approval_level.has_email_noty" aria-label="Switch 1" ng-true-value="'No'" ng-false-value="'Yes'" class="md-warn type-2">
+                                                                <div class="tab-switch">
+                                                                    <md-switch ng-model="approval_level.has_email_noty" aria-label="Switch 1" ng-true-value="'No'" ng-false-value="'Yes'" class="md-warn type-2 type-sm">
                                                                         {{ approval_level.has_email_noty }}
                                                                     </md-switch>
                                                                     <input type="hidden" name="approval_levels[{{index}}][has_email_noty]" value="{{approval_level.has_email_noty}}">
-                                                                </div> 
+                                                                </div>
                                                             </td>
                                                             <td>
-                                                               <div class="tab-switch">
-                                                                    <md-switch ng-model="approval_level.has_sms_noty" aria-label="Switch 1" ng-true-value="'No'" ng-false-value="'Yes'" class="md-warn type-2">
+                                                                <div class="tab-switch">
+                                                                    <md-switch ng-model="approval_level.has_sms_noty" aria-label="Switch 1" ng-true-value="'No'" ng-false-value="'Yes'" class="md-warn type-2 type-sm">
                                                                         {{ approval_level.has_sms_noty }}
                                                                     </md-switch>
                                                                     <input type="hidden" name="approval_levels[{{index}}][has_sms_noty]" value="{{approval_level.has_sms_noty}}">
-                                                                </div> 
+                                                                </div>
                                                             </td>
                                                             <td>
-                                                               <div class="tab-switch">
-                                                                    <md-switch ng-model="approval_level.switch_value" aria-label="Switch 1" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn">
+                                                                <div class="tab-switch">
+                                                                    <md-switch ng-model="approval_level.switch_value" aria-label="Switch 1" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn type-sm">
                                                                         {{ approval_level.switch_value }}
                                                                     </md-switch>
                                                                     <input type="hidden" name="approval_levels[{{index}}][switch_value]" value="{{approval_level.switch_value}}">
-                                                                </div> 
+                                                                </div>
                                                             </td>
                                                         </tr>
                                                     </tbody>
