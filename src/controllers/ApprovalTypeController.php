@@ -1,6 +1,7 @@
 <?php
 
 namespace Abs\ApprovalPkg;
+use Abs\ApprovalPkg\ApprovalLevel;
 use Abs\ApprovalPkg\ApprovalType;
 use Abs\ApprovalPkg\ApprovalTypeStatus;
 use App\Http\Controllers\Controller;
@@ -346,5 +347,9 @@ class ApprovalTypeController extends Controller {
 			DB::rollBack();
 			return response()->json(['success' => false, 'errors' => ['Exception Error' => $e->getMessage()]]);
 		}
+	}
+
+	public function getApprovalStatus(Request $request) {
+		return ApprovalLevel::getApprovalLevelList($request);
 	}
 }
