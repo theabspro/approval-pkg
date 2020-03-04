@@ -350,6 +350,6 @@ class ApprovalTypeController extends Controller {
 	}
 
 	public function getApprovalStatus(Request $request) {
-		return ApprovalLevel::getApprovalLevelList($request);
+		return ApprovalTypeStatus::getApprovalTypeStatusList($request);
 	}
 }

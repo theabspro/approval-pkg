@@ -26,17 +26,6 @@ class ApprovalLevel extends Model {
 		return !empty($this->attributes['deleted_at']) ? 'Inactive' : 'Active';
 	}
 
-	public static function getApprovalLevelList($request) {
-		$data['approval_type_status_list'] = self::select(
-			'id',
-			'name'
-		)
-			->where('approval_type_id', $request->id)
-			->orderBy('id', 'ASC')
-			->get();
-		return response()->json($data);
-	}
-
 	public function approvalType() {
 		return $this->belongsTo('Abs\ApprovalPkg\ApprovalType');
 	}

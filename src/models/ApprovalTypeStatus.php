@@ -21,6 +21,17 @@ class ApprovalTypeStatus extends Model {
 		return !empty($this->attributes['deleted_at']) ? 'Inactive' : 'Active';
 	}
 
+	public static function getApprovalTypeStatusList($request) {
+		$data['approval_type_status_list'] = self::select(
+			'id',
+			'status'
+		)
+			->where('approval_type_id', $request->id)
+			->orderBy('id', 'ASC')
+			->get();
+		return response()->json($data);
+	}
+
 	public static function createFromObject($record_data) {
 
 		$errors = [];
