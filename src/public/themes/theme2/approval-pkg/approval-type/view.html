@@ -113,28 +113,23 @@
                                                 <table class="table table-form">
                                                     <thead>
                                                         <tr>
-                                                            <th class="width-60"></th>
                                                             <th class="width-230">Name</th>
                                                             <th class="width-115">Approval Order</th>
                                                             <th class="width-115">Current Status</th>
                                                             <th class="width-115">Approval Status</th>
                                                             <th class="width-115">Reject Status</th>
-                                                            <th class="width-95">Has Email Noty?</th>
-                                                            <!-- <th class="width-230">Email Noty</th> -->
-                                                            <th class="width-95">Has SMS Noty?</th>
-                                                            <!-- <th class="width-230">SMS Noty</th> -->
                                                             <th class="width-95">Active Status</th>
+                                                            <th class="width-95">Email Notification</th>
+                                                            <!-- <th class="width-115">Email Notification</th> -->
+                                                            <th class="width-95">SMS Notification</th>
+                                                            <!-- <th class="width-115">SMS Notification</th> -->
+                                                            <th class="width-45"></th>
                                                         </tr>
                                                     </thead>
                                                     <tbody class="approval_level_list" ng-repeat="(index, approval_level) in $ctrl.approval_type.approval_levels">
                                                         <input type="hidden" name="approval_levels[{{index}}][id]" value="{{approval_level.id}}">
                                                         <input type="hidden" name="approval_levels[{{index}}][approval_type_id]" value="{{$ctrl.approval_type.id}}">
                                                         <tr>
-                                                            <td>
-                                                                <button class="btn-delete" ng-click="$ctrl.removeApprovalLevel(index, approval_level.id)" type="button">
-                                                                    <img class="img-responsive" src="./public/theme/img/table/cndn/delete.svg" alt="Delete" />
-                                                                </button>
-                                                            </td>
                                                             <td>
                                                                 <input type="text" class="form-control type-sm" name="approval_levels[{{index}}][name]" ng-model="approval_level.name" placeholder="Enter Name" autocomplete="off" minlength="3" maxlength="191" required="required" />
                                                             </td>
@@ -176,6 +171,14 @@
                                                             </td>
                                                             <td>
                                                                 <div class="tab-switch">
+                                                                    <md-switch ng-model="approval_level.switch_value" aria-label="Switch 1" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn type-sm">
+                                                                        {{ approval_level.switch_value }}
+                                                                    </md-switch>
+                                                                    <input type="hidden" name="approval_levels[{{index}}][switch_value]" value="{{approval_level.switch_value}}">
+                                                                </div>
+                                                            </td>
+                                                            <td>
+                                                                <div class="tab-switch">
                                                                     <md-switch ng-model="approval_level.has_email_noty" aria-label="Switch 1" ng-true-value="'No'" ng-false-value="'Yes'" class="md-warn type-2 type-sm">
                                                                         {{ approval_level.has_email_noty }}
                                                                     </md-switch>
@@ -191,19 +194,16 @@
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <div class="tab-switch">
-                                                                    <md-switch ng-model="approval_level.switch_value" aria-label="Switch 1" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn type-sm">
-                                                                        {{ approval_level.switch_value }}
-                                                                    </md-switch>
-                                                                    <input type="hidden" name="approval_levels[{{index}}][switch_value]" value="{{approval_level.switch_value}}">
-                                                                </div>
+                                                                <button class="btn-delete" ng-click="$ctrl.removeApprovalLevel(index, approval_level.id)" type="button">
+                                                                    <img class="img-responsive" src="./public/theme/img/table/cndn/delete.svg" alt="Delete" />
+                                                                </button>
                                                             </td>
                                                         </tr>
                                                     </tbody>
                                                     <tfoot>
                                                         <tr>
                                                             <td colspan="9">
-                                                                <button type="button" class="btn btn-primary-light btn-square" ng-click="$ctrl.addNewApprovalLevel()">+ Add </button>
+                                                                <button type="button" class="btn btn-primary-light btn-square" ng-click="$ctrl.addNewApprovalLevel()">+ Add More </button>
                                                             </td>
                                                         </tr>
                                                     </tfoot>
