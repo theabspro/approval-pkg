@@ -24,6 +24,20 @@
 	    when('/approval-pkg/approval-type/view/:id', {
 	        template: '<approval-type-view></approval-type-view>',
 	        title: 'View Approval Type',
+	    }).
+
+	    //APPROVAL LEVELS
+	    when('/approval-pkg/approval-level/list', {
+	        template: '<approval-level-list></approval-level-list>',
+	        title: 'Approval Types',
+	    }).
+	    when('/approval-pkg/approval-level/add', {
+	        template: '<approval-level-form></approval-level-form>',
+	        title: 'Add Approval Type',
+	    }).
+	    when('/approval-pkg/approval-level/edit/:id', {
+	        template: '<approval-level-form></approval-level-form>',
+	        title: 'Edit Approval Type',
 	    });
 
 	}]);
@@ -31,5 +45,10 @@
     var approval_type_list_template_url = "{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-type/list.html')}}";
     var approval_type_form_template_url = "{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-type/form.html')}}";
     var approval_type_view_template_url = "{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-type/view.html')}}";
+
+    var approval_level_list_template_url = "{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-level/list.html')}}";
+    var approval_level_form_template_url = "{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-level/form.html')}}";
+    var approval_level_view_template_url = "{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-level/view.html')}}";
 </script>
 <script type="text/javascript" src="{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-type/controller.js?v=2')}}"></script>
+<script type="text/javascript" src="{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-level/controller.js?v=2')}}"></script>

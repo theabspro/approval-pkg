@@ -6,6 +6,12 @@ Route::group(['namespace' => 'Abs\ApprovalPkg', 'middleware' => ['web', 'auth'],
 	Route::post('/approval-type/save', 'ApprovalTypeController@saveApprovalType')->name('saveApprovalType');
 	Route::get('/approval-type/delete', 'ApprovalTypeController@deleteApprovalType')->name('deleteApprovalType');
 	Route::get('approval-type/view', 'ApprovalTypeController@viewApprovalType')->name('viewApprovalType');
-	Route::post('/approval-level/save', 'ApprovalTypeController@saveApprovalLevel')->name('saveApprovalLevel');
+	Route::post('/approval-type-level/save', 'ApprovalTypeController@saveApprovalTypeLevel')->name('saveApprovalTypeLevel');
 	Route::get('/approval-status', 'ApprovalTypeController@getApprovalStatus')->name('getApprovalStatus');
+
+	//Approval Level
+	Route::get('/approval-level/get-list', 'ApprovalLevelController@getApprovalLevelList')->name('getApprovalLevelList');
+	Route::get('/approval-level/get-form-data', 'ApprovalLevelController@getApprovalLevelFormData')->name('getApprovalLevelFormData');
+	Route::post('/approval-level/save', 'ApprovalLevelController@saveApprovalLevel')->name('saveApprovalLevel');
+	Route::get('/approval-level/delete', 'ApprovalLevelController@deleteApprovalLevel')->name('deleteApprovalLevel');
 });

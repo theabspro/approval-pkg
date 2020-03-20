@@ -11,14 +11,15 @@ class ApprovalLevel extends Model {
 	use SoftDeletes;
 	protected $table = 'approval_levels';
 	protected $fillable = [
-		'approval_type_id',
+		// 'approval_type_id',
 		'name',
-		'approval_order',
-		'current_status_id',
-		'next_status_id',
-		'has_email_noty',
-		'has_sms_noty',
-		'reject_status_id',
+		'category_id',
+		// 'approval_order',
+		// 'current_status_id',
+		// 'next_status_id',
+		// 'has_email_noty',
+		// 'has_sms_noty',
+		// 'reject_status_id',
 	];
 	protected $appends = ['switch_value'];
 

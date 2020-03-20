@@ -306,7 +306,7 @@ app.component('approvalTypeView', {
                 'id': $routeParams.id,
             }
         }).then(function(response) {
-            //console.log(response.data);
+            console.log(response.data);
             self.approval_type = response.data.approval_type;
             self.extras = response.data.extras;
             self.action = response.data.action;
@@ -319,12 +319,12 @@ app.component('approvalTypeView', {
                 }
                 angular.forEach(response.data.approval_type.approval_levels, function(value, key) {
                     //console.log(key, value);
-                    if (value.has_email_noty == 1) {
+                    if (value.pivot.has_email_noty == 1) {
                         value.has_email_noty = 'Yes';
                     } else {
                         value.has_email_noty = 'No';
                     }
-                    if (value.has_sms_noty == 1) {
+                    if (value.pivot.has_sms_noty == 1) {
                         value.has_sms_noty = 'Yes';
                     } else {
                         value.has_sms_noty = 'No';
@@ -409,7 +409,7 @@ app.component('approvalTypeView', {
                 let formData = new FormData($(form_id)[0]);
                 $('#submit').button('loading');
                 $.ajax({
-                        url: laravel_routes['saveApprovalLevel'],
+                        url: laravel_routes['saveApprovalTypeLevel'],
                         method: "POST",
                         data: formData,
                         processData: false,

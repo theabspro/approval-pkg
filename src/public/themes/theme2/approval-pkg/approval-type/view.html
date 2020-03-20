@@ -131,13 +131,23 @@
                                                         <input type="hidden" name="approval_levels[{{index}}][approval_type_id]" value="{{$ctrl.approval_type.id}}">
                                                         <tr>
                                                             <td>
-                                                                <input type="text" class="form-control type-sm" name="approval_levels[{{index}}][name]" ng-model="approval_level.name" placeholder="Enter Name" autocomplete="off" minlength="3" maxlength="191" required="required" />
+                                                                <md-select class="type-sm" ng-model="approval_level.pivot.approval_level_id" placeholder="Select Approval Level" md-on-close="clearSearchCurrentStatus()" data-md-container-class="selectdemoSelectHeader">
+                                                                    <md-select-header class="demo-select-header">
+                                                                        <input ng-model="searchCurrentStatus" type="search" placeholder="Search for a Approval Level.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                                    </md-select-header>
+                                                                    <md-optgroup>
+                                                                        <md-option ng-value="i.id" ng-repeat="i in $ctrl.extras.approval_levels_list | filter:searchCurrentStatus">{{i.name}}</md-option>
+                                                                    </md-optgroup>
+                                                                </md-select>
+                                                                <input type="hidden" name="approval_levels[{{index}}][approval_level]" value="{{approval_level.pivot.approval_level_id}}" class="required">
+                                                                <!-- 
+                                                                <input type="text" class="form-control type-sm" name="approval_levels[{{index}}][name]" ng-model="approval_level.name" placeholder="Enter Name" autocomplete="off" minlength="3" maxlength="191" required="required" /> -->
                                                             </td>
                                                             <td>
-                                                                <input type="text" class="form-control type-sm" name="approval_levels[{{index}}][approval_order]" ng-model="approval_level.approval_order" placeholder="Enter Approval Order" autocomplete="off" minlength="1" maxlength="3" required="required" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" />
+                                                                <input type="text" class="form-control type-sm" name="approval_levels[{{index}}][approval_order]" ng-model="approval_level.pivot.approval_order" placeholder="Enter Approval Order" autocomplete="off" minlength="1" maxlength="3" required="required" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" />
                                                             </td>
                                                             <td>
-                                                                <md-select class="type-sm" ng-model="approval_level.current_status_id" placeholder="Select Current Status" md-on-close="clearSearchCurrentStatus()" data-md-container-class="selectdemoSelectHeader">
+                                                                <md-select class="type-sm" ng-model="approval_level.pivot.current_status_id" placeholder="Select Current Status" md-on-close="clearSearchCurrentStatus()" data-md-container-class="selectdemoSelectHeader">
                                                                     <md-select-header class="demo-select-header">
                                                                         <input ng-model="searchCurrentStatus" type="search" placeholder="Search for a Current Status.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
                                                                     </md-select-header>
@@ -145,10 +155,10 @@
                                                                         <md-option ng-value="i.id" ng-repeat="i in $ctrl.extras.approval_type_status_list | filter:searchCurrentStatus">{{i.status}}</md-option>
                                                                     </md-optgroup>
                                                                 </md-select>
-                                                                <input type="hidden" name="approval_levels[{{index}}][current_status_id]" value="{{approval_level.current_status_id}}" class="required">
+                                                                <input type="hidden" name="approval_levels[{{index}}][current_status_id]" value="{{approval_level.pivot.current_status_id}}" class="required">
                                                             </td>
                                                             <td>
-                                                                <md-select class="type-sm" ng-model="approval_level.next_status_id" placeholder="Select Approval Status" md-on-close="clearSearchApprovalStatus()" data-md-container-class="selectdemoSelectHeader">
+                                                                <md-select class="type-sm" ng-model="approval_level.pivot.next_status_id" placeholder="Select Approval Status" md-on-close="clearSearchApprovalStatus()" data-md-container-class="selectdemoSelectHeader">
                                                                     <md-select-header class="demo-select-header">
                                                                         <input ng-model="searchApprovalStatus" type="search" placeholder="Search for a Approval Status.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
                                                                     </md-select-header>
@@ -156,10 +166,10 @@
                                                                         <md-option ng-value="i.id" ng-repeat="i in $ctrl.extras.approval_type_status_list | filter:searchApprovalStatus">{{i.status}}</md-option>
                                                                     </md-optgroup>
                                                                 </md-select>
-                                                                <input type="hidden" name="approval_levels[{{index}}][next_status_id]" value="{{approval_level.next_status_id}}" class="required">
+                                                                <input type="hidden" name="approval_levels[{{index}}][next_status_id]" value="{{approval_level.pivot.next_status_id}}" class="required">
                                                             </td>
                                                             <td>
-                                                                <md-select class="type-sm" ng-model="approval_level.    reject_status_id" placeholder="Select Reject Status" md-on-close="clearSearchRejectStatus()" data-md-container-class="selectdemoSelectHeader">
+                                                                <md-select class="type-sm" ng-model="approval_level.pivot.    reject_status_id" placeholder="Select Reject Status" md-on-close="clearSearchRejectStatus()" data-md-container-class="selectdemoSelectHeader">
                                                                     <md-select-header class="demo-select-header">
                                                                         <input ng-model="searchRejectStatus" type="search" placeholder="Search for a Reject Status.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
                                                                     </md-select-header>
@@ -167,7 +177,7 @@
                                                                         <md-option ng-value="i.id" ng-repeat="i in $ctrl.extras.approval_type_status_list | filter:searchRejectStatus">{{i.status}}</md-option>
                                                                     </md-optgroup>
                                                                 </md-select>
-                                                                <input type="hidden" name="approval_levels[{{index}}][reject_status_id]" value="{{approval_level.reject_status_id}}" class="required">
+                                                                <input type="hidden" name="approval_levels[{{index}}][reject_status_id]" value="{{approval_level.pivot.reject_status_id}}" class="required">
                                                             </td>
                                                             <td>
                                                                 <div class="tab-switch">

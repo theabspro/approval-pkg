@@ -2,6 +2,7 @@
 
 namespace Abs\ApprovalPkg;
 
+use Abs\ApprovalPkg\ApprovalLevel;
 use App\Company;
 use App\Config;
 use Illuminate\Database\Eloquent\Model;
@@ -17,8 +18,12 @@ class ApprovalType extends Model {
 		'filter_field',
 	];
 
+	// public function approvalLevels() {
+	// 	// return $this->hasMany('Abs\ApprovalPkg\ApprovalLevel', 'approval_type_id', 'id')->withTrashed()->orderby('id');
+	// }
+
 	public function approvalLevels() {
-		return $this->hasMany('Abs\ApprovalPkg\ApprovalLevel', 'approval_type_id', 'id')->withTrashed()->orderby('id');
+		return $this->belongsToMany('Abs\ApprovalPkg\ApprovalLevel', 'approval_type_approval_level', 'approval_type_id', 'approval_level_id')->withPivot(['approval_order', 'current_status_id', 'next_status_id','reject_status_id','has_email_noty','has_sms_noty']);
 	}
 
 	public function approvalTypeStatuses() {
