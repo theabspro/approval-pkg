@@ -14,4 +14,5 @@ Route::group(['namespace' => 'Abs\ApprovalPkg', 'middleware' => ['web', 'auth'],
 	Route::get('/approval-level/get-form-data', 'ApprovalLevelController@getApprovalLevelFormData')->name('getApprovalLevelFormData');
 	Route::post('/approval-level/save', 'ApprovalLevelController@saveApprovalLevel')->name('saveApprovalLevel');
 	Route::get('/approval-level/delete', 'ApprovalLevelController@deleteApprovalLevel')->name('deleteApprovalLevel');
+	Route::get('/approval-level/filter', 'ApprovalLevelController@getApprovalLevelFilter')->name('getApprovalLevelFilter');
 });

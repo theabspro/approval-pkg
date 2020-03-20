@@ -29,15 +29,15 @@
 	    //APPROVAL LEVELS
 	    when('/approval-pkg/approval-level/list', {
 	        template: '<approval-level-list></approval-level-list>',
-	        title: 'Approval Types',
+	        title: 'Approval Levels',
 	    }).
 	    when('/approval-pkg/approval-level/add', {
 	        template: '<approval-level-form></approval-level-form>',
-	        title: 'Add Approval Type',
+	        title: 'Add Approval Level',
 	    }).
 	    when('/approval-pkg/approval-level/edit/:id', {
 	        template: '<approval-level-form></approval-level-form>',
-	        title: 'Edit Approval Type',
+	        title: 'Edit Approval Level',
 	    });
 
 	}]);

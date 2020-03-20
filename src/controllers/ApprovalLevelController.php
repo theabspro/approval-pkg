@@ -2,14 +2,14 @@
 
 namespace Abs\ApprovalPkg;
 use Abs\ApprovalPkg\ApprovalLevel;
-use App\Http\Controllers\Controller;
-use Auth;
-use App\Config;
-use App\Permission;
-use Entrust;
 use App\ActivityLog;
+use App\Config;
+use App\Http\Controllers\Controller;
+use App\Permission;
+use Auth;
 use Carbon\Carbon;
 use DB;
+use Entrust;
 use Illuminate\Http\Request;
 use Validator;
 use Yajra\Datatables\Datatables;
@@ -20,6 +20,11 @@ class ApprovalLevelController extends Controller {
 		$this->data['theme'] = config('custom.admin_theme');
 	}
 
+	public function getApprovalLevelFilter() {
+		$this->data['category_list'] = Collect(Config::getCategoryList()->prepend(['id' => '', 'name' => 'Select Category']));
+		return response()->json($this->data);
+	}
+
 	public function getApprovalLevelList(Request $request) {
 		$approval_levels = ApprovalLevel::withTrashed()->select(
 			'approval_levels.id',
@@ -27,7 +32,24 @@ class ApprovalLevelController extends Controller {
 			'configs.name as category',
 			DB::raw('IF(approval_levels.deleted_at IS NULL, "Active","Inactive") as status')
 		)
-		->leftJoin('configs','configs.id','approval_levels.category_id')
+			->leftJoin('configs', 'configs.id', 'approval_levels.category_id')
+			->where(function ($query) use ($request) {
+				if (!empty($request->approval_level_name)) {
+					$query->where('approval_levels.name', 'LIKE', '%' . $request->approval_level_name . '%');
+				}
+			})
+			->where(function ($query) use ($request) {
+				if (!empty($request->category_id)) {
+					$query->where('approval_levels.category_id', $request->category_id);
+				}
+			})
+			->where(function ($query) use ($request) {
+				if ($request->status == '1') {
+					$query->whereNull('approval_levels.deleted_at');
+				} else if ($request->status == '0') {
+					$query->whereNotNull('approval_levels.deleted_at');
+				}
+			})
 		;
 
 		return Datatables::of($approval_levels)
@@ -49,7 +71,7 @@ class ApprovalLevelController extends Controller {
 				}
 				return $output;
 			})
-		->make(true);
+			->make(true);
 	}
 
 	public function getApprovalLevelFormData(Request $request) {
@@ -61,7 +83,7 @@ class ApprovalLevelController extends Controller {
 			$approval_level = ApprovalLevel::withTrashed()->find($id);
 			$action = 'Edit';
 		}
-		$this->data['category_list'] = Collect(Config::getCategoryList()->prepend(['id'=>'','name'=>'Select Category']));
+		$this->data['category_list'] = Collect(Config::getCategoryList()->prepend(['id' => '', 'name' => 'Select Category']));
 		$this->data['approval_level'] = $approval_level;
 		$this->data['action'] = $action;
 		$this->data['theme'];
@@ -112,20 +134,20 @@ class ApprovalLevelController extends Controller {
 				$approval_level->deleted_at = NULL;
 			}
 			$approval_level->save();
-			
-			if($request->category_id == 7220){
+
+			if ($request->category_id == 7220) {
 				$parent = 'cn-dn-verification';
-			}elseif ($request->category_id == 7221) {
-				$parent = 'jv-verification';	
+			} elseif ($request->category_id == 7221) {
+				$parent = 'jv-verification';
 			}
 
 			$permissions = [
 				[
 					'display_order' => 999,
 					'parent' => $parent,
-					'name' => $approval_level->id.'-verification',
+					'name' => $approval_level->id . '-verification',
 					'display_name' => $approval_level->name,
-				]
+				],
 			];
 
 			Permission::createFromArrays($permissions);

@@ -41,8 +41,9 @@ app.component('approvalLevelList', {
                 type: "GET",
                 dataType: "json",
                 data: function(d) {
-                    d.approval_type_name = $('#approval_level_name').val();
+                    d.approval_level_name = $('#approval_level_name').val();
                     d.category_id = $('#category_id').val();
+                    d.status = $('#status').val();
                 },
             },
 
@@ -93,18 +94,36 @@ app.component('approvalLevelList', {
         }
 
         //FOR FILTER
-        $('#approval_type_code').on('keyup', function() {
+        $http.get(
+            laravel_routes['getApprovalLevelFilter']
+            ).then(function(response){
+                self.category_list = response.data.category_list;
+        });
+
+        self.status = [
+            { id: '', name: 'Select Status' },
+            { id: '1', name: 'Active' },
+            { id: '0', name: 'Inactive' },
+        ];
+
+        /* Modal Md Select Hide */
+        $('.modal').bind('click', function(event) {
+            if ($('.md-select-menu-container').hasClass('md-active')) {
+                $mdSelect.hide();
+            }
+        });
+
+        $('#approval_level_name').on('keyup', function() {
             dataTables.fnFilter();
         });
-        $('#approval_type_name').on('keyup', function() {
+        $scope.onSelectedCategory = function(id){
+            $("#category_id").val(id);
             dataTables.fnFilter();
-        });
-        $('#mobile_no').on('keyup', function() {
+        }
+        $scope.onSelectedStatus = function(id){
+            $("#status").val(id);
             dataTables.fnFilter();
-        });
-        $('#email').on('keyup', function() {
-            dataTables.fnFilter();
-        });
+        }
         $scope.reset_filter = function() {
             $("#approval_type_name").val('');
             dataTables.fnFilter();
