@@ -4,7 +4,7 @@ app.component('approvalLevelList', {
         $scope.loading = true;
         var self = this;
         self.hasPermission = HelperService.hasPermission;
-        self.add_permission = self.hasPermission('');
+        self.add_permission = self.hasPermission('add-approval-level');
         var table_scroll;
         table_scroll = $('.page-main-content.list-page-content').height() - 37;
         var dataTable = $('#approval_level_list').DataTable({
