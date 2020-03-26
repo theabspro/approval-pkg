@@ -15,11 +15,11 @@ class ApprovalTypeStatus extends Model {
 		'approval_type_id',
 		'status',
 	];
-	protected $appends = ['switch_value'];
+	// protected $appends = ['switch_value'];
 
-	public function getSwitchValueAttribute() {
-		return !empty($this->attributes['deleted_at']) ? 'Inactive' : 'Active';
-	}
+	// public function getSwitchValueAttribute() {
+	// 	return !empty($this->attributes['deleted_at']) ? 'Inactive' : 'Active';
+	// }
 
 	public static function getApprovalTypeStatusList($request) {
 		$data['approval_type_status_list'] = self::select(
