@@ -2,8 +2,13 @@ app.component('approvalLevelList', {
     templateUrl: approval_level_list_template_url,
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location) {
         $scope.loading = true;
+        $('#search_approval_level').focus();
         var self = this;
         self.hasPermission = HelperService.hasPermission;
+        if (!self.hasPermission('approval-levels')) {
+            window.location = "#!/page-permission-denied";
+            return false;
+        }
         self.add_permission = self.hasPermission('add-approval-level');
         var table_scroll;
         table_scroll = $('.page-main-content.list-page-content').height() - 37;
@@ -66,6 +71,10 @@ app.component('approvalLevelList', {
             $('#search_approval_level').val('');
             $('#approval_level_list').DataTable().search('').draw();
         }
+
+        $('.refresh_table').on("click", function() {
+            $('#approval_level_list').DataTable().ajax.reload();
+        });
 
         var dataTables = $('#approval_level_list').dataTable();
         $("#search_approval_level").keyup(function() {
@@ -139,6 +148,10 @@ app.component('approvalLevelForm', {
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope,$element) {
         var self = this;
         self.hasPermission = HelperService.hasPermission;
+        if (!self.hasPermission('add-approval-type') || !self.hasPermission('edit-approval-type')) {
+            window.location = "#!/page-permission-denied";
+            return false;
+        }
         self.angular_routes = angular_routes;
          $http.get(
             laravel_routes['getApprovalLevelFormData'], {

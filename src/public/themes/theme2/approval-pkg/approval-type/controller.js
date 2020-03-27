@@ -2,8 +2,13 @@ app.component('approvalTypeList', {
     templateUrl: approval_type_list_template_url,
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location, $mdSelect) {
         $scope.loading = true;
+        $('#search_approval_type').focus();
         var self = this;
         self.hasPermission = HelperService.hasPermission;
+        if (!self.hasPermission('approval-types')) {
+            window.location = "#!/page-permission-denied";
+            return false;
+        }
         var table_scroll;
         table_scroll = $('.page-main-content.list-page-content').height() - 37;
         var dataTable = $('#approval_types_list').DataTable({
@@ -149,6 +154,10 @@ app.component('approvalTypeForm', {
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
         self.hasPermission = HelperService.hasPermission;
+        if (!self.hasPermission('add-approval-type') || !self.hasPermission('edit-approval-type')) {
+            window.location = "#!/page-permission-denied";
+            return false;
+        }
         self.angular_routes = angular_routes;
         $http({
             url: laravel_routes['getApprovalTypeFormData'],
@@ -186,6 +195,7 @@ app.component('approvalTypeForm', {
         });
         $scope.btnNxt = function() {}
         $scope.prev = function() {}*/
+        $("input:text:visible:first").focus();
 
         self.addNewApprovalTypeStatus = function() {
             self.approval_type.approval_type_statuses.push({
@@ -298,6 +308,10 @@ app.component('approvalTypeView', {
     controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope) {
         var self = this;
         self.hasPermission = HelperService.hasPermission;
+        if (!self.hasPermission('view-approval-type')) {
+            window.location = "#!/page-permission-denied";
+            return false;
+        }
         self.angular_routes = angular_routes;
         $http({
             url: laravel_routes['viewApprovalType'],
@@ -407,7 +421,7 @@ app.component('approvalTypeView', {
             },
             submitHandler: function(form) {
                 let formData = new FormData($(form_id)[0]);
-                $('#submit').button('loading');
+                $('.submit').button('loading');
                 $.ajax({
                         url: laravel_routes['saveApprovalTypeLevel'],
                         method: "POST",
@@ -417,7 +431,7 @@ app.component('approvalTypeView', {
                     })
                     .done(function(res) {
                         if (!res.success) {
-                            $('#submit').prop('disabled', 'disabled');
+                            $('.submit').prop('disabled', 'disabled');
                             var errors = '';
                             for (var i in res.errors) {
                                 errors += '<li>' + res.errors[i] + '</li>';
@@ -430,7 +444,7 @@ app.component('approvalTypeView', {
                             setTimeout(function() {
                                 $noty.close();
                             }, 3000);
-                            $('#submit').button('reset');
+                            $('.submit').button('reset');
 
                         } else {
                             if (res.comes_from != '') {
@@ -443,14 +457,14 @@ app.component('approvalTypeView', {
                             setTimeout(function() {
                                 $noty.close();
                             }, 3000);
-                            $('#submit').button('reset');
+                            $('.submit').button('reset');
 
                             $location.path('/approval-pkg/approval-type/list')
                             $scope.$apply()
                         }
                     })
                     .fail(function(xhr) {
-                        $('#submit').button('reset');
+                        $('.submit').button('reset');
                         $noty = new Noty({
                             type: 'error',
                             layout: 'topRight',
