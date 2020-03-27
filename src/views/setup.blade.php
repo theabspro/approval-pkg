@@ -11,33 +11,33 @@
 	    //APPROVAL FLOW
 	    when('/approval-pkg/approval-type/list', {
 	        template: '<approval-type-list></approval-type-list>',
-	        title: 'Approval Flows',
+	        title: 'Verification Flows',
 	    }).
 	    when('/approval-pkg/approval-type/add', {
 	        template: '<approval-type-form></approval-type-form>',
-	        title: 'Add Approval Flow',
+	        title: 'Add Verification Flow',
 	    }).
 	    when('/approval-pkg/approval-type/edit/:id', {
 	        template: '<approval-type-form></approval-type-form>',
-	        title: 'Edit Approval Flow',
+	        title: 'Edit Verification Flow',
 	    }).
 	    when('/approval-pkg/approval-type/view/:id', {
 	        template: '<approval-type-view></approval-type-view>',
-	        title: 'View Approval Flow',
+	        title: 'View Verification Flow',
 	    }).
 
-	    //APPROVAL LEVELS
+	    //Verification LEVELS
 	    when('/approval-pkg/approval-level/list', {
 	        template: '<approval-level-list></approval-level-list>',
-	        title: 'Approval Levels',
+	        title: 'Verification Levels',
 	    }).
 	    when('/approval-pkg/approval-level/add', {
 	        template: '<approval-level-form></approval-level-form>',
-	        title: 'Add Approval Level',
+	        title: 'Add Verification Level',
 	    }).
 	    when('/approval-pkg/approval-level/edit/:id', {
 	        template: '<approval-level-form></approval-level-form>',
-	        title: 'Edit Approval Level',
+	        title: 'Edit Verification Level',
 	    });
 
 	}]);

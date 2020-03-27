@@ -3,7 +3,7 @@
         <div class="page-header-inner">
             <div class="page-header-content-left">
                 <div class="page-header-content title-block">
-                    <h1 class="title type-2">Approval levels (<span id="table_info"></span>)</h1>
+                    <h1 class="title type-2">Verification levels (<span id="table_info"></span>)</h1>
                     <!-- <p class="subtitle">Masters / JV Masters / JV Types</p> -->
                 </div><!-- Page Header Content -->
                 <div class="page-header-content button-block">
@@ -46,7 +46,7 @@
                         <thead>
                             <tr>
                                 <th class="action">Action</th>
-                                <th>Approval level Name</th>
+                                <th>Verification Level Name</th>
                                 <th>Category Name</th>
                             </tr>
                         </thead>
@@ -62,15 +62,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close ripple" data-dismiss="modal" aria-label="Close"><i class="icon ion-md-close"></i></button>
-                <h5 class="modal-title" id="myModalLabel">Approval Level Filter</h5>
+                <h5 class="modal-title" id="myModalLabel">Verification Level Filter</h5>
             </div><!-- Modal Header -->
             <div class="modal-body">
                 <div class="modal-form">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Approval Level Name</label>
-                                <input type="text" class="form-control" id="approval_level_name" name="approval_level_name" placeholder="Enter Approval Level Name" autocomplete="off">
+                                <label>Verification Level Name</label>
+                                <input type="text" class="form-control" id="approval_level_name" name="approval_level_name" placeholder="Enter Verification Level Name" autocomplete="off">
                             </div><!-- Field -->
                         </div><!-- Column -->
                         <div class="col-md-6">
@@ -101,7 +101,7 @@
                                 <input type="hidden" name="status" id="status" value="">
                             </div><!-- Field -->
                         </div><!-- Column -->
-                         <div class="col-md-12">
+                        <div class="col-md-12">
                             <button type="button" class="btn btn-rose" ng-click="reset_filter(); $ctrl.status.id='';$ctrl.category_id=''">Reset Filter</button>
                         </div>
                     </div><!-- Row -->
