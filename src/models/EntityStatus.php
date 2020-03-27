@@ -7,26 +7,17 @@ use App\Config;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class ApprovalType extends Model {
+class EntityStatus extends Model {
 	use SoftDeletes;
-	protected $table = 'approval_types';
-	public $timestamps = true;
+	protected $table = 'entity_statuses';
 	protected $fillable = [
 		'name',
-		'code',
 		'entity_id',
 	];
+	protected $appends = ['switch_value'];
 
-	public function entityType() {
-		return $this->belongsTo('App\Config', 'entity_id');
-	}
-
-	public function approvalLevels() {
-		return $this->belongsToMany('Abs\ApprovalPkg\ApprovalLevel', 'approval_type_approval_level', 'approval_type_id', 'approval_level_id')->withPivot(['approval_order', 'current_status_id', 'next_status_id', 'reject_status_id', 'has_email_noty', 'has_sms_noty']);
-	}
-
-	public function approvalTypeStatuses() {
-		return $this->hasMany('Abs\ApprovalPkg\ApprovalTypeStatus', 'approval_type_id', 'id')->withTrashed()->orderby('id');
+	public function getSwitchValueAttribute() {
+		return !empty($this->attributes['deleted_at']) ? 'Inactive' : 'Active';
 	}
 
 	public static function createFromObject($record_data) {

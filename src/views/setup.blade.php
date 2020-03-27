@@ -38,6 +38,20 @@
 	    when('/approval-pkg/approval-level/edit/:id', {
 	        template: '<approval-level-form></approval-level-form>',
 	        title: 'Edit Verification Level',
+	    }).
+
+	    //ENTITY STATUSES
+	    when('/approval-pkg/entity-status/list', {
+	        template: '<entity-status-list></entity-status-list>',
+	        title: 'Entity Statuses',
+	    }).
+	    when('/approval-pkg/entity-status/add', {
+	        template: '<entity-status-form></entity-status-form>',
+	        title: 'Add Entity Status',
+	    }).
+	    when('/approval-pkg/entity-status/edit/:id', {
+	        template: '<entity-status-form></entity-status-form>',
+	        title: 'Edit Entity Status',
 	    });
 
 	}]);
@@ -49,6 +63,10 @@
     var approval_level_list_template_url = "{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-level/list.html')}}";
     var approval_level_form_template_url = "{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-level/form.html')}}";
     var approval_level_view_template_url = "{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-level/view.html')}}";
+
+    var entity_status_list_template_url = "{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/entity-status/list.html')}}";
+    var entity_status_form_template_url = "{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/entity-status/form.html')}}";
 </script>
 <script type="text/javascript" src="{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-type/controller.js?v=2')}}"></script>
 <script type="text/javascript" src="{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-level/controller.js?v=2')}}"></script>
+<script type="text/javascript" src="{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/entity-status/controller.js?v=2')}}"></script>

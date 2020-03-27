@@ -54,8 +54,9 @@ app.component('approvalTypeList', {
                 { data: 'action', class: 'action', searchable: false },
                 { data: 'name', name: 'approval_types.name', searchable: true },
                 { data: 'approval_type_code', name: 'approval_types.code', searchable: true },
+                { data: 'entity_type', name: 'e.name', searchable: true },
                 { data: 'no_of_levels', searchable: false },
-                { data: 'no_of_status', searchable: false },
+                // { data: 'no_of_status', searchable: false },
             ],
             "infoCallback": function(settings, start, end, max, total, pre) {
                 $('#table_info').html(total)
@@ -168,6 +169,7 @@ app.component('approvalTypeForm', {
         }).then(function(response) {
             console.log(response.data);
             self.approval_type = response.data.approval_type;
+            self.entity_list = response.data.entity_list;
             self.action = response.data.action;
             $rootScope.loading = false;
             if (self.action == 'Edit') {
@@ -227,10 +229,8 @@ app.component('approvalTypeForm', {
                     minlength: 3,
                     maxlength: 191,
                 },
-                'filter_field': {
+                'entity_id': {
                     required: true,
-                    minlength: 3,
-                    maxlength: 255,
                 },
             },
             invalidHandler: function(event, validator) {
