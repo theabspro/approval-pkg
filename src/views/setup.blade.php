@@ -8,22 +8,22 @@
 	app.config(['$routeProvider', function($routeProvider) {
 
 	    $routeProvider.
-	    //APPROVAL TYPE
+	    //APPROVAL FLOW
 	    when('/approval-pkg/approval-type/list', {
 	        template: '<approval-type-list></approval-type-list>',
-	        title: 'Approval Types',
+	        title: 'Approval Flows',
 	    }).
 	    when('/approval-pkg/approval-type/add', {
 	        template: '<approval-type-form></approval-type-form>',
-	        title: 'Add Approval Type',
+	        title: 'Add Approval Flow',
 	    }).
 	    when('/approval-pkg/approval-type/edit/:id', {
 	        template: '<approval-type-form></approval-type-form>',
-	        title: 'Edit Approval Type',
+	        title: 'Edit Approval Flow',
 	    }).
 	    when('/approval-pkg/approval-type/view/:id', {
 	        template: '<approval-type-view></approval-type-view>',
-	        title: 'View Approval Type',
+	        title: 'View Approval Flow',
 	    }).
 
 	    //APPROVAL LEVELS
