@@ -37,7 +37,7 @@ app.component('approvalTypeList', {
             serverSide: true,
             paging: true,
             stateSave: true,
-            ordering: false,
+            ordering: true,
             scrollY: table_scroll + "px",
             scrollCollapse: true,
             ajax: {
@@ -245,7 +245,7 @@ app.component('approvalTypeForm', {
             },
             submitHandler: function(form) {
                 let formData = new FormData($(form_id)[0]);
-                $('#submit').button('loading');
+                $('.submit').button('loading');
                 $.ajax({
                         url: laravel_routes['saveApprovalType'],
                         method: "POST",
@@ -255,7 +255,7 @@ app.component('approvalTypeForm', {
                     })
                     .done(function(res) {
                         if (!res.success) {
-                            $('#submit').prop('disabled', 'disabled');
+                            $('.submit').prop('disabled', 'disabled');
                             var errors = '';
                             for (var i in res.errors) {
                                 errors += '<li>' + res.errors[i] + '</li>';
@@ -268,7 +268,7 @@ app.component('approvalTypeForm', {
                             setTimeout(function() {
                                 $noty.close();
                             }, 3000);
-                            $('#submit').button('reset');
+                            $('.submit').button('reset');
 
                         } else {
                             $noty = new Noty({
@@ -279,14 +279,14 @@ app.component('approvalTypeForm', {
                             setTimeout(function() {
                                 $noty.close();
                             }, 3000);
-                            $('#submit').button('reset');
+                            $('.submit').button('reset');
 
                             $location.path('/approval-pkg/approval-type/list')
                             $scope.$apply()
                         }
                     })
                     .fail(function(xhr) {
-                        $('#submit').button('reset');
+                        $('.submit').button('reset');
                         $noty = new Noty({
                             type: 'error',
                             layout: 'topRight',

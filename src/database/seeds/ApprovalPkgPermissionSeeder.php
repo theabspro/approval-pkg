@@ -35,6 +35,12 @@ class ApprovalPkgPermissionSeeder extends Seeder {
 			[
 				'display_order' => 3,
 				'parent' => 'approval-types',
+				'name' => 'view-approval-type',
+				'display_name' => 'View',
+			],
+			[
+				'display_order' => 4,
+				'parent' => 'approval-types',
 				'name' => 'delete-approval-type',
 				'display_name' => 'Delete',
 			],

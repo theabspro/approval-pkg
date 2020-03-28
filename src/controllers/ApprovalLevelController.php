@@ -155,9 +155,9 @@ class ApprovalLevelController extends Controller {
 			$activity = new ActivityLog;
 			$activity->date_time = Carbon::now();
 			$activity->user_id = Auth::user()->id;
-			$activity->module = 'Approval Level';
+			$activity->module = 'Approval Levels';
 			$activity->entity_id = $approval_level->id;
-			$activity->entity_type_id = 1420;
+			$activity->entity_type_id = 386;
 			$activity->activity_id = $request->id == NULL ? 280 : 281;
 			$activity->activity = $request->id == NULL ? 280 : 281;
 			$activity->details = json_encode($activity);
@@ -193,9 +193,9 @@ class ApprovalLevelController extends Controller {
 				$activity = new ActivityLog;
 				$activity->date_time = Carbon::now();
 				$activity->user_id = Auth::user()->id;
-				$activity->module = 'Approval Level';
+				$activity->module = 'Approval Levels';
 				$activity->entity_id = $request->id;
-				$activity->entity_type_id = 1420;
+				$activity->entity_type_id = 386;
 				$activity->activity_id = 282;
 				$activity->activity = 282;
 				$activity->details = json_encode($activity);

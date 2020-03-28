@@ -4,8 +4,10 @@ namespace Abs\ApprovalPkg;
 use Abs\ApprovalPkg\ApprovalLevel;
 use Abs\ApprovalPkg\ApprovalType;
 use Abs\ApprovalPkg\ApprovalTypeStatus;
+use App\ActivityLog;
 use App\Http\Controllers\Controller;
 use Auth;
+use Carbon\Carbon;
 use DB;
 use Illuminate\Http\Request;
 use Validator;
@@ -56,10 +58,10 @@ class ApprovalTypeController extends Controller {
 				$edit_img = asset('public/theme/img/table/cndn/edit.svg');
 				$delete_img = asset('public/theme/img/table/cndn/delete.svg');
 				return '
-					<a href="#!/approval-pkg/approval-type/view/' . $approval_types->id . '">
+					<a href="#!/approval-pkg/approval-type/view/' . $approval_types->id . '" title="View">
 	                        <img class="img-responsive" src="' . $view_img . '" alt="View" />
 	                    	</a>
-					<a href="#!/approval-pkg/approval-type/edit/' . $approval_types->id . '">
+					<a href="#!/approval-pkg/approval-type/edit/' . $approval_types->id . '" title="Edit">
 						<img src="' . $edit_img . '" alt="View" class="img-responsive">
 					</a>
 					<a href="javascript:;" data-toggle="modal" data-target="#delete-approval-type"
@@ -203,6 +205,17 @@ class ApprovalTypeController extends Controller {
 				}
 			}
 
+			$activity = new ActivityLog;
+			$activity->date_time = Carbon::now();
+			$activity->user_id = Auth::user()->id;
+			$activity->module = 'Approval Type';
+			$activity->entity_id = $approval_type->id;
+			$activity->entity_type_id = 385;
+			$activity->activity_id = $request->id == NULL ? 280 : 281;
+			$activity->activity = $request->id == NULL ? 280 : 281;
+			$activity->details = json_encode($activity);
+			$activity->save();
+
 			DB::commit();
 			return response()->json(['success' => true, 'comes_from' => $msg]);
 		} catch (Exception $e) {
@@ -214,7 +227,20 @@ class ApprovalTypeController extends Controller {
 	public function deleteApprovalType(Request $request) {
 		DB::beginTransaction();
 		try {
-			ApprovalType::withTrashed()->where('id', $request->id)->forceDelete();
+			$approval_type = ApprovalType::withTrashed()->where('id', $request->id)->forceDelete();
+
+			if ($approval_type) {
+				$activity = new ActivityLog;
+				$activity->date_time = Carbon::now();
+				$activity->user_id = Auth::user()->id;
+				$activity->module = 'Approval Types';
+				$activity->entity_id = $request->id;
+				$activity->entity_type_id = 385;
+				$activity->activity_id = 282;
+				$activity->activity = 282;
+				$activity->details = json_encode($activity);
+				$activity->save();
+			}
 
 			DB::commit();
 			return response()->json(['success' => true, 'message' => 'Approval Type Deleted Successfully']);
@@ -376,6 +402,18 @@ class ApprovalTypeController extends Controller {
 					// }
 					// $approval_level_save->save();
 				}
+
+				$activity = new ActivityLog;
+				$activity->date_time = Carbon::now();
+				$activity->user_id = Auth::user()->id;
+				$activity->module = 'Approval Type Level Added';
+				$activity->entity_id = $approval_type->id;
+				$activity->entity_type_id = 385;
+				$activity->activity_id = $request->id == NULL ? 280 : 281;
+				$activity->activity = $request->id == NULL ? 280 : 281;
+				$activity->details = json_encode($activity);
+				$activity->save();
+
 				DB::commit();
 				return response()->json(['success' => true, 'comes_from' => 'Added']);
 				// } else {
