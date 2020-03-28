@@ -5,6 +5,7 @@ use Abs\ApprovalPkg\ApprovalLevel;
 use Abs\ApprovalPkg\ApprovalType;
 use Abs\ApprovalPkg\ApprovalTypeStatus;
 use App\ActivityLog;
+use App\Config;
 use App\Http\Controllers\Controller;
 use Auth;
 use Carbon\Carbon;
@@ -22,11 +23,12 @@ class ApprovalTypeController extends Controller {
 		$approval_types = ApprovalType::withTrashed()
 			->leftJoin('approval_type_statuses', 'approval_type_statuses.approval_type_id', 'approval_types.id')
 			->leftJoin('approval_type_approval_level', 'approval_type_approval_level.approval_type_id', 'approval_types.id')
+			->leftJoin('configs as e', 'e.id', 'approval_types.entity_id')
 			->select(
 				'approval_types.id',
 				'approval_types.name as approval_type_name',
 				'approval_types.code as approval_type_code',
-				'approval_types.filter_field',
+				'e.name as entity_type',
 				DB::raw('count(distinct approval_type_approval_level.approval_level_id) as no_of_levels'),
 				DB::raw('count(distinct approval_type_statuses.id) as no_of_status'),
 				DB::raw('IF(approval_types.deleted_at IS NULL,"Active","Inactive") as status')
@@ -86,6 +88,7 @@ class ApprovalTypeController extends Controller {
 				->first();
 			$action = 'Edit';
 		}
+		$this->data['entity_list'] = Collect(Config::getCategoryList()->prepend(['id' => '', 'name' => 'Select Entity']));
 		$this->data['approval_type'] = $approval_type;
 		$this->data['action'] = $action;
 
@@ -98,11 +101,11 @@ class ApprovalTypeController extends Controller {
 		try {
 
 			$error_messages = [
-				'name.required' => 'Approval Type name is required',
-				'name.unique' => 'Approval Type name is already taken',
-				'code.required' => 'Approval Type code is required',
-				'code.unique' => 'Approval Type code is already taken',
-				'filter_field.required' => 'Filter Field is required',
+				'name.required' => 'Verification Flow name is required',
+				'name.unique' => 'Verification Flow name is already taken',
+				'code.required' => 'Verification Flow code is required',
+				'code.unique' => 'Verification Flow code is already taken',
+				// 'filter_field.required' => 'Filter Field is required',
 			];
 
 			$validator = Validator::make($request->all(), [
@@ -114,7 +117,7 @@ class ApprovalTypeController extends Controller {
 					'unique:approval_types,code,' . $request->id . ',id,company_id,' . Auth::user()->company_id,
 					'required',
 				],
-				'filter_field' => 'required',
+				// 'filter_field' => 'required',
 			], $error_messages);
 
 			if ($validator->fails()) {
@@ -124,8 +127,8 @@ class ApprovalTypeController extends Controller {
 			//VALIDATE UNIQUE FOR APPROVAL-TYPE-STATUSES
 			if (isset($request->approval_type_statuses) && !empty($request->approval_type_statuses)) {
 				$error_messages_1 = [
-					'status.required' => 'Approval Type Status is required',
-					'status.unique' => 'Approval Type Status is already taken',
+					'status.required' => 'Verification Flow Status is required',
+					'status.unique' => 'Verification Flow Status is already taken',
 				];
 
 				foreach ($request->approval_type_statuses as $approval_type_status_key => $approval_type_status) {
@@ -144,7 +147,7 @@ class ApprovalTypeController extends Controller {
 					foreach ($request->approval_type_statuses as $search_key => $search_array) {
 						if ($search_array['status'] == $approval_type_status['status']) {
 							if ($search_key != $approval_type_status_key) {
-								return response()->json(['success' => false, 'errors' => ['Approval Type Status is already taken']]);
+								return response()->json(['success' => false, 'errors' => ['Verification Flow Status is already taken']]);
 							}
 						}
 					}
@@ -243,7 +246,7 @@ class ApprovalTypeController extends Controller {
 			}
 
 			DB::commit();
-			return response()->json(['success' => true, 'message' => 'Approval Type Deleted Successfully']);
+			return response()->json(['success' => true, 'message' => 'Verification Flow Deleted Successfully']);
 		} catch (Exception $e) {
 			DB::rollBack();
 			return response()->json(['success' => false, 'errors' => ['Exception Error' => $e->getMessage()]]);
@@ -256,6 +259,7 @@ class ApprovalTypeController extends Controller {
 			$this->data['approval_type'] = $approval_type = ApprovalType::withTrashed()->where('id', $id)->with([
 				'approvalTypeStatuses',
 				'approvalLevels',
+				'entityType',
 			])
 				->first();
 // dd($approval_type->approvalLevels);
@@ -263,11 +267,11 @@ class ApprovalTypeController extends Controller {
 
 			$this->data['action'] = 'View';
 			$this->data['extras'] = [
-				'approval_type_status_list' => collect(ApprovalTypeStatus::where('approval_type_id', $id)->select('status', 'id')->get())->prepend(['status' => 'Select Approval Type Status']),
-				'approval_levels_list' => collect(ApprovalLevel::select('id', 'name')->get())->prepend(['name' => 'Select Approval Level']),
+				'approval_type_status_list' => collect(EntityStatus::where('entity_id', $approval_type->entity_id)->select('name', 'id')->get())->prepend(['name' => 'Select Status']),
+				'approval_levels_list' => collect(ApprovalLevel::where('category_id', $approval_type->entity_id)->select('id', 'name')->get())->prepend(['name' => 'Select Level']),
 			];
 		} else {
-			return response()->json(['success' => false, 'error' => 'Approval Type ID not found']);
+			return response()->json(['success' => false, 'error' => 'Verification Flow ID not found']);
 		}
 		return response()->json($this->data);
 	}

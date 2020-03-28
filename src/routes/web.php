@@ -15,4 +15,11 @@ Route::group(['namespace' => 'Abs\ApprovalPkg', 'middleware' => ['web', 'auth'],
 	Route::post('/approval-level/save', 'ApprovalLevelController@saveApprovalLevel')->name('saveApprovalLevel');
 	Route::get('/approval-level/delete', 'ApprovalLevelController@deleteApprovalLevel')->name('deleteApprovalLevel');
 	Route::get('/approval-level/filter', 'ApprovalLevelController@getApprovalLevelFilter')->name('getApprovalLevelFilter');
+
+	//Entity Statuses
+	Route::get('/entity-status/get-list', 'EntityStatusController@getEntityStatusList')->name('getEntityStatusList');
+	Route::get('/entity-status/get-form-data', 'EntityStatusController@getEntityStatusFormData')->name('getEntityStatusFormData');
+	Route::post('/entity-status/save', 'EntityStatusController@saveEntityStatus')->name('saveEntityStatus');
+	Route::get('/entity-status/delete', 'EntityStatusController@deleteEntityStatus')->name('deleteEntityStatus');
+	Route::get('/entity-status/filter', 'EntityStatusController@getEntityStatusFilter')->name('getEntityStatusFilter');
 });

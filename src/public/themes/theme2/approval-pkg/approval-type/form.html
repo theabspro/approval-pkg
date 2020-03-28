@@ -1,4 +1,4 @@
-<!-- Content Wrap -->
+Content Wrap -->
 <div class="content-wrap cndn-wrap">
     <!-- Page Header -->
     <div class="page-header">
@@ -9,8 +9,8 @@
                         <img class="img-responsive my-tooltip" src="./public/theme/img/content/previous.svg" alt="Back" ng-shortcut="'meta+shift+left'" ng-shortcut-click data-title="ctrl+shift+left" /></a>
                 </div><!-- Page Header Content -->
                 <div class="page-header-content title-block">
-                    <h1 class="title"><b>{{$ctrl.action}} Approval Type</b></h1>
-                    <p class="subtitle"><a href="#!/approval-pkg/approval-type/list" ng-shortcut="'meta+shift+left'" ng-shortcut-click>Approval Types</a> / {{$ctrl.action}}</p>
+                    <h1 class="title"><b>{{$ctrl.action}} Verification Flow</b></h1>
+                    <p class="subtitle"><a href="#!/approval-pkg/approval-type/list" ng-shortcut="'meta+shift+left'" ng-shortcut-click>Verification Flows</a> / {{$ctrl.action}}</p>
                 </div><!-- Page Header Content -->
             </div><!-- Page Header Content Left -->
         </div><!-- Page Header Inner -->
@@ -27,7 +27,7 @@
                             <div class="isotope-filters animated" data-animation="fadeInLeft" data-animation-delay="300">
                                 <ul class="nav nav-pills cndn-tabs">
                                     <li class="active"><a class="filter active" data-target="#general-information" data-toggle="tab" aria-expanded="true" ng-shortcut="'meta+shift+up'" ng-shortcut-click>General Info</a></li>
-                                    <li><a data-target="#approval-status" data-toggle="tab" aria-expanded="true" class="filter" ng-shortcut="'meta+shift+down'" ng-shortcut-click>Approval Statuses</a></li>
+                                    <!-- <li><a data-target="#approval-status" data-toggle="tab" aria-expanded="true" class="filter" ng-shortcut="'meta+shift+down'" ng-shortcut-click>Statuses</a></li> -->
                                 </ul>
                             </div><!-- Filters -->
                         </div><!-- Tab Header -->
@@ -40,21 +40,32 @@
                                     <div class="row">
                                         <div class="col-md-3">
                                             <div class="input-text form-group">
-                                                <label>Approval Type Name <sup class="mandatory">*</sup></label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.approval_type.name" name="name" placeholder="Enter Approval Type Name" minlength="3" maxlength="191" autocomplete="off" />
+                                                <label>Verification Flow Name <sup class="mandatory">*</sup></label>
+                                                <input type="text" class="form-control required" ng-model="$ctrl.approval_type.name" name="name" placeholder="Enter Verification Flow Name" minlength="3" maxlength="191" autocomplete="off" />
                                             </div><!-- Feild -->
                                         </div><!-- Column -->
                                         <div class="col-md-3">
                                             <div class="input-text form-group">
-                                                <label>Approval Type Code <sup class="mandatory">*</sup></label>
+                                                <label>Verification Flow Code <sup class="mandatory">*</sup></label>
                                                 <input type="text" class="form-control required" ng-model="$ctrl.approval_type.code" name="code" placeholder="Enter Approval Type Code" minlength="3" maxlength="191" autocomplete="off" />
                                             </div><!-- Feild -->
                                         </div><!-- Column -->
                                         <div class="col-md-3">
                                             <div class="input-text form-group">
-                                                <label>Filter Field <sup class="mandatory">*</sup></label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.approval_type.filter_field " name="filter_field" placeholder="Enter Filter Field" minlength="3" maxlength="255" autocomplete="off" />
-                                            </div><!-- Feild -->
+                                                <label>
+                                                    Entity Type
+                                                    <sup class="mandatory">*</sup>
+                                                </label>
+                                                <md-select ng-model="$ctrl.approval_type.entity_id" md-on-close="clearSearchTerm()" ng-change="onSelectedEntityType($ctrl.approval_type.entity_id)" data-md-container-class="selectdemoSelectHeader" placeholder="Select Entity">
+                                                    <md-select-header class="demo-select-header">
+                                                        <input ng-model="searchTerm" type="search" placeholder="Search for a Entity" class="demo-header-searchbox md-text">
+                                                    </md-select-header>
+                                                    <md-optgroup>
+                                                        <md-option ng-value="entity.id" ng-repeat="entity in $ctrl.entity_list | filter:searchTerm">{{entity.name}}</md-option>
+                                                    </md-optgroup>
+                                                </md-select>
+                                                <input type="hidden" class="form-control required" name="entity_id" id="entity_id" value="{{$ctrl.approval_type.entity_id}}">
+                                            </div><!-- Field -->
                                         </div><!-- Column -->
                                         <div class="col-md-3">
                                             <div class="input-text form-group">
@@ -70,9 +81,9 @@
                                         <div class="tab-pane-footer">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <a class="btn btn-secondary btn-nxt my-tooltip" ng-shortcut="'meta+shift+down'" ng-shortcut-click data-title="ctrl+shift+down">
-                                                        Next
-                                                    </a>
+                                                    <!-- <a class="btn btn-secondary btn-nxt my-tooltip" ng-shortcut="'meta+shift+down'" ng-shortcut-click data-title="ctrl+shift+down"> -->
+                                                    <!-- Next -->
+                                                    <!-- </a> -->
                                                     <button type="submit" class="btn btn-primary submit my-tooltip" ng-shortcut="'meta+shift+s'" ng-shortcut-click data-title="ctrl+shift+s">
                                                         Submit
                                                     </button>
@@ -86,7 +97,7 @@
                                 <div class="tab-pane-wrap">
                                     <div class="row">
                                         <div class="col-lg-10">
-                                            <h6 class="tab-pane-title">Approval Type : <span class="color-primary-light">{{$ctrl.approval_type.name}}</span></h6>
+                                            <h6 class="tab-pane-title">Verification Flow : <span class="color-primary-light">{{$ctrl.approval_type.name}}</span></h6>
                                             <div class="table-responsive">
                                                 <table class="table table-form">
                                                     <thead>
@@ -146,4 +157,4 @@
             </div><!-- Page Form -->
         </form>
     </div><!-- Page Main Content -->
-</div><!-- Content Wrap -->
+</div><!-- Content Wrap

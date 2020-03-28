@@ -135,12 +135,7 @@ class ApprovalLevelController extends Controller {
 			}
 			$approval_level->save();
 
-			if ($request->category_id == 7220) {
-				$parent = 'cn-dn-verification';
-			} elseif ($request->category_id == 7221) {
-				$parent = 'jv-verification';
-			}
-
+			$parent = $request->category_id . '-verification';
 			$permissions = [
 				[
 					'display_order' => 999,
@@ -149,7 +144,6 @@ class ApprovalLevelController extends Controller {
 					'display_name' => $approval_level->name,
 				],
 			];
-
 			Permission::createFromArrays($permissions);
 
 			$activity = new ActivityLog;

@@ -1,4 +1,4 @@
-<!-- Content Wrap -->
+Content Wrap -->
 <div class="content-wrap cndn-wrap">
     <!-- Page Header -->
     <div class="page-header">
@@ -8,8 +8,8 @@
                     <a href="#!/approval-pkg/approval-type/list" type="button" class="btn-back btn-img"><img class="img-responsive my-tooltip" ng-shortcut="'meta+shift+left'" ng-shortcut-click data-title="ctrl+shift+left" src="./public/theme/img/content/previous.svg" alt="Back" /></a>
                 </div><!-- Page Header Content -->
                 <div class="page-header-content title-block">
-                    <h1 class="title"><b>View Approval Type</b></h1>
-                    <p class="subtitle"><a href="#!/approval-pkg/approval-type/list">Approval Types</a> / View</p>
+                    <h1 class="title"><b>View Verification Flow</b></h1>
+                    <p class="subtitle"><a href="#!/approval-pkg/approval-type/list">Verification Flows</a> / View</p>
                 </div><!-- Page Header Content -->
             </div><!-- Page Header Content Left -->
         </div><!-- Page Header Inner -->
@@ -26,8 +26,8 @@
                             <div class="isotope-filters animated" data-animation="fadeInLeft" data-animation-delay="300">
                                 <ul class="nav nav-pills cndn-tabs">
                                     <li class="active"><a class="filter active" data-target="#general-information" data-toggle="tab" aria-expanded="true">General Information</a></li>
-                                    <li><a data-target="#approval-status" data-toggle="tab" aria-expanded="true" class="filter">Approval Status</a></li>
-                                    <li><a data-target="#approval-levels" data-toggle="tab" aria-expanded="true" class="filter">Approval Levels</a></li>
+                                    <!-- <li><a data-target="#approval-status" data-toggle="tab" aria-expanded="true" class="filter">Approval Status</a></li> -->
+                                    <li><a data-target="#approval-levels" data-toggle="tab" aria-expanded="true" class="filter">Verification Levels</a></li>
                                 </ul>
                             </div><!-- Filters -->
                         </div><!-- Tab Header -->
@@ -41,16 +41,16 @@
                                         <div class="col-md-12">
                                             <ul class="grid-row">
                                                 <li class="grid-col-3">
-                                                    <span class="grid-col-label">Approval Type Name</span>
+                                                    <span class="grid-col-label">Verification Flow Name</span>
                                                     <span class="grid-col-value">{{$ctrl.approval_type.name}}</span>
                                                 </li>
                                                 <li class="grid-col-3">
-                                                    <span class="grid-col-label">Approval Type Code</span>
+                                                    <span class="grid-col-label">Verification Flow Code</span>
                                                     <span class="grid-col-value">{{$ctrl.approval_type.code}}</span>
                                                 </li>
                                                 <li class="grid-col-3">
-                                                    <span class="grid-col-label">Filter Field</span>
-                                                    <span class="grid-col-value">{{$ctrl.approval_type.filter_field}}</span>
+                                                    <span class="grid-col-label">Entity Type</span>
+                                                    <span class="grid-col-value">{{$ctrl.approval_type.entity_type.name}}</span>
                                                 </li>
                                                 <li class="grid-col-3">
                                                     <span class="grid-col-label">Active Status</span>
@@ -78,7 +78,7 @@
                                 <div class="tab-pane-wrap">
                                     <div class="row">
                                         <div class="col-lg-6 col-md-8">
-                                            <h6 class="tab-pane-title">Approval Type : <span class="color-primary-light">{{$ctrl.approval_type.name}}</span></h6>
+                                            <h6 class="tab-pane-title">Verification Flow : <span class="color-primary-light">{{$ctrl.approval_type.name}}</span></h6>
                                             <div class="table-responsive">
                                                 <table class="table table-form">
                                                     <thead>
@@ -118,17 +118,17 @@
                                 <div class="tab-pane-wrap">
                                     <div class="row">
                                         <div class="col-md-12">
-                                            <h6 class="tab-pane-title">Approval Type : <span class="color-primary-light">{{$ctrl.approval_type.name}}</span></h6>
+                                            <h6 class="tab-pane-title">Verification Flow : <span class="color-primary-light">{{$ctrl.approval_type.name}}</span></h6>
                                             <div class="table-responsive">
                                                 <table class="table table-form">
                                                     <thead>
                                                         <tr>
-                                                            <th class="width-230">Name</th>
+                                                            <th class="width-230">Level</th>
                                                             <th class="width-115">Approval Order</th>
                                                             <th class="width-115">Current Status</th>
                                                             <th class="width-115">Approval Status</th>
                                                             <th class="width-115">Reject Status</th>
-                                                            <th class="width-95">Active Status</th>
+                                                            <!-- <th class="width-95">Active Status</th> -->
                                                             <th class="width-95">Email Notification</th>
                                                             <!-- <th class="width-115">Email Notification</th> -->
                                                             <th class="width-95">SMS Notification</th>
@@ -141,9 +141,9 @@
                                                         <input type="hidden" name="approval_levels[{{index}}][approval_type_id]" value="{{$ctrl.approval_type.id}}">
                                                         <tr>
                                                             <td>
-                                                                <md-select class="type-sm" ng-model="approval_level.pivot.approval_level_id" placeholder="Select Approval Level" md-on-close="clearSearchCurrentStatus()" data-md-container-class="selectdemoSelectHeader">
+                                                                <md-select class="type-sm" ng-model="approval_level.pivot.approval_level_id" placeholder="Select Verification Level" md-on-close="clearSearchCurrentStatus()" data-md-container-class="selectdemoSelectHeader">
                                                                     <md-select-header class="demo-select-header">
-                                                                        <input ng-model="searchCurrentStatus" type="search" placeholder="Search for a Approval Level.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                                        <input ng-model="searchCurrentStatus" type="search" placeholder="Search for a Verification Level.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
                                                                     </md-select-header>
                                                                     <md-optgroup>
                                                                         <md-option ng-value="i.id" ng-repeat="i in $ctrl.extras.approval_levels_list | filter:searchCurrentStatus">{{i.name}}</md-option>
@@ -162,7 +162,7 @@
                                                                         <input ng-model="searchCurrentStatus" type="search" placeholder="Search for a Current Status.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
                                                                     </md-select-header>
                                                                     <md-optgroup>
-                                                                        <md-option ng-value="i.id" ng-repeat="i in $ctrl.extras.approval_type_status_list | filter:searchCurrentStatus">{{i.status}}</md-option>
+                                                                        <md-option ng-value="i.id" ng-repeat="i in $ctrl.extras.approval_type_status_list | filter:searchCurrentStatus">{{i.name}}</md-option>
                                                                     </md-optgroup>
                                                                 </md-select>
                                                                 <input type="hidden" name="approval_levels[{{index}}][current_status_id]" value="{{approval_level.pivot.current_status_id}}" class="required">
@@ -173,7 +173,7 @@
                                                                         <input ng-model="searchApprovalStatus" type="search" placeholder="Search for a Approval Status.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
                                                                     </md-select-header>
                                                                     <md-optgroup>
-                                                                        <md-option ng-value="i.id" ng-repeat="i in $ctrl.extras.approval_type_status_list | filter:searchApprovalStatus">{{i.status}}</md-option>
+                                                                        <md-option ng-value="i.id" ng-repeat="i in $ctrl.extras.approval_type_status_list | filter:searchApprovalStatus">{{i.name}}</md-option>
                                                                     </md-optgroup>
                                                                 </md-select>
                                                                 <input type="hidden" name="approval_levels[{{index}}][next_status_id]" value="{{approval_level.pivot.next_status_id}}" class="required">
@@ -184,19 +184,19 @@
                                                                         <input ng-model="searchRejectStatus" type="search" placeholder="Search for a Reject Status.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
                                                                     </md-select-header>
                                                                     <md-optgroup>
-                                                                        <md-option ng-value="i.id" ng-repeat="i in $ctrl.extras.approval_type_status_list | filter:searchRejectStatus">{{i.status}}</md-option>
+                                                                        <md-option ng-value="i.id" ng-repeat="i in $ctrl.extras.approval_type_status_list | filter:searchRejectStatus">{{i.name}}</md-option>
                                                                     </md-optgroup>
                                                                 </md-select>
                                                                 <input type="hidden" name="approval_levels[{{index}}][reject_status_id]" value="{{approval_level.pivot.reject_status_id}}" class="required">
                                                             </td>
-                                                            <td>
+                                                            <!-- <td>
                                                                 <div class="tab-switch">
                                                                     <md-switch ng-model="approval_level.switch_value" aria-label="Switch 1" ng-true-value="'Inactive'" ng-false-value="'Active'" class="md-warn type-sm">
                                                                         {{ approval_level.switch_value }}
                                                                     </md-switch>
                                                                     <input type="hidden" name="approval_levels[{{index}}][switch_value]" value="{{approval_level.switch_value}}">
                                                                 </div>
-                                                            </td>
+                                                            </td> -->
                                                             <td>
                                                                 <div class="tab-switch">
                                                                     <md-switch ng-model="approval_level.has_email_noty" aria-label="Switch 1" ng-true-value="'No'" ng-false-value="'Yes'" class="md-warn type-2 type-sm">
@@ -250,4 +250,4 @@
             </div><!-- Page Form -->
         </form>
     </div><!-- Page Main Content -->
-</div><!-- Content Wrap -->
+</div><!-- Content Wrap

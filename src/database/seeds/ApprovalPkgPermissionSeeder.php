@@ -45,6 +45,13 @@ class ApprovalPkgPermissionSeeder extends Seeder {
 				'display_name' => 'Delete',
 			],
 			[
+				'display_order' => 4,
+				'parent' => 'approval-types',
+				'name' => 'view-approval-type',
+				'display_name' => 'View',
+			],
+
+			[
 				'display_order' => 99,
 				'parent' => null,
 				'name' => 'approval-levels',
@@ -66,6 +73,31 @@ class ApprovalPkgPermissionSeeder extends Seeder {
 				'display_order' => 3,
 				'parent' => 'approval-levels',
 				'name' => 'delete-approval-level',
+				'display_name' => 'Delete',
+			],
+
+			[
+				'display_order' => 99,
+				'parent' => null,
+				'name' => 'entity-statuses',
+				'display_name' => 'Entity Statuses',
+			],
+			[
+				'display_order' => 1,
+				'parent' => 'entity-statuses',
+				'name' => 'add-entity-status',
+				'display_name' => 'Add',
+			],
+			[
+				'display_order' => 2,
+				'parent' => 'entity-statuses',
+				'name' => 'edit-entity-status',
+				'display_name' => 'Edit',
+			],
+			[
+				'display_order' => 3,
+				'parent' => 'entity-statuses',
+				'name' => 'delete-entity-status',
 				'display_name' => 'Delete',
 			],
 

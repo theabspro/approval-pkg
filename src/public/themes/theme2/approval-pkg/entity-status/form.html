@@ -5,15 +5,15 @@
         <div class="page-header-inner">
             <div class="page-header-content-left">
                 <div class="page-header-content button-block">
-                    <a href="#!/approval-pkg/approval-level/list" type="button" class="btn-back btn-img">
+                    <a href="#!/approval-pkg/entity-status/list" type="button" class="btn-back btn-img">
                         <img class="img-responsive my-tooltip" src="./public/theme/img/content/previous.svg" alt="Back" ng-shortcut="'meta+shift+left'" ng-shortcut-click data-title="ctrl+shift+left" />
                     </a>
                 </div><!-- Page Header Content -->
                 <div class="page-header-content title-block">
-                    <h1 class="title"><b>{{$ctrl.action}} Verification Level</b></h1>
+                    <h1 class="title"><b>{{$ctrl.action}} Entity Status</b></h1>
                     <p class="subtitle">
-                        <a href="#!/approval-pkg/approval-level/list">
-                            Verification Level
+                        <a href="#!/approval-pkg/entity-status/list">
+                            Entity Statuses
                         </a> /
                         {{$ctrl.action}}
                     </p>
@@ -24,7 +24,7 @@
     <!-- Page Main Content -->
     <div class="page-main-content form-content type2">
         <form id="form" autocomplete="off">
-            <input type="hidden" name="id" value="{{$ctrl.approval_level.id}}">
+            <input type="hidden" name="id" value="{{$ctrl.entity_status.id}}">
             <div class="page-tab-form pb-70">
                 <div class="tab-form-wrap">
                     <div class="tab-form-header">
@@ -50,10 +50,10 @@
                                         <div class="col-md-3">
                                             <div class="input-text form-group">
                                                 <label>
-                                                    Verification Level Name
+                                                    Status Name
                                                     <sup class="mandatory">*</sup>
                                                 </label>
-                                                <input type="text" class="form-control required" ng-model="$ctrl.approval_level.name" name="name" placeholder="Enter Verification Level Name" />
+                                                <input type="text" class="form-control required" ng-model="$ctrl.entity_status.name" name="name" placeholder="Enter Verification Level Name" />
                                             </div><!-- Feild -->
                                         </div><!-- Column -->
                                         <div class="col-md-3">
@@ -62,15 +62,15 @@
                                                     Entity Type
                                                     <sup class="mandatory">*</sup>
                                                 </label>
-                                                <md-select ng-model="$ctrl.approval_level.category_id" md-on-close="clearSearchTerm()" ng-change="onSelectedApprovalType($ctrl.approval_level.category_id)" data-md-container-class="selectdemoSelectHeader" placeholder="Select Category Type">
+                                                <md-select ng-model="$ctrl.entity_status.entity_id" md-on-close="clearSearchTerm()" ng-change="onSelectedApprovalType($ctrl.entity_status.entity_id)" data-md-container-class="selectdemoSelectHeader" placeholder="Select Entity">
                                                     <md-select-header class="demo-select-header">
-                                                        <input ng-model="searchTerm" type="search" placeholder="Search for a Category Type" class="demo-header-searchbox md-text">
+                                                        <input ng-model="searchTerm" type="search" placeholder="Search for a Entity" class="demo-header-searchbox md-text">
                                                     </md-select-header>
                                                     <md-optgroup>
-                                                        <md-option ng-value="category.id" ng-repeat="category in $ctrl.category_list | filter:searchTerm">{{category.name}}</md-option>
+                                                        <md-option ng-value="entity.id" ng-repeat="entity in $ctrl.entity_list | filter:searchTerm">{{entity.name}}</md-option>
                                                     </md-optgroup>
                                                 </md-select>
-                                                <input type="hidden" class="form-control required" name="category_id" id="category_id" value="{{$ctrl.approval_level.category_id}}">
+                                                <input type="hidden" class="form-control required" name="entity_id" id="entity_id" value="{{$ctrl.entity_status.entity_id}}">
                                             </div><!-- Field -->
                                         </div><!-- Column -->
                                         <div class="col-md-3">
@@ -90,7 +90,7 @@
                                         <div class="tab-pane-footer">
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <a class="btn btn-cancel my-tooltip" href="#!/approval-pkg/approval-level/list" ng-shortcut="'meta+shift+left'" ng-shortcut-click data-title="ctrl+shift+left">Cancel</a>
+                                                    <a class="btn btn-cancel my-tooltip" href="#!/approval-pkg/entity-status/list" ng-shortcut="'meta+shift+left'" ng-shortcut-click data-title="ctrl+shift+left">Cancel</a>
                                                     <button type="submit" id="submit" class="btn btn-primary my-tooltip" ng-shortcut="'meta+shift+s'" ng-shortcut-click data-title="ctrl+shift+s">
                                                         Submit
                                                     </button>

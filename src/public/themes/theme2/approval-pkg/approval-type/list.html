@@ -1,9 +1,9 @@
- <div class="content-wrap cndn-wrap">
+<div class="content-wrap cndn-wrap">
     <div class="page-header">
         <div class="page-header-inner">
             <div class="page-header-content-left">
                 <div class="page-header-content title-block">
-                    <h1 class="title type-2">Approval Types (<span id="table_info"></span>)</h1>
+                    <h1 class="title type-2">Verification Flows (<span id="table_info"></span>)</h1>
                 </div><!-- Page Header Content -->
                 <div class="page-header-content button-block">
                     <button class="btn btn-bordered my-tooltip" data-toggle="modal" data-target="#approval-type-filter-modal" ng-shortcut="'meta+shift+f'" ng-shortcut-click data-title="ctrl+shift+f">
@@ -50,10 +50,11 @@
                         <thead>
                             <tr>
                                 <th class="action">Action</th>
-                                <th>Approval Type</th>
-                                <th>Type Short Name</th>
+                                <th>Verification Flow Name</th>
+                                <th>Short Name</th>
+                                <th>Entity Type</th>
                                 <th>No. of Levels</th>
-                                <th>No. of Status</th>
+                                <!-- <th>No. of Status</th> -->
                             </tr>
                         </thead>
                     </table>
@@ -68,15 +69,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close ripple" data-dismiss="modal" aria-label="Close"><i class="icon ion-md-close"></i></button>
-                <h5 class="modal-title" id="myModalLabel">Approval Type Filter</h5>
+                <h5 class="modal-title" id="myModalLabel">Verification Flow Filter</h5>
             </div><!-- Modal Header -->
             <div class="modal-body">
                 <div class="modal-form">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Approval Type Name</label>
-                                <input type="text" class="form-control" id="approval_type_name" name="name" placeholder="Enter Approval Type Name" autocomplete="off">
+                                <label>Verification Flow Name</label>
+                                <input type="text" class="form-control" id="approval_type_name" name="name" placeholder="Enter Verification Flow Name" autocomplete="off">
                             </div><!-- Field -->
                         </div><!-- Column -->
                         <div class="col-md-6">
