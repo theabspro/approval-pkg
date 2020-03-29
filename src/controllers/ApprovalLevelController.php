@@ -29,10 +29,17 @@ class ApprovalLevelController extends Controller {
 		$approval_levels = ApprovalLevel::withTrashed()->select(
 			'approval_levels.id',
 			'approval_levels.name',
-			'configs.name as category',
+			'configs.name as entity',
+			'approval_levels.approval_order',
+			'cs.name as current_status',
+			'ns.name as next_status',
+			'rs.name as rejected_status',
 			DB::raw('IF(approval_levels.deleted_at IS NULL, "Active","Inactive") as status')
 		)
 			->leftJoin('configs', 'configs.id', 'approval_levels.category_id')
+			->leftJoin('entity_statuses as cs', 'cs.id', 'approval_levels.current_status_id')
+			->leftJoin('entity_statuses as ns', 'ns.id', 'approval_levels.next_status_id')
+			->leftJoin('entity_statuses as rs', 'rs.id', 'approval_levels.reject_status_id')
 			->where(function ($query) use ($request) {
 				if (!empty($request->approval_level_name)) {
 					$query->where('approval_levels.name', 'LIKE', '%' . $request->approval_level_name . '%');
@@ -84,6 +91,7 @@ class ApprovalLevelController extends Controller {
 			$action = 'Edit';
 		}
 		$this->data['category_list'] = Collect(Config::getCategoryList()->prepend(['id' => '', 'name' => 'Select Category']));
+		$this->data['entity_status_list'] = Collect(EntityStatus::company()->get()->prepend(['id' => '', 'name' => 'Select Status']));
 		$this->data['approval_level'] = $approval_level;
 		$this->data['action'] = $action;
 		$this->data['theme'];

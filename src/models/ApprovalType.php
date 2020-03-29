@@ -22,7 +22,9 @@ class ApprovalType extends Model {
 	}
 
 	public function approvalLevels() {
-		return $this->belongsToMany('Abs\ApprovalPkg\ApprovalLevel', 'approval_type_approval_level', 'approval_type_id', 'approval_level_id')->withPivot(['approval_order', 'current_status_id', 'next_status_id', 'reject_status_id', 'has_email_noty', 'has_sms_noty']);
+		return $this->belongsToMany('Abs\ApprovalPkg\ApprovalLevel', 'approval_type_approval_level', 'approval_type_id', 'approval_level_id')
+		//->withPivot(['approval_order', 'current_status_id', 'next_status_id', 'reject_status_id', 'has_email_noty', 'has_sms_noty'])
+		;
 	}
 
 	public function approvalTypeStatuses() {

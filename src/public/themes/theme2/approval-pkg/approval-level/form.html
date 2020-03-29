@@ -62,7 +62,7 @@
                                                     Entity Type
                                                     <sup class="mandatory">*</sup>
                                                 </label>
-                                                <md-select ng-model="$ctrl.approval_level.category_id" md-on-close="clearSearchTerm()" ng-change="onSelectedApprovalType($ctrl.approval_level.category_id)" data-md-container-class="selectdemoSelectHeader" placeholder="Select Category Type">
+                                                <md-select ng-model="$ctrl.approval_level.category_id" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" placeholder="Select Category Type">
                                                     <md-select-header class="demo-select-header">
                                                         <input ng-model="searchTerm" type="search" placeholder="Search for a Category Type" class="demo-header-searchbox md-text">
                                                     </md-select-header>
@@ -71,6 +71,66 @@
                                                     </md-optgroup>
                                                 </md-select>
                                                 <input type="hidden" class="form-control required" name="category_id" id="category_id" value="{{$ctrl.approval_level.category_id}}">
+                                            </div><!-- Field -->
+                                        </div><!-- Column -->
+                                        <div class="col-md-3">
+                                            <div class="input-text form-group">
+                                                <label>
+                                                    Verification Order
+                                                    <sup class="mandatory">*</sup>
+                                                </label>
+                                                <input type="number" class="form-control required" ng-model="$ctrl.approval_level.approval_order" name="approval_order" placeholder="Enter Verification Order" />
+                                            </div><!-- Feild -->
+                                        </div><!-- Column -->
+                                        <div class="col-md-3">
+                                            <div class="input-text form-group">
+                                                <label>
+                                                    Current Status
+                                                    <sup class="mandatory">*</sup>
+                                                </label>
+                                                <md-select ng-model="$ctrl.approval_level.current_status_id" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" placeholder="Select Current Status">
+                                                    <md-select-header class="demo-select-header">
+                                                        <input ng-model="searchTerm" type="search" placeholder="Search for a Current Status" class="demo-header-searchbox md-text">
+                                                    </md-select-header>
+                                                    <md-optgroup>
+                                                        <md-option ng-value="current_status.id" ng-repeat="current_status in $ctrl.entity_status_list | filter:searchTerm">{{current_status.name}}</md-option>
+                                                    </md-optgroup>
+                                                </md-select>
+                                                <input type="hidden" class="form-control required" name="current_status_id" value="{{$ctrl.approval_level.current_status_id}}">
+                                            </div><!-- Field -->
+                                        </div><!-- Column -->
+                                        <div class="col-md-3">
+                                            <div class="input-text form-group">
+                                                <label>
+                                                    Next Status
+                                                    <sup class="mandatory">*</sup>
+                                                </label>
+                                                <md-select ng-model="$ctrl.approval_level.next_status_id" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" placeholder="Select Next Status">
+                                                    <md-select-header class="demo-select-header">
+                                                        <input ng-model="searchTerm" type="search" placeholder="Search for a Next Status" class="demo-header-searchbox md-text">
+                                                    </md-select-header>
+                                                    <md-optgroup>
+                                                        <md-option ng-value="next_status.id" ng-repeat="next_status in $ctrl.entity_status_list | filter:searchTerm">{{next_status.name}}</md-option>
+                                                    </md-optgroup>
+                                                </md-select>
+                                                <input type="hidden" class="form-control required" name="next_status_id" value="{{$ctrl.approval_level.next_status_id}}">
+                                            </div><!-- Field -->
+                                        </div><!-- Column -->
+                                        <div class="col-md-3">
+                                            <div class="input-text form-group">
+                                                <label>
+                                                    Rejected Status
+                                                    <sup class="mandatory">*</sup>
+                                                </label>
+                                                <md-select ng-model="$ctrl.approval_level.reject_status_id" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" placeholder="Select Rejected Status">
+                                                    <md-select-header class="demo-select-header">
+                                                        <input ng-model="searchTerm" type="search" placeholder="Search for a Rejected Status" class="demo-header-searchbox md-text">
+                                                    </md-select-header>
+                                                    <md-optgroup>
+                                                        <md-option ng-value="reject_status.id" ng-repeat="reject_status in $ctrl.entity_status_list | filter:searchTerm">{{reject_status.name}}</md-option>
+                                                    </md-optgroup>
+                                                </md-select>
+                                                <input type="hidden" class="form-control required" name="reject_status_id" value="{{$ctrl.approval_level.reject_status_id}}">
                                             </div><!-- Field -->
                                         </div><!-- Column -->
                                         <div class="col-md-3">

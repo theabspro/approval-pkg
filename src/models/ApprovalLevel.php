@@ -11,15 +11,14 @@ class ApprovalLevel extends Model {
 	use SoftDeletes;
 	protected $table = 'approval_levels';
 	protected $fillable = [
-		// 'approval_type_id',
 		'name',
 		'category_id',
-		// 'approval_order',
-		// 'current_status_id',
-		// 'next_status_id',
-		// 'has_email_noty',
-		// 'has_sms_noty',
-		// 'reject_status_id',
+		'approval_order',
+		'current_status_id',
+		'next_status_id',
+		'reject_status_id',
+		'has_email_noty',
+		'has_sms_noty',
 	];
 	protected $appends = ['switch_value'];
 
@@ -27,8 +26,20 @@ class ApprovalLevel extends Model {
 		return !empty($this->attributes['deleted_at']) ? 'Inactive' : 'Active';
 	}
 
-	public function approvalType() {
-		return $this->belongsTo('Abs\ApprovalPkg\ApprovalType');
+	public function entity() {
+		return $this->belongsTo('App\Config', 'category_id');
+	}
+
+	public function currentStatus() {
+		return $this->belongsTo('Abs\ApprovalPkg\EntityStatus', 'current_status_id');
+	}
+
+	public function nextStatus() {
+		return $this->belongsTo('Abs\ApprovalPkg\EntityStatus', 'next_status_id');
+	}
+
+	public function rejectedStatus() {
+		return $this->belongsTo('Abs\ApprovalPkg\EntityStatus', 'reject_status_id');
 	}
 
 	public static function createFromObject($record_data) {

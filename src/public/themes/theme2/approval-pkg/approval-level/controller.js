@@ -55,7 +55,11 @@ app.component('approvalLevelList', {
             columns: [
                 { data: 'action', class: 'action', name: 'action', searchable: false },
                 { data: 'name', name: 'approval_levels.name' },
-                { data: 'category', name: 'configs.name' },
+                { data: 'entity', name: 'configs.name' },
+                { data: 'approval_order', searchable: false },
+                { data: 'current_status', name: 'cs.name' },
+                { data: 'next_status', name: 'ns.name' },
+                { data: 'rejected_status', name: 'rs.name' },
             ],
             "infoCallback": function(settings, start, end, max, total, pre) {
                 $('#table_info').html(total)
@@ -105,8 +109,8 @@ app.component('approvalLevelList', {
         //FOR FILTER
         $http.get(
             laravel_routes['getApprovalLevelFilter']
-            ).then(function(response){
-                self.category_list = response.data.category_list;
+        ).then(function(response) {
+            self.category_list = response.data.category_list;
         });
 
         self.status = [
@@ -125,11 +129,11 @@ app.component('approvalLevelList', {
         $('#approval_level_name').on('keyup', function() {
             dataTables.fnFilter();
         });
-        $scope.onSelectedCategory = function(id){
+        $scope.onSelectedCategory = function(id) {
             $("#category_id").val(id);
             dataTables.fnFilter();
         }
-        $scope.onSelectedStatus = function(id){
+        $scope.onSelectedStatus = function(id) {
             $("#status").val(id);
             dataTables.fnFilter();
         }
@@ -145,7 +149,7 @@ app.component('approvalLevelList', {
 //------------------------------------------------------------------------------------------------------------------------
 app.component('approvalLevelForm', {
     templateUrl: approval_level_form_template_url,
-    controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope,$element) {
+    controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $element) {
         var self = this;
         self.hasPermission = HelperService.hasPermission;
         if (!self.hasPermission('add-approval-type') || !self.hasPermission('edit-approval-type')) {
@@ -153,7 +157,7 @@ app.component('approvalLevelForm', {
             return false;
         }
         self.angular_routes = angular_routes;
-         $http.get(
+        $http.get(
             laravel_routes['getApprovalLevelFormData'], {
                 params: {
                     id: typeof($routeParams.id) == 'undefined' ? null : $routeParams.id,
@@ -163,6 +167,7 @@ app.component('approvalLevelForm', {
             // console.log(response);
             self.approval_level = response.data.approval_level;
             self.category_list = response.data.category_list;
+            self.entity_status_list = response.data.entity_status_list;
             self.action = response.data.action;
             $rootScope.loading = false;
             if (self.action == 'Edit') {
@@ -183,7 +188,7 @@ app.component('approvalLevelForm', {
             $scope.searchTerm = '';
         };
 
-       $("input:text:visible:first").focus();
+        $("input:text:visible:first").focus();
 
         var form_id = '#form';
         var v = jQuery(form_id).validate({
@@ -195,6 +200,18 @@ app.component('approvalLevelForm', {
                     maxlength: 191,
                 },
                 'category_id': {
+                    required: true,
+                },
+                'approval_order': {
+                    required: true,
+                },
+                'current_status_id': {
+                    required: true,
+                },
+                'next_status_id': {
+                    required: true,
+                },
+                'reject_status_id': {
                     required: true,
                 },
             },
