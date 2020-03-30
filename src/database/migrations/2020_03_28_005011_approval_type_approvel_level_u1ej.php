@@ -12,12 +12,13 @@ class ApprovalTypeApprovelLevelU1ej extends Migration {
 	 */
 	public function up() {
 		Schema::table('approval_types', function (Blueprint $table) {
+
+			$table->dropForeign('approval_types_company_id_foreign');
+
 			$table->dropUnique('approval_types_name_unique');
 			$table->dropUnique('approval_types_code_unique');
 			$table->dropUnique('approval_types_company_id_name_unique');
 			$table->dropUnique('approval_types_company_id_code_unique');
-
-			$table->dropForeign('approval_types_company_id_foreign');
 
 			$table->dropColumn('filter_field');
 
