@@ -111,9 +111,9 @@ app.component('approvalTypeList', {
                         layout: 'topRight',
                         text: response.data.errors,
                     }).show();
-                    setTimeout(function() {
-                        $noty.close();
-                    }, 3000);
+                    // setTimeout(function() {
+                    //     $noty.close();
+                    // }, 3000);
                 }
             });
         }
@@ -239,9 +239,9 @@ app.component('approvalTypeForm', {
                     layout: 'topRight',
                     text: 'You have errors,Please check all tabs'
                 }).show();
-                setTimeout(function() {
-                    $noty.close();
-                }, 3000)
+                // setTimeout(function() {
+                //     $noty.close();
+                // }, 3000)
             },
             submitHandler: function(form) {
                 let formData = new FormData($(form_id)[0]);
@@ -265,9 +265,9 @@ app.component('approvalTypeForm', {
                                 layout: 'topRight',
                                 text: errors
                             }).show();
-                            setTimeout(function() {
-                                $noty.close();
-                            }, 3000);
+                            // setTimeout(function() {
+                            //     $noty.close();
+                            // }, 3000);
                             $('.submit').button('reset');
 
                         } else {
@@ -292,9 +292,9 @@ app.component('approvalTypeForm', {
                             layout: 'topRight',
                             text: 'Something went wrong at server',
                         }).show();
-                        setTimeout(function() {
-                            $noty.close();
-                        }, 3000);
+                        // setTimeout(function() {
+                        //     $noty.close();
+                        // }, 3000);
                     });
             }
         });
@@ -415,9 +415,9 @@ app.component('approvalTypeView', {
                     layout: 'topRight',
                     text: 'You have errors,Please check all tabs'
                 }).show();
-                setTimeout(function() {
-                    $noty.close();
-                }, 3000)
+                // setTimeout(function() {
+                //     $noty.close();
+                // }, 3000)
             },
             submitHandler: function(form) {
                 let formData = new FormData($(form_id)[0]);
@@ -441,9 +441,9 @@ app.component('approvalTypeView', {
                                 layout: 'topRight',
                                 text: errors
                             }).show();
-                            setTimeout(function() {
-                                $noty.close();
-                            }, 3000);
+                            // setTimeout(function() {
+                            //     $noty.close();
+                            // }, 3000);
                             $('.submit').button('reset');
 
                         } else {
@@ -470,9 +470,9 @@ app.component('approvalTypeView', {
                             layout: 'topRight',
                             text: 'Something went wrong at server',
                         }).show();
-                        setTimeout(function() {
-                            $noty.close();
-                        }, 3000);
+                        // setTimeout(function() {
+                        //     $noty.close();
+                        // }, 3000);
                     });
             }
         });
