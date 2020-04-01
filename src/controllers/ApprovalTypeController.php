@@ -80,17 +80,30 @@ class ApprovalTypeController extends Controller {
 		if (!$id) {
 			$approval_type = new ApprovalType;
 			$approval_type->approval_levels = [];
+			$this->data['extras'] = [];
 			$action = 'Add';
 		} else {
 			$approval_type = ApprovalType::withTrashed()->where('id', $id)->with([
 				'approvalLevels',
+				'entityType',
 			])
 				->first();
 			$action = 'Edit';
+			$this->data['extras'] = [
+				'approval_levels_list' => collect(ApprovalLevel::where('category_id', $approval_type->entity_id)->select('id', 'name')->get())->prepend(['name' => 'Select Level']),
+			];
 		}
 		$this->data['entity_list'] = Collect(Config::getCategoryList()->prepend(['id' => '', 'name' => 'Select Entity']));
 		$this->data['approval_type'] = $approval_type;
 		$this->data['action'] = $action;
+
+		return response()->json($this->data);
+	}
+
+	public function getApprovalLevelsList(Request $request) {
+		$this->data['extras'] = [
+			'approval_levels_list' => collect(ApprovalLevel::where('category_id', $request->category_id)->select('id', 'name')->get())->prepend(['name' => 'Select Level']),
+		];
 
 		return response()->json($this->data);
 	}
@@ -147,7 +160,37 @@ class ApprovalTypeController extends Controller {
 				$approval_type->deleted_by_id = Auth::user()->id;
 			}
 			$approval_type->save();
+			if (isset($request->approval_levels) && !empty($request->approval_levels)){
+				$approval_level_values = array_column($request->approval_levels, 'approval_level');
+				$approval_level_count = count($approval_level_values);
+				$spproval_level_unique_count = count(array_unique($approval_level_values));
 
+				if ($approval_level_count != $spproval_level_unique_count) {
+					return response()->json(['success' => false, 'errors' => ['Name is Already Taken!']]);
+				}
+				// DB::beginTransaction();
+				// $approval_type = ApprovalType::find($request->id);
+
+				$approval_level_ids = [];
+				foreach ($request->approval_levels as $key => $approval_level) {
+					$approval_level_ids[] = $approval_level['approval_level'];
+				}
+				$approval_type->approvalLevels()->sync($approval_level_ids);
+
+				// $activity = new ActivityLog;
+				// $activity->date_time = Carbon::now();
+				// $activity->user_id = Auth::user()->id;
+				// $activity->module = 'Verification Level Updated';
+				// $activity->entity_id = $approval_type->id;
+				// $activity->entity_type_id = 385;
+				// $activity->activity_id = $request->id == NULL ? 280 : 281;
+				// $activity->activity = $request->id == NULL ? 280 : 281;
+				// $activity->details = json_encode($activity);
+				// $activity->save();
+
+				// DB::commit();
+				// return response()->json(['success' => true, 'comes_from' => 'Added']);
+			}
 			$activity = new ActivityLog;
 			$activity->date_time = Carbon::now();
 			$activity->user_id = Auth::user()->id;
@@ -212,45 +255,45 @@ class ApprovalTypeController extends Controller {
 		return response()->json($this->data);
 	}
 
-	public function saveApprovalTypeLevel(Request $request) {
-		try {
-			if (isset($request->approval_levels) && !empty($request->approval_levels)) {
-				$approval_level_values = array_column($request->approval_levels, 'approval_level');
-				$approval_level_count = count($approval_level_values);
-				$spproval_level_unique_count = count(array_unique($approval_level_values));
+	// public function saveApprovalTypeLevel(Request $request) {
+	// 	try {
+	// 		if (isset($request->approval_levels) && !empty($request->approval_levels)) {
+	// 			$approval_level_values = array_column($request->approval_levels, 'approval_level');
+	// 			$approval_level_count = count($approval_level_values);
+	// 			$spproval_level_unique_count = count(array_unique($approval_level_values));
 
-				if ($approval_level_count != $spproval_level_unique_count) {
-					return response()->json(['success' => false, 'errors' => ['Name is Already Taken!']]);
-				}
-				DB::beginTransaction();
-				$approval_type = ApprovalType::find($request->id);
+	// 			if ($approval_level_count != $spproval_level_unique_count) {
+	// 				return response()->json(['success' => false, 'errors' => ['Name is Already Taken!']]);
+	// 			}
+	// 			DB::beginTransaction();
+	// 			$approval_type = ApprovalType::find($request->id);
 
-				$approval_level_ids = [];
-				foreach ($request->approval_levels as $key => $approval_level) {
-					$approval_level_ids[] = $approval_level['approval_level'];
-				}
-				$approval_type->approvalLevels()->sync($approval_level_ids);
+	// 			$approval_level_ids = [];
+	// 			foreach ($request->approval_levels as $key => $approval_level) {
+	// 				$approval_level_ids[] = $approval_level['approval_level'];
+	// 			}
+	// 			$approval_type->approvalLevels()->sync($approval_level_ids);
 
-				$activity = new ActivityLog;
-				$activity->date_time = Carbon::now();
-				$activity->user_id = Auth::user()->id;
-				$activity->module = 'Verification Level Updated';
-				$activity->entity_id = $approval_type->id;
-				$activity->entity_type_id = 385;
-				$activity->activity_id = $request->id == NULL ? 280 : 281;
-				$activity->activity = $request->id == NULL ? 280 : 281;
-				$activity->details = json_encode($activity);
-				$activity->save();
+	// 			$activity = new ActivityLog;
+	// 			$activity->date_time = Carbon::now();
+	// 			$activity->user_id = Auth::user()->id;
+	// 			$activity->module = 'Verification Level Updated';
+	// 			$activity->entity_id = $approval_type->id;
+	// 			$activity->entity_type_id = 385;
+	// 			$activity->activity_id = $request->id == NULL ? 280 : 281;
+	// 			$activity->activity = $request->id == NULL ? 280 : 281;
+	// 			$activity->details = json_encode($activity);
+	// 			$activity->save();
 
-				DB::commit();
-				return response()->json(['success' => true, 'comes_from' => 'Added']);
-			}
+	// 			DB::commit();
+	// 			return response()->json(['success' => true, 'comes_from' => 'Added']);
+	// 		}
 
-		} catch (Exception $e) {
-			DB::rollBack();
-			return response()->json(['success' => false, 'errors' => ['Exception Error' => $e->getMessage()]]);
-		}
-	}
+	// 	} catch (Exception $e) {
+	// 		DB::rollBack();
+	// 		return response()->json(['success' => false, 'errors' => ['Exception Error' => $e->getMessage()]]);
+	// 	}
+	// }
 
 	public function getApprovalStatus(Request $request) {
 		return ApprovalTypeStatus::getApprovalTypeStatusList($request);

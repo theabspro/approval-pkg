@@ -169,6 +169,7 @@ app.component('approvalTypeForm', {
         }).then(function(response) {
             console.log(response.data);
             self.approval_type = response.data.approval_type;
+            self.extras = response.data.extras;
             self.entity_list = response.data.entity_list;
             self.action = response.data.action;
             $rootScope.loading = false;
@@ -192,27 +193,53 @@ app.component('approvalTypeForm', {
             $('.cndn-tabs li.active').prev().children('a').trigger("click");
             tabPaneFooter();
         });
-        /*$('.btn-pills').on("click", function() {
-            tabPaneFooter();
-        });
-        $scope.btnNxt = function() {}
-        $scope.prev = function() {}*/
         $("input:text:visible:first").focus();
-
-        self.addNewApprovalTypeStatus = function() {
-            self.approval_type.approval_type_statuses.push({
+        //SELECT ENTITY TYPE BASED APPROVAL LEVELS
+        $scope.onSelectedEntityType = function(id) {
+            $http.post(
+                laravel_routes['getApprovalLevelsList'], { 
+                    'category_id': id
+                }
+            ).then(function(response) {
+                console.log(response.data);
+                self.extras = response.data.extras;
+            });
+        }
+        // self.addNewApprovalTypeStatus = function() {
+        //     self.approval_type.approval_type_statuses.push({
+        //         id: '',
+        //         status: '',
+        //         switch_value: 'Active',
+        //     });
+        // }
+        // self.approval_type_status_removal_ids = [];
+        // self.removeApprovalTypeStatus = function(index, approval_type_status_id) {
+        //     if (approval_type_status_id) {
+        //         self.approval_type_status_removal_ids.push(approval_type_status_id);
+        //         $('#approval_type_status_removal_ids').val(JSON.stringify(self.approval_type_status_removal_ids));
+        //     }
+        //     self.approval_type.approval_type_statuses.splice(index, 1);
+        // }
+        self.addNewApprovalLevel = function() {
+            self.approval_type.approval_levels.push({
                 id: '',
-                status: '',
+                name: '',
+                approval_order: '',
+                current_status_id: '',
+                next_status_id: '',
+                reject_status_id: '',
+                has_email_noty: 'No',
+                has_sms_noty: 'No',
                 switch_value: 'Active',
             });
         }
-        self.approval_type_status_removal_ids = [];
-        self.removeApprovalTypeStatus = function(index, approval_type_status_id) {
-            if (approval_type_status_id) {
-                self.approval_type_status_removal_ids.push(approval_type_status_id);
-                $('#approval_type_status_removal_ids').val(JSON.stringify(self.approval_type_status_removal_ids));
+        self.approval_level_removal_ids = [];
+        self.removeApprovalLevel = function(index, approval_level_id) {
+            if (approval_level_id) {
+                self.approval_level_removal_ids.push(approval_level_id);
+                $('#approval_level_removal_ids').val(JSON.stringify(self.approval_level_removal_ids));
             }
-            self.approval_type.approval_type_statuses.splice(index, 1);
+            self.approval_type.approval_levels.splice(index, 1);
         }
 
         var form_id = '#form';
@@ -274,7 +301,7 @@ app.component('approvalTypeForm', {
                             $noty = new Noty({
                                 type: 'success',
                                 layout: 'topRight',
-                                text: 'Approval Type ' + res.comes_from + ' Successfully',
+                                text: 'Verification Flow ' + res.comes_from + ' Successfully',
                             }).show();
                             setTimeout(function() {
                                 $noty.close();
@@ -362,119 +389,119 @@ app.component('approvalTypeView', {
         $scope.btnNxt = function() {}
         $scope.prev = function() {}*/
 
-        self.addNewApprovalLevel = function() {
-            self.approval_type.approval_levels.push({
-                id: '',
-                name: '',
-                approval_order: '',
-                current_status_id: '',
-                next_status_id: '',
-                reject_status_id: '',
-                has_email_noty: 'No',
-                has_sms_noty: 'No',
-                switch_value: 'Active',
-            });
-        }
-        self.approval_level_removal_ids = [];
-        self.removeApprovalLevel = function(index, approval_level_id) {
-            if (approval_level_id) {
-                self.approval_level_removal_ids.push(approval_level_id);
-                $('#approval_level_removal_ids').val(JSON.stringify(self.approval_level_removal_ids));
-            }
-            self.approval_type.approval_levels.splice(index, 1);
-        }
+        // self.addNewApprovalLevel = function() {
+        //     self.approval_type.approval_levels.push({
+        //         id: '',
+        //         name: '',
+        //         approval_order: '',
+        //         current_status_id: '',
+        //         next_status_id: '',
+        //         reject_status_id: '',
+        //         has_email_noty: 'No',
+        //         has_sms_noty: 'No',
+        //         switch_value: 'Active',
+        //     });
+        // }
+        // self.approval_level_removal_ids = [];
+        // self.removeApprovalLevel = function(index, approval_level_id) {
+        //     if (approval_level_id) {
+        //         self.approval_level_removal_ids.push(approval_level_id);
+        //         $('#approval_level_removal_ids').val(JSON.stringify(self.approval_level_removal_ids));
+        //     }
+        //     self.approval_type.approval_levels.splice(index, 1);
+        // }
 
-        var form_id = '#form';
-        var v = jQuery(form_id).validate({
-            ignore: '',
-            rules: {
-                'name': {
-                    required: true,
-                    minlength: 3,
-                    maxlength: 191,
-                },
-                'approval_order': {
-                    required: true,
-                    number: true,
-                    minlength: 1,
-                    maxlength: 3,
-                },
-                'current_status_id': {
-                    required: true,
-                },
-                'next_status_id': {
-                    required: true,
-                },
-                'reject_status_id': {
-                    required: true,
-                },
-            },
-            invalidHandler: function(event, validator) {
-                $noty = new Noty({
-                    type: 'error',
-                    layout: 'topRight',
-                    text: 'You have errors,Please check all tabs'
-                }).show();
-                // setTimeout(function() {
-                //     $noty.close();
-                // }, 3000)
-            },
-            submitHandler: function(form) {
-                let formData = new FormData($(form_id)[0]);
-                $('.submit').button('loading');
-                $.ajax({
-                        url: laravel_routes['saveApprovalTypeLevel'],
-                        method: "POST",
-                        data: formData,
-                        processData: false,
-                        contentType: false,
-                    })
-                    .done(function(res) {
-                        if (!res.success) {
-                            $('.submit').prop('disabled', 'disabled');
-                            var errors = '';
-                            for (var i in res.errors) {
-                                errors += '<li>' + res.errors[i] + '</li>';
-                            }
-                            $noty = new Noty({
-                                type: 'error',
-                                layout: 'topRight',
-                                text: errors
-                            }).show();
-                            // setTimeout(function() {
-                            //     $noty.close();
-                            // }, 3000);
-                            $('.submit').button('reset');
+        // var form_id = '#form';
+        // var v = jQuery(form_id).validate({
+        //     ignore: '',
+        //     rules: {
+        //         'name': {
+        //             required: true,
+        //             minlength: 3,
+        //             maxlength: 191,
+        //         },
+        //         'approval_order': {
+        //             required: true,
+        //             number: true,
+        //             minlength: 1,
+        //             maxlength: 3,
+        //         },
+        //         'current_status_id': {
+        //             required: true,
+        //         },
+        //         'next_status_id': {
+        //             required: true,
+        //         },
+        //         'reject_status_id': {
+        //             required: true,
+        //         },
+        //     },
+        //     invalidHandler: function(event, validator) {
+        //         $noty = new Noty({
+        //             type: 'error',
+        //             layout: 'topRight',
+        //             text: 'You have errors,Please check all tabs'
+        //         }).show();
+        //         // setTimeout(function() {
+        //         //     $noty.close();
+        //         // }, 3000)
+        //     },
+        //     submitHandler: function(form) {
+        //         let formData = new FormData($(form_id)[0]);
+        //         $('.submit').button('loading');
+        //         $.ajax({
+        //                 url: laravel_routes['saveApprovalTypeLevel'],
+        //                 method: "POST",
+        //                 data: formData,
+        //                 processData: false,
+        //                 contentType: false,
+        //             })
+        //             .done(function(res) {
+        //                 if (!res.success) {
+        //                     $('.submit').prop('disabled', 'disabled');
+        //                     var errors = '';
+        //                     for (var i in res.errors) {
+        //                         errors += '<li>' + res.errors[i] + '</li>';
+        //                     }
+        //                     $noty = new Noty({
+        //                         type: 'error',
+        //                         layout: 'topRight',
+        //                         text: errors
+        //                     }).show();
+        //                     // setTimeout(function() {
+        //                     //     $noty.close();
+        //                     // }, 3000);
+        //                     $('.submit').button('reset');
 
-                        } else {
-                            if (res.comes_from != '') {
-                                $noty = new Noty({
-                                    type: 'success',
-                                    layout: 'topRight',
-                                    text: 'Approval Level ' + res.comes_from + ' Successfully',
-                                }).show();
-                            }
-                            setTimeout(function() {
-                                $noty.close();
-                            }, 3000);
-                            $('.submit').button('reset');
+        //                 } else {
+        //                     if (res.comes_from != '') {
+        //                         $noty = new Noty({
+        //                             type: 'success',
+        //                             layout: 'topRight',
+        //                             text: 'Approval Level ' + res.comes_from + ' Successfully',
+        //                         }).show();
+        //                     }
+        //                     setTimeout(function() {
+        //                         $noty.close();
+        //                     }, 3000);
+        //                     $('.submit').button('reset');
 
-                            $location.path('/approval-pkg/approval-type/list')
-                            $scope.$apply()
-                        }
-                    })
-                    .fail(function(xhr) {
-                        $('.submit').button('reset');
-                        $noty = new Noty({
-                            type: 'error',
-                            layout: 'topRight',
-                            text: 'Something went wrong at server',
-                        }).show();
-                        // setTimeout(function() {
-                        //     $noty.close();
-                        // }, 3000);
-                    });
-            }
-        });
+        //                     $location.path('/approval-pkg/approval-type/list')
+        //                     $scope.$apply()
+        //                 }
+        //             })
+        //             .fail(function(xhr) {
+        //                 $('.submit').button('reset');
+        //                 $noty = new Noty({
+        //                     type: 'error',
+        //                     layout: 'topRight',
+        //                     text: 'Something went wrong at server',
+        //                 }).show();
+        //                 // setTimeout(function() {
+        //                 //     $noty.close();
+        //                 // }, 3000);
+        //             });
+        //     }
+        // });
     }
 });

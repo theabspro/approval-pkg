@@ -16,7 +16,7 @@ Content Wrap -->
     </div><!-- Page Header -->
     <!-- Page Main Content -->
     <div class="page-main-content form-content type2">
-        <form id="form" autocomplete="off">
+        <!-- <form id="form" autocomplete="off"> -->
             <input type="hidden" name="id" value="{{$ctrl.approval_type.id}}">
             <div class="page-tab-form pb-70">
                 <div class="tab-form-wrap">
@@ -25,7 +25,7 @@ Content Wrap -->
                             <!-- Filters -->
                             <div class="isotope-filters animated" data-animation="fadeInLeft" data-animation-delay="300">
                                 <ul class="nav nav-pills cndn-tabs">
-                                    <li class="active"><a class="filter active" data-target="#general-information" data-toggle="tab" aria-expanded="true">General Information</a></li>
+                                    <li class="active"><a class="filter active" data-target="#general-information" data-toggle="tab" aria-expanded="true">General Info</a></li>
                                     <!-- <li><a data-target="#approval-status" data-toggle="tab" aria-expanded="true" class="filter">Approval Status</a></li> -->
                                     <li><a data-target="#approval-levels" data-toggle="tab" aria-expanded="true" class="filter">Verification Levels</a></li>
                                 </ul>
@@ -65,16 +65,16 @@ Content Wrap -->
                                                     <a class="btn btn-secondary btn-nxt my-tooltip" ng-shortcut="'meta+shift+down'" ng-shortcut-click data-title="ctrl+shift+down">
                                                         Next
                                                     </a>
-                                                    <button type="submit" class="btn btn-primary submit my-tooltip" ng-shortcut="'meta+shift+s'" ng-shortcut-click data-title="ctrl+shift+s">
+                                                    <!-- <button type="submit" class="btn btn-primary submit my-tooltip" ng-shortcut="'meta+shift+s'" ng-shortcut-click data-title="ctrl+shift+s">
                                                         Submit
-                                                    </button>
+                                                    </button> -->
                                                 </div>
                                             </div>
                                         </div><!-- Tab Footer -->
                                     </div><!-- Row -->
                                 </div><!-- Tab Pane Wrap -->
                             </div><!-- Tabe Pane -->
-                            <div class="tab-pane fade" id="approval-status" data-animation="fadeInUp" data-animation-delay="300">
+                            <!-- <div class="tab-pane fade" id="approval-status" data-animation="fadeInUp" data-animation-delay="300">
                                 <div class="tab-pane-wrap">
                                     <div class="row">
                                         <div class="col-lg-6 col-md-8">
@@ -96,8 +96,8 @@ Content Wrap -->
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                            </div><!-- Table Responsive -->
-                                        </div><!-- Column -->
+                                            </div>
+                                        </div>
                                         <div class="tab-pane-footer">
                                             <div class="row">
                                                 <div class="col-md-12">
@@ -110,20 +110,20 @@ Content Wrap -->
                                                     </button>
                                                 </div>
                                             </div>
-                                        </div><!-- Tab Footer -->
-                                    </div><!-- Row -->
-                                </div><!-- Tab Pane Wrap -->
-                            </div><!-- Tabe Pane -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
                             <div class="tab-pane fade" id="approval-levels" data-animation="fadeInUp" data-animation-delay="300">
                                 <div class="tab-pane-wrap">
                                     <div class="row">
-                                        <div class="col-md-12">
+                                        <div class="col-md-6">
                                             <h6 class="tab-pane-title">Verification Flow : <span class="color-primary-light">{{$ctrl.approval_type.name}}</span></h6>
                                             <div class="table-responsive">
                                                 <table class="table table-form">
                                                     <thead>
                                                         <tr>
-                                                            <th class="width-45">Action</th>
+                                                            <!-- <th class="width-45">Action</th> -->
                                                             <th class="width-230">Level</th>
                                                         </tr>
                                                     </thead>
@@ -131,13 +131,13 @@ Content Wrap -->
                                                         <input type="hidden" name="approval_levels[{{index}}][id]" value="{{approval_level.id}}">
                                                         <input type="hidden" name="approval_levels[{{index}}][approval_type_id]" value="{{$ctrl.approval_type.id}}">
                                                         <tr>
-                                                            <td>
+                                                            <!-- <td>
                                                                 <button class="btn-delete" ng-click="$ctrl.removeApprovalLevel(index, approval_level.id)" type="button">
                                                                     <img class="img-responsive" src="./public/theme/img/table/cndn/delete.svg" alt="Delete" />
                                                                 </button>
-                                                            </td>
+                                                            </td> -->
                                                             <td>
-                                                                <md-select class="type-sm" ng-model="approval_level.pivot.approval_level_id" placeholder="Select Verification Level" md-on-close="clearSearchCurrentStatus()" data-md-container-class="selectdemoSelectHeader">
+                                                                <md-select class="type-sm" ng-model="approval_level.pivot.approval_level_id" placeholder="Select Verification Level" md-on-close="clearSearchCurrentStatus()" data-md-container-class="selectdemoSelectHeader" ng-disabled="true">
                                                                     <md-select-header class="demo-select-header">
                                                                         <input ng-model="searchCurrentStatus" type="search" placeholder="Search for a Verification Level.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
                                                                     </md-select-header>
@@ -145,7 +145,7 @@ Content Wrap -->
                                                                         <md-option ng-value="i.id" ng-repeat="i in $ctrl.extras.approval_levels_list | filter:searchCurrentStatus">{{i.name}}</md-option>
                                                                     </md-optgroup>
                                                                 </md-select>
-                                                                <input type="hidden" name="approval_levels[{{index}}][approval_level]" value="{{approval_level.pivot.approval_level_id}}" class="required">
+                                                                <input type="hidden" name="approval_levels[{{index}}][approval_level]" value="{{approval_level.pivot.approval_level_id}}">
                                                             </td>
                                                             <!--                                                             <td>
                                                                 <input type="text" class="form-control type-sm" name="approval_levels[{{index}}][approval_order]" ng-model="approval_level.pivot.approval_order" placeholder="Enter Approval Order" autocomplete="off" minlength="1" maxlength="3" required="required" oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*)\./g, '$1');" />
@@ -209,7 +209,7 @@ Content Wrap -->
                                                             </td> -->
                                                         </tr>
                                                     </tbody>
-                                                    <tfoot>
+                                                    <!-- <tfoot>
                                                         <tr>
                                                             <td colspan="9">
                                                                 <button type="button" class="btn btn-primary-light btn-square" ng-click="$ctrl.addNewApprovalLevel()">
@@ -217,7 +217,7 @@ Content Wrap -->
                                                                 </button>
                                                             </td>
                                                         </tr>
-                                                    </tfoot>
+                                                    </tfoot> -->
                                                 </table>
                                             </div><!-- Table Responsive -->
                                         </div><!-- Column -->
@@ -225,9 +225,9 @@ Content Wrap -->
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <a class="btn btn-secondary btn-prev my-tooltip" ng-shortcut="'meta+shift+up'" ng-shortcut-click data-title="ctrl+shift+up">Previous</a>
-                                                    <button type="submit" class="btn btn-primary submit my-tooltip" ng-shortcut="'meta+shift+s'" ng-shortcut-click data-title="ctrl+shift+s">
+                                                    <!-- <button type="submit" class="btn btn-primary submit my-tooltip" ng-shortcut="'meta+shift+s'" ng-shortcut-click data-title="ctrl+shift+s">
                                                         Submit
-                                                    </button>
+                                                    </button> -->
                                                 </div>
                                             </div>
                                         </div><!-- Tab Footer -->
@@ -239,6 +239,6 @@ Content Wrap -->
                     </div><!-- Tab Form Body -->
                 </div><!-- Tab Form Wrap -->
             </div><!-- Page Form -->
-        </form>
+        <!-- </form> -->
     </div><!-- Page Main Content -->
 </div><!-- Content Wrap

@@ -8,6 +8,7 @@ Route::group(['namespace' => 'Abs\ApprovalPkg', 'middleware' => ['web', 'auth'],
 	Route::get('approval-type/view', 'ApprovalTypeController@viewApprovalType')->name('viewApprovalType');
 	Route::post('/approval-type-level/save', 'ApprovalTypeController@saveApprovalTypeLevel')->name('saveApprovalTypeLevel');
 	Route::get('/approval-status', 'ApprovalTypeController@getApprovalStatus')->name('getApprovalStatus');
+	Route::post('/approval-type/approval-level-list', 'ApprovalTypeController@getApprovalLevelsList')->name('getApprovalLevelsList');
 
 	//Approval Level
 	Route::get('/approval-level/get-list', 'ApprovalLevelController@getApprovalLevelList')->name('getApprovalLevelList');
