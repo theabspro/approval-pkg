@@ -260,6 +260,16 @@ app.component('approvalTypeForm', {
                     required: true,
                 },
             },
+            messages: {
+                'name': {
+                    minlength: 'Minimum 3 Characters',
+                    maxlength: 'Maximum 191 Characters',
+                },
+                'code': {
+                    minlength: 'Minimum 3 Characters',
+                    maxlength: 'Maximum 191 Characters',
+                },
+            },
             invalidHandler: function(event, validator) {
                 $noty = new Noty({
                     type: 'error',

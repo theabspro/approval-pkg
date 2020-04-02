@@ -26,6 +26,7 @@ class ApprovalLevelController extends Controller {
 	}
 
 	public function getApprovalLevelList(Request $request) {
+		// dd($request->all());
 		$approval_levels = ApprovalLevel::withTrashed()->select(
 			'approval_levels.id',
 			'approval_levels.name',
@@ -46,8 +47,8 @@ class ApprovalLevelController extends Controller {
 				}
 			})
 			->where(function ($query) use ($request) {
-				if (!empty($request->category_id)) {
-					$query->where('approval_levels.category_id', $request->category_id);
+				if (!empty($request->category)) {
+					$query->where('approval_levels.category_id', $request->category);
 				}
 			})
 			->where(function ($query) use ($request) {

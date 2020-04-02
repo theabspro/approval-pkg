@@ -80,7 +80,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label>Category</label>
-                                <md-select ng-model="$ctrl.category_id" placeholder="Select Status" md-on-close="clearSearchCategory()" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedCategory($ctrl.category_id)">
+                                <md-select ng-model="$ctrl.category.id" placeholder="Select Status" md-on-close="clearSearchCategory()" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedCategory($ctrl.category.id)">
                                     <md-select-header class="demo-select-header">
                                         <input ng-model="searchStatus" type="search" placeholder="Search for a Category.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
                                     </md-select-header>
@@ -106,7 +106,7 @@
                             </div><!-- Field -->
                         </div><!-- Column -->
                         <div class="col-md-12">
-                            <button type="button" class="btn btn-rose" ng-click="reset_filter(); $ctrl.status.id='';$ctrl.category_id=''">Reset Filter</button>
+                            <button type="button" class="btn btn-rose my-tooltip" ng-click="reset_filter(); $ctrl.status.id=''; $ctrl.category_id=''" ng-shortcut="'meta+shift+t'" ng-shortcut-click data-title="ctrl+shift+t">Reset Filter</button>
                         </div>
                     </div><!-- Row -->
                 </div><!-- Modal Form -->

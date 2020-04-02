@@ -1,6 +1,6 @@
 app.component('approvalLevelList', {
     templateUrl: approval_level_list_template_url,
-    controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location) {
+    controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location, $mdSelect) {
         $scope.loading = true;
         $('#search_approval_level').focus();
         var self = this;
@@ -10,66 +10,77 @@ app.component('approvalLevelList', {
             return false;
         }
         self.add_permission = self.hasPermission('add-approval-level');
-        var table_scroll;
-        table_scroll = $('.page-main-content.list-page-content').height() - 37;
-        var dataTable = $('#approval_level_list').DataTable({
-            "dom": cndn_dom_structure,
-            "language": {
-                // "search": "",
-                // "searchPlaceholder": "Search",
-                "lengthMenu": "Rows _MENU_",
-                "paginate": {
-                    "next": '<i class="icon ion-ios-arrow-forward"></i>',
-                    "previous": '<i class="icon ion-ios-arrow-back"></i>'
-                },
-            },
-            pageLength: 10,
-            processing: true,
-            stateSaveCallback: function(settings, data) {
-                localStorage.setItem('CDataTables_' + settings.sInstance, JSON.stringify(data));
-            },
-            stateLoadCallback: function(settings) {
-                var state_save_val = JSON.parse(localStorage.getItem('CDataTables_' + settings.sInstance));
-                if (state_save_val) {
-                    $('#search_approval_level').val(state_save_val.search.search);
-                }
-                return JSON.parse(localStorage.getItem('CDataTables_' + settings.sInstance));
-            },
-            serverSide: true,
-            paging: true,
-            stateSave: true,
-            ordering: false,
-            scrollY: table_scroll + "px",
-            scrollCollapse: true,
-            ajax: {
-                url: laravel_routes['getApprovalLevelList'],
-                type: "GET",
-                dataType: "json",
-                data: function(d) {
-                    d.approval_level_name = $('#approval_level_name').val();
-                    d.category_id = $('#category_id').val();
-                    d.status = $('#status').val();
-                },
-            },
-
-            columns: [
-                { data: 'action', class: 'action', name: 'action', searchable: false },
-                { data: 'name', name: 'approval_levels.name' },
-                { data: 'entity', name: 'configs.name' },
-                { data: 'approval_order', searchable: false },
-                { data: 'current_status', name: 'cs.name' },
-                { data: 'next_status', name: 'ns.name' },
-                { data: 'rejected_status', name: 'rs.name' },
-            ],
-            "infoCallback": function(settings, start, end, max, total, pre) {
-                $('#table_info').html(total)
-                $('.foot_info').html('Showing ' + start + ' to ' + end + ' of ' + max + ' entries')
-            },
-            rowCallback: function(row, data) {
-                $(row).addClass('highlight-row');
-            }
+        $http.get(
+            laravel_routes['getApprovalLevelFilter']
+        ).then(function(response) {
+            self.category_list = response.data.category_list;
         });
-        $('.dataTables_length select').select2();
+        var table_scroll;
+        var dataTable;
+        setTimeout(function() {
+            table_scroll = $('.page-main-content.list-page-content').height() - 37;
+            dataTable = $('#approval_level_list').DataTable({
+                "dom": cndn_dom_structure,
+                "language": {
+                    // "search": "",
+                    // "searchPlaceholder": "Search",
+                    "lengthMenu": "Rows _MENU_",
+                    "paginate": {
+                        "next": '<i class="icon ion-ios-arrow-forward"></i>',
+                        "previous": '<i class="icon ion-ios-arrow-back"></i>'
+                    },
+                },
+                pageLength: 10,
+                processing: true,
+                stateSaveCallback: function(settings, data) {
+                    localStorage.setItem('CDataTables_' + settings.sInstance, JSON.stringify(data));
+                },
+                stateLoadCallback: function(settings) {
+                    var state_save_val = JSON.parse(localStorage.getItem('CDataTables_' + settings.sInstance));
+                    if (state_save_val) {
+                        $('#search_approval_level').val(state_save_val.search.search);
+                    }
+                    return JSON.parse(localStorage.getItem('CDataTables_' + settings.sInstance));
+                },
+                serverSide: true,
+                paging: true,
+                stateSave: true,
+                ordering: false,
+                scrollY: table_scroll + "px",
+                scrollCollapse: true,
+                ajax: {
+                    url: laravel_routes['getApprovalLevelList'],
+                    type: "GET",
+                    dataType: "json",
+                    data: function(d) {
+                        d.approval_level_name = $('#approval_level_name').val();
+                        d.category = $('#category_id').val();
+                        d.status = $('#status').val();
+                    },
+                },
+
+                columns: [
+                    { data: 'action', class: 'action', name: 'action', searchable: false },
+                    { data: 'name', name: 'approval_levels.name', searchable: true },
+                    { data: 'entity', name: 'configs.name', searchable: false },
+                    { data: 'approval_order', searchable: false },
+                    { data: 'current_status', name: 'cs.name', searchable: false },
+                    { data: 'next_status', name: 'ns.name', searchable: false },
+                    { data: 'rejected_status', name: 'rs.name', searchable: false },
+                ],
+                "initComplete": function(settings, json) {
+                    $('.dataTables_length select').select2();
+                },
+                "infoCallback": function(settings, start, end, max, total, pre) {
+                    $('#table_info').html(total)
+                    $('.foot_info').html('Showing ' + start + ' to ' + end + ' of ' + max + ' entries')
+                },
+                rowCallback: function(row, data) {
+                    $(row).addClass('highlight-row');
+                }
+            });
+        }, 1000);
+        // $('.dataTables_length select').select2();
 
         $scope.clear_search = function() {
             $('#search_approval_level').val('');
@@ -79,10 +90,18 @@ app.component('approvalLevelList', {
         $('.refresh_table').on("click", function() {
             $('#approval_level_list').DataTable().ajax.reload();
         });
-
-        var dataTables = $('#approval_level_list').dataTable();
+        /* Modal Md Select Hide */
+        $('.modal').bind('click', function(event) {
+            if ($('.md-select-menu-container').hasClass('md-active')) {
+                $mdSelect.hide();
+            }
+        });
+        // var dataTables = $('#approval_level_list').dataTable();
         $("#search_approval_level").keyup(function() {
-            dataTables.fnFilter(this.value);
+            // dataTables.fnFilter(this.value);
+            dataTable
+                 .search(this.value)
+                 .draw();
         });
 
         //DELETE
@@ -107,12 +126,6 @@ app.component('approvalLevelList', {
         }
 
         //FOR FILTER
-        $http.get(
-            laravel_routes['getApprovalLevelFilter']
-        ).then(function(response) {
-            self.category_list = response.data.category_list;
-        });
-
         self.status = [
             { id: '', name: 'Select Status' },
             { id: '1', name: 'Active' },
@@ -127,19 +140,25 @@ app.component('approvalLevelList', {
         });
 
         $('#approval_level_name').on('keyup', function() {
-            dataTables.fnFilter();
+            // dataTables.fnFilter();
+            dataTable.draw();
         });
-        $scope.onSelectedCategory = function(id) {
-            $("#category_id").val(id);
-            dataTables.fnFilter();
+        $scope.onSelectedCategory = function(category_id) {
+            $("#category_id").val(category_id);
+            // dataTables.fnFilter();
+            dataTable.draw();
         }
-        $scope.onSelectedStatus = function(id) {
-            $("#status").val(id);
-            dataTables.fnFilter();
+        $scope.onSelectedStatus = function(status_id) {
+            $("#status").val(status_id);
+            // dataTables.fnFilter();
+            dataTable.draw();
         }
         $scope.reset_filter = function() {
-            $("#approval_type_name").val('');
-            dataTables.fnFilter();
+            $("#approval_level_name").val('');
+            $("#category_id").val('');
+            $("#status").val('');
+            // dataTables.fnFilter();
+            dataTable.draw();
         }
 
         $rootScope.loading = false;
@@ -228,7 +247,7 @@ app.component('approvalLevelForm', {
                     .done(function(res) {
                         if (res.success == true) {
                             custom_noty('success', res.message);
-                            $location.path('/approval-pkg/approval-level/list');
+                            $location.path('/approval-pkg/approval-level/list')
                             $scope.$apply();
                         } else {
                             if (!res.success == true) {
@@ -240,7 +259,7 @@ app.component('approvalLevelForm', {
                                 custom_noty('error', errors);
                             } else {
                                 $('#submit').button('reset');
-                                $location.path('/approval-pkg/approval-level/list');
+                                $location.path('/approval-pkg/approval-level/list')
                                 $scope.$apply();
                             }
                         }
