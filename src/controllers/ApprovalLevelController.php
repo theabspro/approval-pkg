@@ -158,7 +158,7 @@ class ApprovalLevelController extends Controller {
 			$activity = new ActivityLog;
 			$activity->date_time = Carbon::now();
 			$activity->user_id = Auth::user()->id;
-			$activity->module = 'Approval Levels';
+			$activity->module = 'Verification Level';
 			$activity->entity_id = $approval_level->id;
 			$activity->entity_type_id = 386;
 			$activity->activity_id = $request->id == NULL ? 280 : 281;
@@ -170,12 +170,12 @@ class ApprovalLevelController extends Controller {
 			if (!($request->id)) {
 				return response()->json([
 					'success' => true,
-					'message' => 'Approval Level Added Successfully',
+					'message' => 'Verification Level Added Successfully',
 				]);
 			} else {
 				return response()->json([
 					'success' => true,
-					'message' => 'Approval Level Updated Successfully',
+					'message' => 'Verification Level Updated Successfully',
 				]);
 			}
 		} catch (Exceprion $e) {
@@ -192,11 +192,12 @@ class ApprovalLevelController extends Controller {
 		try {
 			$approval_level = ApprovalLevel::withTrashed()->where('id', $request->id)->forceDelete();
 			if ($approval_level) {
+				$permission = Permission::where('name', $request->id . '-verification')->forceDelete();
 
 				$activity = new ActivityLog;
 				$activity->date_time = Carbon::now();
 				$activity->user_id = Auth::user()->id;
-				$activity->module = 'Approval Levels';
+				$activity->module = 'Verification Level';
 				$activity->entity_id = $request->id;
 				$activity->entity_type_id = 386;
 				$activity->activity_id = 282;
@@ -205,7 +206,7 @@ class ApprovalLevelController extends Controller {
 				$activity->save();
 
 				DB::commit();
-				return response()->json(['success' => true, 'message' => 'Approvel Level Deleted Successfully']);
+				return response()->json(['success' => true, 'message' => 'Verification Level Deleted Successfully']);
 			}
 		} catch (Exception $e) {
 			DB::rollBack();

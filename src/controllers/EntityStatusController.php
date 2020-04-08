@@ -25,6 +25,7 @@ class EntityStatusController extends Controller {
 	}
 
 	public function getEntityStatusList(Request $request) {
+		// dd($request->all());
 		$entity_statuses = EntityStatus::withTrashed()->select(
 			'entity_statuses.id',
 			'entity_statuses.name',
@@ -151,12 +152,12 @@ class EntityStatusController extends Controller {
 			if (!($request->id)) {
 				return response()->json([
 					'success' => true,
-					'message' => 'Approval Level Added Successfully',
+					'message' => 'Entity Status Added Successfully',
 				]);
 			} else {
 				return response()->json([
 					'success' => true,
-					'message' => 'Approval Level Updated Successfully',
+					'message' => 'Entity Status Updated Successfully',
 				]);
 			}
 		} catch (Exceprion $e) {
@@ -177,7 +178,7 @@ class EntityStatusController extends Controller {
 				$activity = new ActivityLog;
 				$activity->date_time = Carbon::now();
 				$activity->user_id = Auth::user()->id;
-				$activity->module = 'Approval Level';
+				$activity->module = 'Entity Status';
 				$activity->entity_id = $request->id;
 				$activity->entity_type_id = 1420;
 				$activity->activity_id = 282;
@@ -186,7 +187,7 @@ class EntityStatusController extends Controller {
 				$activity->save();
 
 				DB::commit();
-				return response()->json(['success' => true, 'message' => 'Approvel Level Deleted Successfully']);
+				return response()->json(['success' => true, 'message' => 'Entity Status Deleted Successfully']);
 			}
 		} catch (Exception $e) {
 			DB::rollBack();

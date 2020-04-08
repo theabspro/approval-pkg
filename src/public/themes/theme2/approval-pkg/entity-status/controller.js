@@ -1,9 +1,9 @@
 app.component('entityStatusList', {
     templateUrl: entity_status_list_template_url,
-    controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location) {
+    controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location, $element, $mdSelect) {
         $scope.loading = true;
-        $('#search_entity_status').focus();
         var self = this;
+        $('#search_entity_status').focus();
         self.hasPermission = HelperService.hasPermission;
         if (!self.hasPermission('entity-statuses')) {
             window.location = "#!/page-permission-denied";
@@ -38,7 +38,7 @@ app.component('entityStatusList', {
             serverSide: true,
             paging: true,
             stateSave: true,
-            ordering: false,
+            ordering: true,
             scrollY: table_scroll + "px",
             scrollCollapse: true,
             ajax: {
@@ -95,7 +95,7 @@ app.component('entityStatusList', {
                 }
             ).then(function(response) {
                 if (response.data.success) {
-                    custom_noty('success', 'Approval Level Deleted Successfully');
+                    custom_noty('success', 'Entity Status Deleted Successfully');
                     $('#entity_status_list').DataTable().ajax.reload(function(json) {});
                     $location.path('/approval-pkg/entity-status/list');
                 }
@@ -106,7 +106,7 @@ app.component('entityStatusList', {
         $http.get(
             laravel_routes['getEntityStatusFilter']
         ).then(function(response) {
-            self.entity_list = response.data.entity_list;
+            self.entity_list = response.data.category_list;
         });
 
         self.status = [
@@ -115,6 +115,13 @@ app.component('entityStatusList', {
             { id: '0', name: 'Inactive' },
         ];
 
+        $element.find('input').on('keydown', function(ev) {
+            ev.stopPropagation();
+        });
+        $scope.clearSearchTerm = function() {
+            $scope.searchEntity = '';
+            $scope.searchStatus = '';
+        };
         /* Modal Md Select Hide */
         $('.modal').bind('click', function(event) {
             if ($('.md-select-menu-container').hasClass('md-active')) {
@@ -125,7 +132,7 @@ app.component('entityStatusList', {
         $('#entity_status_name').on('keyup', function() {
             dataTables.fnFilter();
         });
-        $scope.onSelectedCategory = function(id) {
+        $scope.onSelectedEntity = function(id) {
             $("#entity_id").val(id);
             dataTables.fnFilter();
         }
@@ -134,7 +141,9 @@ app.component('entityStatusList', {
             dataTables.fnFilter();
         }
         $scope.reset_filter = function() {
-            $("#approval_type_name").val('');
+            $("#entity_status_name").val('');
+            $("#entity_id").val('');
+            $("#status").val('');
             dataTables.fnFilter();
         }
 
@@ -197,6 +206,12 @@ app.component('entityStatusForm', {
                 'entity_id': {
                     required: true,
                 },
+            },
+            messages:{
+                'name':{
+                    minlength: "Minimum 3 Characters",
+                    maxlength: "Maximum 191 Characters",
+                }, 
             },
             submitHandler: function(form) {
                 let formData = new FormData($(form_id)[0]);

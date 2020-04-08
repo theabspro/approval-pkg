@@ -75,10 +75,10 @@
                         </div><!-- Column -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Entity</label>
-                                <md-select ng-model="$ctrl.entity_id" placeholder="Select Status" md-on-close="clearSearchEntity()" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedEntity($ctrl.entity_id)">
+                                <label>Entity Type</label>
+                                <md-select ng-model="$ctrl.entity_id" placeholder="Select Entity Type" md-on-close="clearSearchEntity()" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedEntity($ctrl.entity_id)">
                                     <md-select-header class="demo-select-header">
-                                        <input ng-model="searchStatus" type="search" placeholder="Search for a Category.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                        <input ng-model="searchEntity" type="search" placeholder="Search for a Entity Type.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
                                     </md-select-header>
                                     <md-optgroup>
                                         <md-option ng-value="i.id" ng-repeat="i in $ctrl.entity_list | filter:searchEntity">{{i.name}}</md-option>
@@ -102,7 +102,7 @@
                             </div><!-- Field -->
                         </div><!-- Column -->
                         <div class="col-md-12">
-                            <button type="button" class="btn btn-rose" ng-click="reset_filter(); $ctrl.status.id='';$ctrl.entity_id=''">Reset Filter</button>
+                            <button type="button" class="btn btn-rose my-tooltip" ng-click="reset_filter(); $ctrl.status.id='';$ctrl.entity_id=''" ng-shortcut="'meta+shift+t'" ng-shortcut-click data-title="ctrl+shift+t">Reset Filter</button>
                         </div>
                     </div><!-- Row -->
                 </div><!-- Modal Form -->

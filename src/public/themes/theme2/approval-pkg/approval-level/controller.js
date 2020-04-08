@@ -1,6 +1,6 @@
 app.component('approvalLevelList', {
     templateUrl: approval_level_list_template_url,
-    controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location, $mdSelect) {
+    controller: function($http, $location, HelperService, $scope, $routeParams, $rootScope, $location, $mdSelect, $element) {
         $scope.loading = true;
         $('#search_approval_level').focus();
         var self = this;
@@ -45,7 +45,7 @@ app.component('approvalLevelList', {
                 serverSide: true,
                 paging: true,
                 stateSave: true,
-                ordering: false,
+                ordering: true,
                 scrollY: table_scroll + "px",
                 scrollCollapse: true,
                 ajax: {
@@ -118,7 +118,7 @@ app.component('approvalLevelList', {
                 }
             ).then(function(response) {
                 if (response.data.success) {
-                    custom_noty('success', 'Approval Level Deleted Successfully');
+                    custom_noty('success', 'Verification Level Deleted Successfully');
                     $('#approval_level_list').DataTable().ajax.reload(function(json) {});
                     $location.path('/approval-pkg/approval-level/list');
                 }
@@ -132,6 +132,13 @@ app.component('approvalLevelList', {
             { id: '0', name: 'Inactive' },
         ];
 
+        $element.find('input').on('keydown', function(ev) {
+            ev.stopPropagation();
+        });
+        $scope.clearSearchTerm = function() {
+            $scope.searchEntity = '';
+            $scope.searchStatus = '';
+        };
         /* Modal Md Select Hide */
         $('.modal').bind('click', function(event) {
             if ($('.md-select-menu-container').hasClass('md-active')) {
@@ -232,6 +239,12 @@ app.component('approvalLevelForm', {
                 },
                 'reject_status_id': {
                     required: true,
+                },
+            },
+            messages:{
+                'name':{
+                    minlength: "Minimum 3 Characters",
+                    maxlength: "Maximum 191 Characters",
                 },
             },
             submitHandler: function(form) {

@@ -47,7 +47,7 @@
                             <tr>
                                 <th class="action">Actions</th>
                                 <th>Verification Level Name</th>
-                                <th>Entity</th>
+                                <th>Entity Type</th>
                                 <th>Verification Order</th>
                                 <th>Current Status</th>
                                 <th>Next Status</th>
@@ -79,13 +79,13 @@
                         </div><!-- Column -->
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label>Category</label>
-                                <md-select ng-model="$ctrl.category.id" placeholder="Select Status" md-on-close="clearSearchCategory()" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedCategory($ctrl.category.id)">
+                                <label>Entity Type</label>
+                                <md-select ng-model="$ctrl.category.id" placeholder="Select Entity Type" md-on-close="clearSearchEntity()" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedCategory($ctrl.category.id)">
                                     <md-select-header class="demo-select-header">
-                                        <input ng-model="searchStatus" type="search" placeholder="Search for a Category.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                        <input ng-model="searchEntity" type="search" placeholder="Search for a Entity Type.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
                                     </md-select-header>
                                     <md-optgroup>
-                                        <md-option ng-value="i.id" ng-repeat="i in $ctrl.category_list | filter:searchCategory">{{i.name}}</md-option>
+                                        <md-option ng-value="i.id" ng-repeat="i in $ctrl.category_list | filter:searchEntity">{{i.name}}</md-option>
                                     </md-optgroup>
                                 </md-select>
                                 <input type="hidden" name="category_id" id="category_id" value="">
@@ -106,7 +106,7 @@
                             </div><!-- Field -->
                         </div><!-- Column -->
                         <div class="col-md-12">
-                            <button type="button" class="btn btn-rose my-tooltip" ng-click="reset_filter(); $ctrl.status.id=''; $ctrl.category_id=''" ng-shortcut="'meta+shift+t'" ng-shortcut-click data-title="ctrl+shift+t">Reset Filter</button>
+                            <button type="button" class="btn btn-rose my-tooltip" ng-click="reset_filter();$ctrl.status.id='';$ctrl.category.id='';$ctrl.status.id=''" ng-shortcut="'meta+shift+t'" ng-shortcut-click data-title="ctrl+shift+t">Reset Filter</button>
                         </div>
                     </div><!-- Row -->
                 </div><!-- Modal Form -->

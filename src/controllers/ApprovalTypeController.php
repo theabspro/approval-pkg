@@ -160,7 +160,7 @@ class ApprovalTypeController extends Controller {
 				$approval_type->deleted_by_id = Auth::user()->id;
 			}
 			$approval_type->save();
-			if (isset($request->approval_levels) && !empty($request->approval_levels)){
+			if (isset($request->approval_levels) && !empty($request->approval_levels)) {
 				$approval_level_values = array_column($request->approval_levels, 'approval_level');
 				$approval_level_count = count($approval_level_values);
 				$spproval_level_unique_count = count(array_unique($approval_level_values));
@@ -194,7 +194,7 @@ class ApprovalTypeController extends Controller {
 			$activity = new ActivityLog;
 			$activity->date_time = Carbon::now();
 			$activity->user_id = Auth::user()->id;
-			$activity->module = 'Approval Type';
+			$activity->module = 'Verification Flow';
 			$activity->entity_id = $approval_type->id;
 			$activity->entity_type_id = 385;
 			$activity->activity_id = $request->id == NULL ? 280 : 281;
@@ -219,7 +219,7 @@ class ApprovalTypeController extends Controller {
 				$activity = new ActivityLog;
 				$activity->date_time = Carbon::now();
 				$activity->user_id = Auth::user()->id;
-				$activity->module = 'Approval Types';
+				$activity->module = 'Verification Flow';
 				$activity->entity_id = $request->id;
 				$activity->entity_type_id = 385;
 				$activity->activity_id = 282;
