@@ -92,7 +92,7 @@ class ApprovalLevelController extends Controller {
 			$action = 'Edit';
 		}
 		$this->data['category_list'] = Collect(Config::getCategoryList()->prepend(['id' => '', 'name' => 'Select Category']));
-		$this->data['entity_status_list'] = Collect(EntityStatus::company()->get()->prepend(['id' => '', 'name' => 'Select Status']));
+		$this->data['entity_status_list'] = Collect(EntityStatus::query()->company()->get()->prepend(['id' => '', 'name' => 'Select Status']));
 		$this->data['approval_level'] = $approval_level;
 		$this->data['action'] = $action;
 		$this->data['theme'];
