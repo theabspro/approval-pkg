@@ -3,12 +3,12 @@
 namespace Abs\ApprovalPkg;
 
 use Abs\HelperPkg\Traits\SeederTrait;
+use App\BaseModel;
 use App\Company;
 use App\Config;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class EntityStatus extends Model {
+class EntityStatus extends BaseModel {
 	use SoftDeletes;
 	use SeederTrait;
 	protected $table = 'entity_statuses';
