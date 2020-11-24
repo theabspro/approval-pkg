@@ -203,6 +203,7 @@ app.component('approvalLevelForm', {
                     self.switch_value = 'Active';
                 }
             } else {
+                self.approval_level.has_verification_flow = 0;
                 self.switch_value = 'Active';
             }
         });

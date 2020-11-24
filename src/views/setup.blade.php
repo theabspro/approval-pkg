@@ -64,7 +64,7 @@
 	        title: 'Add Verification Flow Configuration',
 	    }).
 	    when('/approval-pkg/approval-flow-configuration/edit/:id', {
-	        template: '<approval-approval-flow-configuration-form></approval-flow-configuration-form>',
+	        template: '<approval-flow-configuration-form></approval-flow-configuration-form>',
 	        title: 'Edit Verification Flow Configuration',
 	    });
 

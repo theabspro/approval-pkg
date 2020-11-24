@@ -67,10 +67,10 @@ class ApprovalFlowConfigurationController extends Controller {
 				$img_delete = asset('public/themes/' . $this->data['theme'] . '/img/content/table/delete-default.svg');
 				$img_delete_active = asset('public/themes/' . $this->data['theme'] . '/img/content/table/delete-active.svg');
 				$output = '';
-				if (Entrust::can('edit-entity-status')) {
-					$output .= '<a href="#!/approval-pkg/entity-status/edit/' . $approval_flow_configuration->id . '" id = "" title="Edit"><img src="' . $img1 . '" alt="Edit" class="img-responsive" onmouseover=this.src="' . $img1_active . '" onmouseout=this.src="' . $img1 . '"></a>';
+				if (Entrust::can('edit-flow-configuration')) {
+					$output .= '<a href="#!/approval-pkg/approval-flow-configuration/edit/' . $approval_flow_configuration->id . '" id = "" title="Edit"><img src="' . $img1 . '" alt="Edit" class="img-responsive" onmouseover=this.src="' . $img1_active . '" onmouseout=this.src="' . $img1 . '"></a>';
 				}
-				if (Entrust::can('delete-entity-status')) {
+				if (Entrust::can('delete-flow-configuration')) {
 					$output .= '<a href="javascript:;" data-toggle="modal" data-target="#approval_flow_configuration-delete-modal" onclick="angular.element(this).scope().deleteApprovalFlowConfiguration(' . $approval_flow_configuration->id . ')" title="Delete"><img src="' . $img_delete . '" alt="Delete" class="img-responsive delete" onmouseover=this.src="' . $img_delete_active . '" onmouseout=this.src="' . $img_delete . '"></a>';
 				}
 				return $output;
