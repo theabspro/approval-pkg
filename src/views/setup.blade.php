@@ -52,6 +52,20 @@
 	    when('/approval-pkg/entity-status/edit/:id', {
 	        template: '<entity-status-form></entity-status-form>',
 	        title: 'Edit Entity Status',
+	    }).
+
+	    //VERIFICATION FLOW CONFIGURATION
+	    when('/approval-pkg/approval-flow-configuration/list', {
+	        template: '<approval-flow-configuration-list></approval-flow-configuration-list>',
+	        title: 'Verification Flow Configuration',
+	    }).
+	    when('/approval-pkg/approval-flow-configuration/add', {
+	        template: '<approval-flow-configuration-form></approval-flow-configuration-form>',
+	        title: 'Add Verification Flow Configuration',
+	    }).
+	    when('/approval-pkg/approval-flow-configuration/edit/:id', {
+	        template: '<approval-approval-flow-configuration-form></approval-flow-configuration-form>',
+	        title: 'Edit Verification Flow Configuration',
 	    });
 
 	}]);
@@ -66,7 +80,10 @@
 
     var entity_status_list_template_url = "{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/entity-status/list.html')}}";
     var entity_status_form_template_url = "{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/entity-status/form.html')}}";
+
+    var approval_flow_configuration_list_template_url = "{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-flow-configuration/list.html')}}";
+    var approval_flow_configuration_form_template_url = "{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-flow-configuration/form.html')}}";
 </script>
-<script type="text/javascript" src="{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-type/controller.js?v=2')}}"></script>
-<script type="text/javascript" src="{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-level/controller.js?v=2')}}"></script>
-<script type="text/javascript" src="{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/entity-status/controller.js?v=2')}}"></script>
+<!-- <script type="text/javascript" src="{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-type/controller.js?v=2')}}"></script> -->
+<!-- <script type="text/javascript" src="{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/approval-level/controller.js?v=2')}}"></script> -->
+<!-- <script type="text/javascript" src="{{URL::asset($approval_pkg_prefix.'/public/themes/'.$theme.'/approval-pkg/entity-status/controller.js?v=2')}}"></script> -->

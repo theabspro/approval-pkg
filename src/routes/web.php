@@ -23,4 +23,11 @@ Route::group(['namespace' => 'Abs\ApprovalPkg', 'middleware' => ['web', 'auth'],
 	Route::post('/entity-status/save', 'EntityStatusController@saveEntityStatus')->name('saveEntityStatus');
 	Route::get('/entity-status/delete', 'EntityStatusController@deleteEntityStatus')->name('deleteEntityStatus');
 	Route::get('/entity-status/filter', 'EntityStatusController@getEntityStatusFilter')->name('getEntityStatusFilter');
+
+	//Approval Flow Configuration
+	Route::get('/approval-flow-configuration/get-list', 'ApprovalFlowConfigurationController@getApprovalFlowConfigurationList')->name('getApprovalFlowConfigurationList');
+	Route::get('/approval-flow-configuration/get-form-data', 'ApprovalFlowConfigurationController@getApprovalFlowConfigurationFormData')->name('getApprovalFlowConfigurationFormData');
+	Route::post('/approval-flow-configuration/save', 'ApprovalFlowConfigurationController@saveApprovalFlowConfiguration')->name('saveApprovalFlowConfiguration');
+	Route::get('/approval-flow-configuration/delete', 'ApprovalFlowConfigurationController@deleteApprovalFlowConfiguration')->name('deleteApprovalFlowConfiguration');
+	Route::get('/approval-flow-configuration/filter', 'ApprovalFlowConfigurationController@getApprovalFlowConfigurationFilter')->name('getApprovalFlowConfigurationFilter');
 });

@@ -1,0 +1,132 @@
+<div class="content-wrap cndn-wrap">
+    <div class="page-header">
+        <div class="page-header-inner">
+            <div class="page-header-content-left">
+                <div class="page-header-content title-block">
+                    <h1 class="title type-2">Verification Flow Configuration (<span id="table_info"></span>)</h1>
+                    <!-- <p class="subtitle">Masters / JV Masters / JV Types</p> -->
+                </div><!-- Page Header Content -->
+                <div class="page-header-content button-block">
+                    <button class="btn btn-bordered my-tooltip" data-toggle="modal" data-target="#approval_flow_configuration-filter-modal" ng-shortcut="'meta+shift+f'" ng-shortcut-click data-title="ctrl+shift+f"><i class="icon ion-md-funnel"></i>Filter</button>
+                </div><!-- Page Header Content -->
+            </div><!-- Page Header Content Left -->
+            <div class="page-header-content-right">
+                <div class="page-header-content indicator-block">
+                    <ul class="indicator-list">
+                        <li class="green">Active</li>
+                        <li class="red">In Active</li>
+                    </ul>
+                </div><!-- Page Header Content -->
+                <div class="page-header-content reset-block">
+                    <div class="reset-wrap">
+                        <button class="btn-reset reset-tooltip refresh_table my-tooltip" ng-shortcut="'meta+shift+r'" ng-shortcut-click data-title="ctrl+shift+r">
+                            <img class="img-responsive" src="./public/theme/img/content/reset.svg" alt="Reset" />
+                        </button>
+                    </div>
+                </div><!-- Page Header Content -->
+                <div class="page-header-content search-block">
+                    <div class="search_filter">
+                        <label>
+                            <input type="search" id="search_approval_flow_configuration" class="form-control" placeholder="Search" autofocus />
+                            <button class="btn-clear my-tooltip" ng-click="clear_search()" ng-shortcut="'meta+shift+c'" ng-shortcut-click data-title="ctrl+shift+c">Clear</button>
+                        </label>
+                    </div><!-- Search Filter -->
+                </div><!-- Page Header Content -->
+                <div class="page-header-content button-block" ng-show="$ctrl.add_permission">
+                    <a href="#!/approval-pkg/approval-flow-configuration/add" class="btn btn-primary my-tooltip" ng-shortcut="'meta+shift+n'" ng-shortcut-click data-title="ctrl+shift+n">Add New</a>
+                </div><!-- Page Header Content -->
+            </div><!-- Page Header Content Right -->
+        </div><!-- Page Header Inner -->
+    </div><!-- Page Header -->
+    <div class="page-main-content list-page-content">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <table class="table" id="approval_flow_configuration_list" style="width: 100% !important;">
+                        <thead>
+                            <tr>
+                                <th class="action">Actions</th>
+                                <th>Verification Type</th>
+                                <th>Verification Level</th>
+                                <th>Next Status</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div><!-- Column -->
+            </div><!-- Row -->
+        </div><!-- Container -->
+    </div><!-- Page Main Content -->
+</div><!-- Content Wrap -->
+<!-- Filter Modal -->
+<div class="modal fade filter" id="approval_flow_configuration-filter-modal" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close ripple" data-dismiss="modal" aria-label="Close"><i class="icon ion-md-close"></i></button>
+                <h5 class="modal-title" id="myModalLabel">Verification Level Filter</h5>
+            </div><!-- Modal Header -->
+            <div class="modal-body">
+                <div class="modal-form">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Verification Level Name</label>
+                                <input type="text" class="form-control" id="approval_flow_configuration_name" name="approval_flow_configuration_name" placeholder="Enter Verification Level Name" autocomplete="off">
+                            </div><!-- Field -->
+                        </div><!-- Column -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Entity Type</label>
+                                <md-select ng-model="$ctrl.category.id" placeholder="Select Entity Type" md-on-close="clearSearchEntity()" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedCategory($ctrl.category.id)">
+                                    <md-select-header class="demo-select-header">
+                                        <input ng-model="searchEntity" type="search" placeholder="Search for a Entity Type.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                    </md-select-header>
+                                    <md-optgroup>
+                                        <md-option ng-value="i.id" ng-repeat="i in $ctrl.category_list | filter:searchEntity">{{i.name}}</md-option>
+                                    </md-optgroup>
+                                </md-select>
+                                <input type="hidden" name="category_id" id="category_id" value="">
+                            </div><!-- Field -->
+                        </div><!-- Column -->
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Status</label>
+                                <md-select ng-model="$ctrl.status.id" placeholder="Select Status" md-on-close="clearSearchStatus()" data-md-container-class="selectdemoSelectHeader" ng-change="onSelectedStatus($ctrl.status.id)">
+                                    <md-select-header class="demo-select-header">
+                                        <input ng-model="searchStatus" type="search" placeholder="Search for a Status.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                    </md-select-header>
+                                    <md-optgroup>
+                                        <md-option ng-value="i.id" ng-repeat="i in $ctrl.status | filter:searchStatus">{{i.name}}</md-option>
+                                    </md-optgroup>
+                                </md-select>
+                                <input type="hidden" name="status" id="status" value="">
+                            </div><!-- Field -->
+                        </div><!-- Column -->
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-rose my-tooltip" ng-click="reset_filter();$ctrl.status.id='';$ctrl.category.id='';$ctrl.status.id=''" ng-shortcut="'meta+shift+t'" ng-shortcut-click data-title="ctrl+shift+t">Reset Filter</button>
+                        </div>
+                    </div><!-- Row -->
+                </div><!-- Modal Form -->
+            </div><!-- Modal Body -->
+        </div><!-- Modal Content -->
+    </div><!-- Modal Dialog -->
+</div><!-- Modal -->
+<!-- Modal -->
+<div class="modal fade alert-modal failure" id="approval_flow_configuration-delete-modal" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">ARE YOU SURE?</h4>
+            </div>
+            <div class="modal-body">
+                <h5>Delete</h5>
+                <p>You can’t retrive the data again, Are you sure you want to delete? </p>
+                <input type="hidden" name="approval_flow_configuration_id" id="approval_flow_configuration_id" value="">
+                <button class="btn btn-grey" data-dismiss="modal" aria-label="Close">Cancel</button>
+                <button class="btn btn-rose" ng-click="deleteConfirm()" type="button" data-dismiss="modal" aria-label="Close">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal -->

@@ -95,6 +95,32 @@ class ApprovalPkgPermissionSeeder extends Seeder {
 				'display_name' => 'Delete',
 			],
 
+			//VERIFICATION FLOW CONFIGURATION
+			[
+				'display_order' => 99,
+				'parent' => null,
+				'name' => 'flow-configurations',
+				'display_name' => 'Approval Flow Configuration',
+			],
+			[
+				'display_order' => 1,
+				'parent' => 'flow-configurations',
+				'name' => 'add-flow-configuration',
+				'display_name' => 'Add',
+			],
+			[
+				'display_order' => 2,
+				'parent' => 'flow-configurations',
+				'name' => 'edit-flow-configuration',
+				'display_name' => 'Edit',
+			],
+			[
+				'display_order' => 3,
+				'parent' => 'flow-configurations',
+				'name' => 'delete-flow-configuration',
+				'display_name' => 'Delete',
+			],
+
 			//APPROVAL LEVELS
 			// [
 			// 	'display_order' => 99,

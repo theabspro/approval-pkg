@@ -14,6 +14,7 @@ class ApprovalLevel extends Model {
 		'name',
 		'category_id',
 		'approval_order',
+		'has_verification_flow',
 		'current_status_id',
 		'next_status_id',
 		'reject_status_id',
