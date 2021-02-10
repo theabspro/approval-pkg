@@ -6,6 +6,9 @@ use App\ActivityLog;
 use App\Config;
 use App\Http\Controllers\Controller;
 use App\Permission;
+use App\User;
+use App\Role;
+use Abs\ApprovalPkg\ApprovalLevelMail;
 use Auth;
 use Carbon\Carbon;
 use DB;
@@ -84,16 +87,45 @@ class ApprovalLevelController extends Controller {
 
 	public function getApprovalLevelFormData(Request $request) {
 		$id = $request->id;
+		$to_emails = $cc_emails = [];
 		if (!$id) {
 			$approval_level = new ApprovalLevel;
 			$action = 'Add';
 		} else {
 			$approval_level = ApprovalLevel::withTrashed()->find($id);
 			$action = 'Edit';
+			//Added to cc mail by Karthick T on 10-02-2021
+			if(isset($approval_level->mail_type_id) && $approval_level->mail_type_id){
+				$to_mail_ids = ApprovalLevelMail::where('approval_level_id',$approval_level->id)
+					->pluck('to_entity_id')->toArray();
+				$cc_mail_ids = ApprovalLevelMail::where('approval_level_id',$approval_level->id)
+					->pluck('cc_entity_id')->toArray();
+				if($approval_level->mail_type_id == 11510){ //User
+					$to_emails = User::select('id','name')
+							->whereIn('id', $to_mail_ids)
+							->get();
+					$cc_emails = User::select('id','name')
+							->whereIn('id', $cc_mail_ids)
+							->get();
+				}else if($approval_level->mail_type_id == 11511){ //Role
+					$to_emails = Role::select('id','name')
+							->whereIn('id', $to_mail_ids)
+							->get();
+					$cc_emails = Role::select('id','name')
+							->whereIn('id', $cc_mail_ids)
+							->get();
+				}
+			}
+			//Added to cc mail by Karthick T on 10-02-2021
 		}
 		$this->data['category_list'] = Collect(Config::getCategoryList()->prepend(['id' => '', 'name' => 'Select Category']));
 		$this->data['entity_status_list'] = Collect(EntityStatus::query()->company()->get()->prepend(['id' => '', 'name' => 'Select Status']));
 		$this->data['approval_level'] = $approval_level;
+		//Added to cc mail by Karthick T on 10-02-2021
+		$this->data['mail_type_list'] = Collect(Config::select('name', 'id')->where('config_type_id', 200)->get()->prepend(['id' => '', 'name' => 'Select Mail Type']));
+		$this->data['to_emails'] = $to_emails;
+		$this->data['cc_emails'] = $cc_emails;
+		//Added to cc mail by Karthick T on 10-02-2021
 		$this->data['action'] = $action;
 		$this->data['theme'];
 
@@ -142,6 +174,9 @@ class ApprovalLevelController extends Controller {
 				$approval_level->deleted_by_id = NULL;
 				$approval_level->deleted_at = NULL;
 			}
+			//Added to cc mail by Karthick T on 10-02-2021
+			if(isset($request->mail_type_id) && $request->mail_type_id)
+				$approval_level->mail_type_id = $request->mail_type_id;
 			$approval_level->save();
 
 			$parent = $request->category_id . '-verification';
@@ -154,6 +189,50 @@ class ApprovalLevelController extends Controller {
 				],
 			];
 			Permission::createFromArrays($permissions);
+
+			//Save to cc mail by Karthick T on 10-02-2021
+			$to_mails = $cc_mails = [];
+			if(isset($request->to_mails) && $request->to_mails){
+				$selected_to_mails = json_decode($request->to_mails);
+				if ($request->to_mails) {
+					if (sizeof($selected_to_mails) > 0) {
+						foreach ($selected_to_mails as $key => $value) {
+							$to_mails[] = $value->id;
+						}
+					}
+				}
+			}
+			if(isset($request->cc_mails) && $request->cc_mails){
+				$selected_cc_mails = json_decode($request->cc_mails);
+				if ($request->cc_mails) {
+					if (sizeof($selected_cc_mails) > 0) {
+						foreach ($selected_cc_mails as $key => $value) {
+							$cc_mails[] = $value->id;
+						}
+					}
+				}
+			}
+			$remove_approval_level_mail = ApprovalLevelMail::where('approval_level_id',$approval_level->id)
+				->forceDelete();
+			if(count($to_mails) > 0){
+				foreach ($to_mails as $key => $to_mail) {
+					$approvel_level_mail = new ApprovalLevelMail;
+					$approvel_level_mail->approval_level_id = $approval_level->id;
+					$approvel_level_mail->to_entity_id = $to_mail;
+					$approvel_level_mail->created_by_id = Auth::user()->id;
+					$approvel_level_mail->save();
+				}
+			}
+			if(count($cc_mails) > 0){
+				foreach ($cc_mails as $key => $cc_mail) {
+					$approvel_level_mail = new ApprovalLevelMail;
+					$approvel_level_mail->approval_level_id = $approval_level->id;
+					$approvel_level_mail->cc_entity_id = $cc_mail;
+					$approvel_level_mail->created_by_id = Auth::user()->id;
+					$approvel_level_mail->save();
+				}
+			}
+			//Save to cc mail by Karthick T on 10-02-2021
 
 			$activity = new ActivityLog;
 			$activity->date_time = Carbon::now();
@@ -213,5 +292,24 @@ class ApprovalLevelController extends Controller {
 			return response()->json(['success' => false, 'errors' => ['Exception Error' => $e->getMessage()]]);
 		}
 	}
+	//For get mail list detail by Karthick T on 10-02-2021
+	public function getMailData(Request $request){
+		$to_mail_list = $cc_mail_list = [];
+		if(isset($request->mail_type_id) && $request->mail_type_id){
+			if($request->mail_type_id == 11510){ //User
+				$to_mail_list = $cc_mail_list = User::select('id','name')
+						->where('company_id', Auth::user()->company_id)
+						->where('user_type_id',1) //Employee
+						->get();
+			}else if($request->mail_type_id == 11511){ //Role
+				$to_mail_list = $cc_mail_list = Role::select('id','name')
+						->get();
+			}
+		}
+		$this->data['to_mail_list'] = $to_mail_list;;
+		$this->data['cc_mail_list'] = $cc_mail_list;
+		return response()->json($this->data);
+	}
+	//For get mail list detail by Karthick T on 10-02-2021
 
 }

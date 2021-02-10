@@ -84,7 +84,7 @@
                                         </div><!-- Column -->
                                         <div class="col-md-3">
                                             <div class="input-text form-group">
-                                                <label>Has Verification Flow 
+                                                <label>Has Verification Flow
                                                     <sup class="mandatory">*</sup>
                                                 </label>
                                                 <div class="common-radio-button type-4">
@@ -150,6 +150,52 @@
                                                 <input type="hidden" class="form-control required" name="reject_status_id" value="{{$ctrl.approval_level.reject_status_id}}">
                                             </div><!-- Field -->
                                         </div><!-- Column -->
+                                        <!-- Added Mail by Karthick T on 10-02-2021 -->
+                                        <div class="col-md-3">
+                                            <div class="input-text form-group">
+                                                <label>
+                                                    Mail Type
+                                                </label>
+                                                <md-select ng-model="$ctrl.approval_level.mail_type_id" md-on-close="clearSearchTerm()" data-md-container-class="selectdemoSelectHeader" placeholder="Select Mail Type" ng-change="mailTypeChange($ctrl.approval_level.mail_type_id)">
+                                                    <md-select-header class="demo-select-header">
+                                                        <input ng-model="searchTerm" type="search" placeholder="Search for a Mail type" class="demo-header-searchbox md-text">
+                                                    </md-select-header>
+                                                    <md-optgroup>
+                                                        <md-option ng-value="mail_type.id" ng-repeat="mail_type in $ctrl.mail_type_list | filter:searchTerm">{{mail_type.name}}</md-option>
+                                                    </md-optgroup>
+                                                </md-select>
+                                                <input type="hidden" class="form-control" name="mail_type_id" value="{{$ctrl.approval_level.mail_type_id}}">
+                                            </div><!-- Field -->
+                                        </div><!-- Column -->
+                                        <div class="col-md-3">
+                                            <label>To mail</label>
+                                            <md-select multiple ng-model="$ctrl.approval_level.to_mails" placeholder="Select To Mails" data-md-container-class="selectdemoSelectHeader" ng-model-options="{trackBy: '$value.id' }" md-search-text="searchTomail">
+                                                <md-select-header class="demo-select-header">
+                                                    <input ng-model="searchTomail" type="search" placeholder="Search.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                </md-select-header>
+                                                <md-optgroup>
+                                                    <md-option ng-value="to_mail" ng-repeat="to_mail in $ctrl.to_mail_list | filter:searchTomail">
+                                                        {{to_mail.name}}
+                                                    </md-option>
+                                                </md-optgroup>
+                                            </md-select>
+                                            <input type="hidden" name="to_mails" value="{{$ctrl.approval_level.to_mails}}">
+                                        </div><!-- Column -->
+                                        <div class="col-md-3">
+                                            <label>Cc mail</label>
+                                            <md-select multiple ng-model="$ctrl.approval_level.cc_mails" placeholder="Select Cc Mails" data-md-container-class="selectdemoSelectHeader" ng-model-options="{trackBy: '$value.id' }" md-search-text="searchCcmail">
+                                                <md-select-header class="demo-select-header">
+                                                    <input ng-model="searchCcmail" type="search" placeholder="Search.." class="demo-header-searchbox md-text" ng-keydown="$event.stopPropagation()">
+                                                </md-select-header>
+                                                <md-optgroup>
+                                                    <md-option ng-value="cc_mail" ng-repeat="cc_mail in $ctrl.cc_mail_list | filter:searchCcmail">
+                                                        {{cc_mail.name}}
+                                                    </md-option>
+                                                </md-optgroup>
+                                            </md-select>
+                                            <input type="hidden" name="cc_mails" value="{{$ctrl.approval_level.cc_mails}}">
+                                        </div><!-- Column -->
+                                        <!-- Added Mail by Karthick T on 10-02-2021 -->
                                         <div class="col-md-3">
                                             <div class="input-text form-group">
                                                 <label>

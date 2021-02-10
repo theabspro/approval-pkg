@@ -100,8 +100,8 @@ app.component('approvalLevelList', {
         $("#search_approval_level").keyup(function() {
             // dataTables.fnFilter(this.value);
             dataTable
-                 .search(this.value)
-                 .draw();
+                .search(this.value)
+                .draw();
         });
 
         //DELETE
@@ -194,6 +194,8 @@ app.component('approvalLevelForm', {
             self.approval_level = response.data.approval_level;
             self.category_list = response.data.category_list;
             self.entity_status_list = response.data.entity_status_list;
+            //Added mail by Karthick T on 10-02-2021
+            self.mail_type_list = response.data.mail_type_list;
             self.action = response.data.action;
             $rootScope.loading = false;
             if (self.action == 'Edit') {
@@ -202,6 +204,15 @@ app.component('approvalLevelForm', {
                 } else {
                     self.switch_value = 'Active';
                 }
+                //List mail drop down by Karthick T on 10-02-2021
+                setTimeout(function() {
+                    if (self.approval_level.mail_type_id)
+                        $scope.mailTypeChange(self.approval_level.mail_type_id);
+
+                    self.approval_level.to_mails = response.data.to_emails;
+                    self.approval_level.cc_mails = response.data.cc_emails;
+                }, 100);
+                //List mail drop down by Karthick T on 10-02-2021
             } else {
                 self.approval_level.has_verification_flow = 0;
                 self.switch_value = 'Active';
@@ -242,8 +253,8 @@ app.component('approvalLevelForm', {
                     required: true,
                 },
             },
-            messages:{
-                'name':{
+            messages: {
+                'name': {
                     minlength: "Minimum 3 Characters",
                     maxlength: "Maximum 191 Characters",
                 },
@@ -284,5 +295,22 @@ app.component('approvalLevelForm', {
                     });
             }
         });
+
+        //For mail type change by Karthick T on 10-02-2021
+        $scope.mailTypeChange = function(mail_type_id) {
+            self.approval_level.cc_mails = '';
+            self.approval_level.to_mails = '';
+            $http.get(
+                laravel_routes['getMailData'], {
+                    params: {
+                        mail_type_id: mail_type_id,
+                    }
+                }
+            ).then(function(response) {
+                self.to_mail_list = response.data.to_mail_list;
+                self.cc_mail_list = response.data.cc_mail_list;
+            });
+        }
+        //For mail type change by Karthick T on 10-02-2021
     }
 });

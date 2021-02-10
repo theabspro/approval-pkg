@@ -16,6 +16,8 @@ Route::group(['namespace' => 'Abs\ApprovalPkg', 'middleware' => ['web', 'auth'],
 	Route::post('/approval-level/save', 'ApprovalLevelController@saveApprovalLevel')->name('saveApprovalLevel');
 	Route::get('/approval-level/delete', 'ApprovalLevelController@deleteApprovalLevel')->name('deleteApprovalLevel');
 	Route::get('/approval-level/filter', 'ApprovalLevelController@getApprovalLevelFilter')->name('getApprovalLevelFilter');
+	//Getting mail drop down list by Karthick T on 10-02-2021
+	Route::get('/approval-level/get-mail-data', 'ApprovalLevelController@getMailData')->name('getMailData');
 
 	//Entity Statuses
 	Route::get('/entity-status/get-list', 'EntityStatusController@getEntityStatusList')->name('getEntityStatusList');
